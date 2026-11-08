@@ -1,0 +1,1212 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>body{margin:0}img{max-width:100%}</style>
+<title>Packetyard</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* Layout: one-screen lab bench. Toolbar on top, topology canvas left, inspector panel right; stacks on phones. */
+:root{
+  --bg:#e9edef; --canvas:#f5f7f8; --panel:#ffffff; --ink:#18222a; --muted:#5a6873; --line:#cdd5da; --grid:#d3dbe0;
+  --accent:#0a7570; --accent-ink:#ffffff; --accent-soft:#d5ecea;
+  --pc:#36597f; --sw:#3f6b4b; --rt:#8a4f2c;
+  --arp:#a96f08; --icmp:#2b62c4; --err:#c23a30; --ok:#258552; --dhcp:#7a45b8; --rip:#0f7f8f; --sw-ev:#3f6b4b; --mute:#8794a0;
+  --l2:#0a7570; --l3:#5a4bb0; --l4:#2b62c4;
+  --term-bg:#0e1417; --term-fg:#cfe2d6; --term-dim:#6d8a7c;
+  --shadow:0 6px 24px rgba(20,35,45,.12);
+  --ui:"Archivo",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0d1215; --canvas:#11181c; --panel:#161e23; --ink:#e2e9ec; --muted:#91a2ac; --line:#2a363d; --grid:#1f2a30;
+  --accent:#3cb5ab; --accent-ink:#06201e; --accent-soft:#16312f;
+  --pc:#8db0db; --sw:#8fc39b; --rt:#e3a37b;
+  --arp:#e2a93b; --icmp:#6e9df2; --err:#f06b60; --ok:#4cc184; --dhcp:#b58cf0; --rip:#4cc6d6; --sw-ev:#8fc39b; --mute:#6f7f89;
+  --l2:#3cb5ab; --l3:#a596f0; --l4:#6e9df2;
+  --term-bg:#080c0e; --term-fg:#cfe2d6; --term-dim:#5f7a6d; --shadow:0 6px 24px rgba(0,0,0,.45);
+  color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0d1215; --canvas:#11181c; --panel:#161e23; --ink:#e2e9ec; --muted:#91a2ac; --line:#2a363d; --grid:#1f2a30;
+  --accent:#3cb5ab; --accent-ink:#06201e; --accent-soft:#16312f;
+  --pc:#8db0db; --sw:#8fc39b; --rt:#e3a37b;
+  --arp:#e2a93b; --icmp:#6e9df2; --err:#f06b60; --ok:#4cc184; --dhcp:#b58cf0; --rip:#4cc6d6; --sw-ev:#8fc39b; --mute:#6f7f89;
+  --l2:#3cb5ab; --l3:#a596f0; --l4:#6e9df2;
+  --term-bg:#080c0e; --term-fg:#cfe2d6; --term-dim:#5f7a6d; --shadow:0 6px 24px rgba(0,0,0,.45);
+  color-scheme:dark}
+html,body{height:100%}
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--ink);font:14px/1.45 var(--ui);padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+*{box-sizing:border-box}
+button,select,input{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+#app{height:100%;display:grid;grid-template-rows:auto auto 1fr;gap:8px;padding-block:12px}
+.bar{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px}
+.brand{display:flex;align-items:baseline;gap:8px;margin-right:6px}
+.brand b{font-weight:700;font-size:18px;letter-spacing:-.01em}
+.brand span{font-size:11px;text-transform:uppercase;letter-spacing:.12em;color:var(--muted)}
+.grp{display:flex;align-items:center;gap:4px;padding:3px;border:1px solid var(--line);border-radius:9px;background:var(--panel)}
+.btn{display:inline-flex;align-items:center;gap:6px;border:0;background:transparent;padding:6px 9px;border-radius:6px;cursor:pointer;font-size:13px;font-weight:500;white-space:nowrap}
+.btn:hover{background:var(--accent-soft)}
+.btn[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink)}
+.btn svg{width:16px;height:16px;flex:none}
+.btn.primary{background:var(--accent);color:var(--accent-ink)}
+.chk{display:inline-flex;align-items:center;gap:6px;font-size:13px;padding:0 6px;cursor:pointer}
+.speed{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);padding:0 6px}
+.speed input{width:80px;accent-color:var(--accent)}
+.clock{font:500 12px var(--mono);color:var(--muted);padding:0 8px;font-variant-numeric:tabular-nums;min-width:70px}
+select.sel{border:1px solid var(--line);background:var(--panel);border-radius:8px;padding:6px 8px;font-size:13px;max-width:220px}
+.hint{font-size:12.5px;color:var(--muted);min-height:18px}
+.hint kbd{font:500 11px var(--mono);border:1px solid var(--line);border-radius:4px;padding:0 4px;background:var(--panel)}
+main{display:grid;grid-template-columns:minmax(0,1fr) 420px;gap:12px;min-height:0}
+.stage{position:relative;border:1px solid var(--line);border-radius:12px;background:var(--canvas);overflow:hidden;min-height:0}
+#svg{width:100%;height:100%;display:block;touch-action:none;user-select:none;-webkit-user-select:none}
+.panel{display:flex;flex-direction:column;min-height:0;min-width:0;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+.tabs{display:flex;border-bottom:1px solid var(--line);padding:0 6px}
+.tab{border:0;background:none;padding:11px 12px 9px;font-weight:600;font-size:13px;color:var(--muted);border-bottom:2px solid transparent;cursor:pointer;display:flex;gap:6px;align-items:center}
+.tab[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--accent)}
+.badge{font:500 10.5px var(--mono);background:var(--accent-soft);color:var(--ink);border-radius:9px;padding:1px 6px}
+.pane{flex:1;overflow:auto;min-height:0;padding:14px;display:flex;flex-direction:column;gap:14px}
+.pane>*{flex-shrink:0}
+.empty{color:var(--muted);font-size:13.5px;line-height:1.55;padding:6px 2px}
+.empty b{color:var(--ink)}
+/* SVG */
+.gridbg{fill:var(--grid)}
+.wire{stroke:var(--muted);stroke-width:2.5;stroke-linecap:round}
+.wire.down{stroke-dasharray:6 6;opacity:.6}
+.link .hit{stroke:transparent;stroke-width:16;cursor:pointer}
+.mode-delete .link:hover .wire{stroke:var(--err)}
+.ldot{stroke:var(--canvas);stroke-width:2}
+.ldot.up{fill:var(--ok)}.ldot.dn{fill:var(--err)}
+.llab{font:500 10.5px var(--mono);fill:var(--muted);paint-order:stroke;stroke:var(--canvas);stroke-width:4px;stroke-linejoin:round}
+.dev{cursor:grab}
+.dev .hitbox{fill:transparent}
+.dev .body{fill:var(--panel);stroke-width:2.2}
+.dev .glyph{fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.dev .scr{opacity:.18}
+.dev.pc .body,.dev.pc .glyph{stroke:var(--pc)} .dev.pc .scr{fill:var(--pc)}
+.dev.switch .body,.dev.switch .glyph{stroke:var(--sw)}
+.dev.router .body,.dev.router .glyph{stroke:var(--rt)}
+.dname{font:600 13px var(--ui);fill:var(--ink);text-anchor:middle;paint-order:stroke;stroke:var(--canvas);stroke-width:4px}
+.dsub{font:500 10.5px var(--mono);fill:var(--muted);text-anchor:middle;paint-order:stroke;stroke:var(--canvas);stroke-width:4px}
+.selring{fill:none;stroke:var(--accent);stroke-width:2;stroke-dasharray:4 4}
+.linkfrom .selring{stroke:var(--arp)}
+.mode-delete .dev:hover .body{stroke:var(--err)}
+.pkt{cursor:pointer}
+.pkt rect{stroke:var(--canvas);stroke-width:1.5}
+.pkt path{fill:none;stroke:var(--canvas);stroke-width:1.4}
+.pkt.arp rect{fill:var(--arp)}.pkt.icmp rect{fill:var(--icmp)}.pkt.err rect{fill:var(--err)}.pkt.dhcp rect{fill:var(--dhcp)}.pkt.rip rect{fill:var(--rip)}
+.pkt .ring{fill:none;stroke:var(--ink);stroke-width:2}
+/* narration */
+.narr{position:absolute;left:12px;bottom:12px;width:min(460px,calc(100% - 24px));max-height:min(60%,460px);overflow:auto;background:var(--panel);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);padding:12px 14px;display:flex;flex-direction:column;gap:9px}
+.narr.min{max-height:none;width:auto}
+.narr.min .nbody{display:none}
+.nhead{display:flex;align-items:center;gap:8px}
+.eyebrow{font-size:10.5px;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);font-weight:600}
+.nhead .sp{flex:1}
+.ntitle{font-size:16px;font-weight:700;letter-spacing:-.01em;text-wrap:balance;margin:0}
+.nbody{display:flex;flex-direction:column;gap:9px}
+.nbody p{margin:0;font-size:13.5px;color:var(--ink);max-width:62ch}
+.stepbox{border:1px dashed var(--line);border-radius:8px;padding:9px 10px;display:flex;flex-direction:column;gap:7px}
+.stepbox code,.cmd{font:500 12px var(--mono);background:var(--accent-soft);padding:1px 5px;border-radius:4px;white-space:pre-wrap}
+.nlines{display:flex;flex-direction:column;gap:6px;margin:0;padding:0;list-style:none}
+.nlines li{font-size:13px;line-height:1.45;padding-left:10px;border-left:3px solid var(--mute)}
+.nlines li b{font-weight:600}
+.c-arp{border-color:var(--arp)!important}.c-icmp{border-color:var(--icmp)!important}.c-err{border-color:var(--err)!important}.c-sw{border-color:var(--sw-ev)!important}.c-dhcp{border-color:var(--dhcp)!important}.c-rip{border-color:var(--rip)!important}.c-ok{border-color:var(--ok)!important}
+.nbtns{display:flex;flex-wrap:wrap;gap:6px}
+.nbtns .btn{border:1px solid var(--line)}
+/* device pane */
+.dhead{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.dhead input{border:1px solid var(--line);border-radius:7px;padding:5px 8px;background:var(--canvas);font-weight:600;width:130px}
+.tag{font-size:10.5px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);font-weight:600}
+.term{background:var(--term-bg);color:var(--term-fg);border-radius:9px;font:13px/1.45 var(--mono);display:flex;flex-direction:column;min-height:240px;height:300px;resize:vertical;overflow:hidden}
+.tout{flex:1;overflow:auto;padding:10px 12px 0;white-space:pre-wrap;word-break:break-word;margin:0;font:inherit}
+.tin{display:flex;align-items:center;padding:2px 12px 10px;gap:0}
+.tin label{color:var(--term-fg);white-space:pre}
+.tin input{flex:1;min-width:0;background:transparent;border:0;outline:none;color:var(--term-fg);font:inherit;caret-color:var(--term-fg);padding:0}
+.qcfg{display:grid;grid-template-columns:repeat(3,minmax(0,1fr)) auto;gap:6px;align-items:end}
+.qcfg label{display:flex;flex-direction:column;gap:3px;font-size:11px;color:var(--muted)}
+.qcfg input{border:1px solid var(--line);border-radius:6px;padding:5px 6px;background:var(--canvas);font:12px var(--mono);min-width:0;width:100%}
+.qcfg .btn{border:1px solid var(--line)}
+h3{margin:0;font-size:11px;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);font-weight:600}
+.tblwrap{overflow-x:auto}
+table.tbl{border-collapse:collapse;width:100%;font:12px var(--mono);font-variant-numeric:tabular-nums}
+.tbl th{text-align:left;font:600 10.5px var(--ui);text-transform:uppercase;letter-spacing:.08em;color:var(--muted);padding:4px 8px 4px 0;border-bottom:1px solid var(--line)}
+.tbl td{padding:4px 8px 4px 0;border-bottom:1px solid var(--line);white-space:nowrap}
+.tbl .none{color:var(--muted);font-family:var(--ui)}
+.st{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:5px;vertical-align:1px}
+.st.up{background:var(--ok)}.st.dn{background:var(--err)}
+.sec{display:flex;flex-direction:column;gap:6px}
+/* inspector */
+.isum{display:flex;flex-direction:column;gap:4px}
+.isum .t{font-weight:700;font-size:15px}
+.isum .h{font:12px var(--mono);color:var(--muted)}
+.layer{border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.layer summary{cursor:pointer;padding:7px 10px;font-weight:600;font-size:13px;display:flex;gap:8px;align-items:center;list-style:none}
+.layer summary::-webkit-details-marker{display:none}
+.layer summary i{width:10px;height:10px;border-radius:2px;flex:none}
+.layer .rows{display:flex;flex-direction:column;border-top:1px solid var(--line)}
+.frow{display:grid;grid-template-columns:130px minmax(0,1fr);gap:8px;padding:4px 10px;font-size:12.5px;cursor:default}
+.frow:hover{background:var(--accent-soft)}
+.frow .k{color:var(--muted)}
+.frow .v{font-family:var(--mono);font-size:12px;word-break:break-word}
+.frow .n{grid-column:2;font-size:11.5px;color:var(--muted);font-family:var(--ui)}
+.L-l2{background:var(--l2)}.L-l3{background:var(--l3)}.L-l4{background:var(--l4)}.L-arp{background:var(--arp)}.L-dhcp{background:var(--dhcp)}.L-rip{background:var(--rip)}.L-pad{background:var(--mute)}
+.hex{font:12px/1.6 var(--mono);overflow:auto;max-height:260px;border:1px solid var(--line);border-radius:8px;padding:8px 10px;white-space:pre}
+.hex .off{color:var(--muted);margin-right:10px}
+.hex span.b{padding:0 1px;border-radius:2px}
+.hex .b.l2{color:var(--l2)}.hex .b.l3{color:var(--l3)}.hex .b.l4{color:var(--l4)}.hex .b.arp{color:var(--arp)}.hex .b.dhcp{color:var(--dhcp)}.hex .b.rip{color:var(--rip)}.hex .b.pad{color:var(--mute)}
+.hex .b.hl{background:var(--ink);color:var(--panel)}
+/* events */
+.evtools{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.chip{border:1px solid var(--line);background:var(--panel);border-radius:999px;padding:3px 10px;font-size:12px;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--panel);border-color:var(--ink)}
+.evlist{display:flex;flex-direction:column;font-size:12.5px}
+.ev{display:grid;grid-template-columns:52px 44px minmax(0,1fr);gap:8px;padding:5px 6px 5px 8px;border-left:3px solid var(--mute);border-bottom:1px solid var(--line);cursor:pointer;align-items:baseline}
+.ev:hover{background:var(--accent-soft)}
+.ev .tm{font:11px var(--mono);color:var(--muted);font-variant-numeric:tabular-nums}
+.ev .dv{font-weight:600}
+.ev .tx{font-family:var(--mono);font-size:11.5px;word-break:break-word}
+.ev.sel{background:var(--accent-soft)}
+/* modal & toast */
+.modal{position:fixed;inset:0;background:rgba(10,18,22,.45);display:grid;place-items:center;padding:16px;z-index:20}
+.mbox{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px;width:min(640px,100%);display:flex;flex-direction:column;gap:10px;box-shadow:var(--shadow)}
+.mbox textarea{width:100%;height:280px;font:12px var(--mono);border:1px solid var(--line);border-radius:8px;padding:8px;background:var(--canvas);resize:vertical}
+.mbox .row{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.mbox .btn{border:1px solid var(--line)}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--panel);padding:8px 14px;border-radius:8px;font-size:13px;z-index:30;max-width:calc(100% - 32px)}
+@media (max-width:980px){
+  html,body{height:auto}
+  #app{height:auto}
+  main{grid-template-columns:minmax(0,1fr)}
+  .stage{height:64vh;min-height:380px}
+  .pane{max-height:none;overflow:visible}
+  .narr{max-height:48%}
+}
+@media (max-width:520px){ .btn .lbl{display:none} .brand span{display:none} .qcfg{grid-template-columns:1fr 1fr} }
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+
+<div id="app">
+  <header class="bar">
+    <div class="brand"><b>Packetyard</b><span>network lab</span></div>
+    <div class="grp" role="toolbar" aria-label="Tools">
+      <button class="btn" data-tool="select" aria-pressed="true" title="Select and move (V)"><svg viewBox="0 0 16 16"><path d="M3 2l9 5-4 1.2L6.5 12z" fill="currentColor"/></svg><span class="lbl">Select</span></button>
+      <button class="btn" data-tool="pc" title="Add PC"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2.5" width="12" height="8" rx="1"/><path d="M6 13.5h4M8 10.5v3"/></svg><span class="lbl">PC</span></button>
+      <button class="btn" data-tool="switch" title="Add switch"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1.5" y="4.5" width="13" height="7" rx="1.5"/><path d="M4 7h7l-1.5-1.3M12 9H5l1.5 1.3"/></svg><span class="lbl">Switch</span></button>
+      <button class="btn" data-tool="router" title="Add router"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="6.2"/><path d="M4.5 8h7M8 4.5v7"/></svg><span class="lbl">Router</span></button>
+      <button class="btn" data-tool="link" title="Connect two devices with a cable (L)"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="3.5" cy="12.5" r="1.8"/><circle cx="12.5" cy="3.5" r="1.8"/><path d="M5 11l6-6"/></svg><span class="lbl">Cable</span></button>
+      <button class="btn" data-tool="delete" title="Delete device or cable"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 4.5h10M6.5 4.5V3h3v1.5M4.5 4.5l.7 9h5.6l.7-9"/></svg><span class="lbl">Delete</span></button>
+    </div>
+    <div class="grp" aria-label="Simulation">
+      <button class="btn" id="playBtn" title="Play or pause the simulation"></button>
+      <button class="btn" id="stepBtn" title="Advance until the next packet arrives"><svg viewBox="0 0 16 16"><path d="M3 3l7 5-7 5zM11 3h2v10h-2z" fill="currentColor"/></svg><span class="lbl">Next hop</span></button>
+      <label class="chk" title="Pause every time a packet reaches a device"><input type="checkbox" id="stepMode"> Pause each hop</label>
+      <label class="speed">Speed <input type="range" id="speed" min="0.25" max="4" step="0.25" value="1" aria-label="Simulation speed"><span id="speedVal">1×</span></label>
+      <span class="clock" id="clock">t 0.0 s</span>
+    </div>
+    <div class="grp">
+      <select class="sel" id="demoSel" aria-label="Guided demos">
+        <option value="">Guided demos…</option>
+      </select>
+      <button class="btn" id="resetBtn" title="Clear packets, ARP caches, MAC tables, leases and learned routes">Reset tables</button>
+      <button class="btn" id="fileBtn" title="Copy or load a topology as JSON">Save / load</button>
+    </div>
+  </header>
+  <div class="hint" id="hint"></div>
+  <main>
+    <section class="stage" id="stage">
+      <svg id="svg" viewBox="0 0 1200 720" preserveAspectRatio="xMidYMid meet" aria-label="Network topology">
+        <defs><pattern id="dots" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="1.5" cy="1.5" r="1.3" class="gridbg"/></pattern></defs>
+        <rect x="-2000" y="-2000" width="5200" height="4720" fill="url(#dots)" id="bg"/>
+        <g id="gLinks"></g><g id="gDevs"></g><g id="gPkts"></g>
+      </svg>
+      <div class="narr" id="narr"></div>
+    </section>
+    <aside class="panel">
+      <nav class="tabs" role="tablist">
+        <button class="tab" role="tab" data-tab="device" aria-selected="true">Device</button>
+        <button class="tab" role="tab" data-tab="packet" aria-selected="false">Packet</button>
+        <button class="tab" role="tab" data-tab="events" aria-selected="false">Events <span class="badge" id="evCount">0</span></button>
+      </nav>
+      <div class="pane" id="pane-device"></div>
+      <div class="pane" id="pane-packet" hidden></div>
+      <div class="pane" id="pane-events" hidden>
+        <div class="evtools" id="evTools">
+          <button class="chip" data-f="all" aria-pressed="true">All</button>
+          <button class="chip" data-f="arp" aria-pressed="false">ARP</button>
+          <button class="chip" data-f="icmp" aria-pressed="false">ICMP</button>
+          <button class="chip" data-f="sw" aria-pressed="false">Switching</button>
+          <button class="chip" data-f="dhcp" aria-pressed="false">DHCP</button>
+          <button class="chip" data-f="rip" aria-pressed="false">RIP</button>
+          <button class="chip" data-f="err" aria-pressed="false">Errors</button>
+          <button class="chip" id="evClear">Clear</button>
+        </div>
+        <div class="evlist" id="evList"></div>
+      </div>
+    </aside>
+  </main>
+</div>
+<div class="modal" id="modal" hidden>
+  <div class="mbox" role="dialog" aria-label="Save or load topology">
+    <h3>Topology JSON</h3>
+    <p class="empty" style="padding:0">Copy this text to keep your lab, or paste a saved lab and press Load.</p>
+    <textarea id="jsonBox" spellcheck="false" aria-label="Topology JSON"></textarea>
+    <div class="row">
+      <button class="btn" id="newBtn">Empty canvas</button>
+      <button class="btn" id="copyBtn">Copy</button>
+      <button class="btn" id="loadBtn">Load</button>
+      <button class="btn primary" id="closeBtn">Close</button>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+(function(){
+'use strict';
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const HOP_MS=1100, BCAST='ff:ff:ff:ff:ff:ff', ZMAC='00:00:00:00:00:00', RIPMAC='01:00:5e:00:00:09';
+const PING_TIMEOUT=20000, ARP_TIMEOUT=8000, RIP_INT=12000, DHCP_TIMEOUT=15000;
+
+/* ---------- address helpers ---------- */
+const validIp=s=>/^(\d{1,3}\.){3}\d{1,3}$/.test(s||'')&&s.split('.').every(o=>+o<=255);
+const ip2n=s=>s.split('.').reduce((a,o)=>a*256+(+o),0)>>>0;
+const n2ip=n=>[n>>>24,(n>>>16)&255,(n>>>8)&255,n&255].join('.');
+const len2mask=l=>n2ip(l<=0?0:(0xffffffff<<(32-l))>>>0);
+const mask2len=m=>{let n=ip2n(m),c=0;while(c<32&&(n&0x80000000)){c++;n=(n<<1)>>>0}return c};
+const validMask=m=>validIp(m)&&len2mask(mask2len(m))===m;
+const netOf=(ip,m)=>n2ip((ip2n(ip)&ip2n(m))>>>0);
+const inNet=(ip,net,m)=>((ip2n(ip)&ip2n(m))>>>0)===((ip2n(net)&ip2n(m))>>>0);
+const classful=n=>{const o=+n.split('.')[0];return o<128?'255.0.0.0':o<192?'255.255.0.0':'255.255.255.0'};
+const rh=()=>Math.floor(Math.random()*256).toString(16).padStart(2,'0');
+const newMac=()=>['02','ac',rh(),rh(),rh(),rh()].join(':');
+const macDot=m=>{const h=m.replace(/:/g,'');return h.slice(0,4)+'.'+h.slice(4,8)+'.'+h.slice(8)};
+function parseCidr(a,b){ // "1.2.3.4/24" or ("1.2.3.4","255.255.255.0"|"24"|"/24")
+  if(a&&a.includes('/')){const [ip,l]=a.split('/');return validIp(ip)&&+l>=0&&+l<=32?{ip,mask:len2mask(+l)}:null}
+  if(!validIp(a)) return null;
+  if(validMask(b)) return {ip:a,mask:b};
+  const l=String(b||'').replace('/','');
+  if(/^\d+$/.test(l)&&+l<=32) return {ip:a,mask:len2mask(+l)};
+  return null;
+}
+
+/* ---------- state ---------- */
+const S={devices:[],links:[],nextId:1};
+const sim={t:0,running:true,speed:1,stepMode:false,stepOnce:false,packets:[],timers:[],pid:1,fid:1,ident:4100};
+let tool='select', selId=null, linkFrom=null, inspected=null, events=[], evFilter='all', topoDirty=true, panelDirty=true, narrDirty=true, tab='device';
+const narr={demo:null,step:0,lines:[],min:false};
+
+const dev=id=>S.devices.find(d=>d.id===id);
+const devByName=n=>S.devices.find(d=>d.name.toLowerCase()===String(n).toLowerCase());
+const linkAt=(d,ifi)=>S.links.find(l=>(l.a.dev===d.id&&l.a.ifi===ifi)||(l.b.dev===d.id&&l.b.ifi===ifi));
+function peer(l,d,ifi){const e=(l.a.dev===d.id&&l.a.ifi===ifi)?l.b:l.a;return {d:dev(e.dev),ifi:e.ifi}}
+function ifOper(d,ifi){const i=d.ifaces[ifi];if(!i||!i.up)return false;const l=linkAt(d,ifi);if(!l)return false;const p=peer(l,d,ifi);return !!(p.d&&p.d.ifaces[p.ifi].up)}
+const after=(ms,fn)=>sim.timers.push({at:sim.t+ms,fn});
+
+const IFN={pc:()=>['eth0'],switch:()=>Array.from({length:8},(_,i)=>'Fa0/'+(i+1)),router:()=>['Gi0/0','Gi0/1','Gi0/2','Gi0/3']};
+const LONG={Gi:'GigabitEthernet',Fa:'FastEthernet'};
+const longIf=n=>n.replace(/^(Gi|Fa)/,m=>LONG[m]);
+const PREFIX={pc:'PC',switch:'SW',router:'R'};
+function runtime(d){
+  d.arp={};d.mact={};d.pending=[];d.arpWait={};d.session=null;d.ripRoutes=[];d.bindings={};d.dhcpc=null;d.ripNext=0;
+  d.routes=d.routes||[];d.gw=d.gw||'';d.rip=d.rip||{on:false,nets:[]};d.dhcp=d.dhcp||{pools:[],excluded:[]};
+  if(!d.term){d.term={lines:[],hist:[],hi:0,mode:'user',sub:null};
+    d.term.lines.push(d.type==='pc'?`${d.name} console. Type help for commands.`:`${d.type==='router'?'Router':'Switch'} console. Type ? for commands.`);
+    if(d.type==='router') d.term.lines.push('Interfaces start shut down. Use: enable, configure terminal, interface gi0/0, ip address …, no shutdown.');}
+  return d;
+}
+function nextName(type){const p=PREFIX[type];let n=0;S.devices.forEach(d=>{const m=d.name.match(new RegExp('^'+p+'(\\d+)$'));if(m)n=Math.max(n,+m[1])});return p+(n+1)}
+function addDev(type,x,y,name){
+  const d=runtime({id:'d'+S.nextId++,type,name:name||nextName(type),x,y,ifaces:IFN[type]().map(n=>({name:n,mac:newMac(),ip:'',mask:'',up:type!=='router'}))});
+  S.devices.push(d);topoDirty=true;save();return d;
+}
+function freeIf(d){return d.ifaces.findIndex((_,i)=>!linkAt(d,i))}
+function connect(a,b,ai,bi){
+  if(a===b) return null;
+  ai=ai??freeIf(a);bi=bi??freeIf(b);
+  if(ai<0){toast(`${a.name} has no free ports.`);return null}
+  if(bi<0){toast(`${b.name} has no free ports.`);return null}
+  const l={id:'l'+S.nextId++,a:{dev:a.id,ifi:ai},b:{dev:b.id,ifi:bi}};S.links.push(l);topoDirty=true;panelDirty=true;save();
+  [a,b].forEach(d=>{if(d.rip.on)d.ripNext=sim.t+400});
+  return l;
+}
+function removeLink(l){S.links=S.links.filter(x=>x!==l);sim.packets=sim.packets.filter(p=>p.link!==l.id);topoDirty=panelDirty=true;save()}
+function removeDev(d){S.links.filter(l=>l.a.dev===d.id||l.b.dev===d.id).forEach(removeLink);S.devices=S.devices.filter(x=>x!==d);if(selId===d.id)selId=null;topoDirty=panelDirty=true;save()}
+
+/* ---------- persistence ---------- */
+function serialize(){return {app:'packetyard',v:1,devices:S.devices.map(d=>({id:d.id,type:d.type,name:d.name,x:Math.round(d.x),y:Math.round(d.y),gw:d.gw,routes:d.routes,rip:d.rip,dhcp:d.dhcp,dhcpClient:!!d.dhcpClient,ifaces:d.ifaces.map(i=>({name:i.name,mac:i.mac,ip:i.ip,mask:i.mask,up:i.up}))})),links:S.links.map(l=>({id:l.id,a:l.a,b:l.b}))}}
+function load(o){
+  if(!o||!Array.isArray(o.devices)) throw new Error('bad');
+  clearAll();
+  S.devices=o.devices.map(d=>runtime({...d,routes:(d.routes||[]).map(r=>({...r})),ifaces:d.ifaces.map(i=>({...i}))}));
+  S.links=(o.links||[]).map(l=>({id:l.id,a:{...l.a},b:{...l.b}}));
+  let mx=0;[...S.devices,...S.links].forEach(x=>{const n=+String(x.id).slice(1);if(n>mx)mx=n});S.nextId=mx+1;
+  S.devices.forEach(d=>{if(d.rip.on)d.ripNext=600});
+  topoDirty=panelDirty=true;save();
+}
+function save(){try{localStorage.setItem('packetyard.topo',JSON.stringify(serialize()))}catch(e){}}
+function clearAll(){S.devices=[];S.links=[];S.nextId=1;sim.packets=[];sim.timers=[];selId=null;inspected=null;linkFrom=null;events=[];renderEvents(true);topoDirty=panelDirty=narrDirty=true}
+function resetTables(){
+  sim.packets=[];sim.timers=[];
+  S.devices.forEach(d=>{d.arp={};d.mact={};d.pending=[];d.arpWait={};d.session=null;d.ripRoutes=[];d.bindings={};d.dhcpc=null;if(d.rip.on)d.ripNext=sim.t+500});
+  topoDirty=panelDirty=narrDirty=true;
+}
+
+/* ---------- logging ---------- */
+function log(d,text,o={}){
+  const e={t:sim.t,dev:d?d.name:'',text,frame:o.frame||null,cls:o.cls||'mute',explain:o.explain||null};
+  events.push(e);if(events.length>600)events.shift();
+  appendEvent(e);
+  if(e.explain){narr.lines.push({who:e.dev,text:e.explain,cls:e.cls});const cap=sim.stepMode?8:3;while(narr.lines.length>cap)narr.lines.shift();narrDirty=true}
+}
+
+/* ---------- frames ---------- */
+const ICMPN={0:'Echo Reply',8:'Echo Request',11:'Time Exceeded',3:'Destination Unreachable'};
+function fsum(f){
+  if(f.arp) return f.arp.op===1?`ARP Who has ${f.arp.tpa}? Tell ${f.arp.spa}`:`ARP ${f.arp.spa} is at ${f.arp.sha}`;
+  const p=f.ip;
+  if(p.icmp) return `ICMP ${ICMPN[p.icmp.type]} ${p.src} → ${p.dst} TTL ${p.ttl}`;
+  if(p.udp&&p.udp.dhcp) return `DHCP ${p.udp.dhcp.type} ${p.src} → ${p.dst}${p.udp.dhcp.yiaddr?' ('+p.udp.dhcp.yiaddr+')':''}`;
+  if(p.udp&&p.udp.rip) return `RIPv2 update ${p.src} → 224.0.0.9 (${p.udp.rip.entries.length} routes)`;
+  return 'Frame';
+}
+function fcls(f){if(f.arp)return 'arp';const p=f.ip;if(p.icmp)return (p.icmp.type===3||p.icmp.type===11)?'err':'icmp';if(p.udp&&p.udp.dhcp)return 'dhcp';if(p.udp&&p.udp.rip)return 'rip';return 'mute'}
+function sendFrame(d,ifi,f,explain,opt){
+  const ifc=d.ifaces[ifi],L=linkAt(d,ifi);
+  f=JSON.parse(JSON.stringify(f));f.id=sim.fid++;
+  if(!L||!ifOper(d,ifi)){log(d,`Can't send on ${ifc.name}: ${!L?'no cable':'link down'}`,{frame:f,cls:'err',explain:`${d.name} can't send on ${ifc.name} because ${!L?'no cable is plugged in':'the link is down (check shutdown on both ends)'}. The frame is dropped.`});return false}
+  const side=(L.a.dev===d.id&&L.a.ifi===ifi)?'a':'b',pe=peer(L,d,ifi);
+  f.hop=`${d.name} ${ifc.name} → ${pe.d.name} ${pe.d.ifaces[pe.ifi].name}`;
+  sim.packets.push({id:sim.pid++,f,link:L.id,from:side,p:0});
+  if(!(opt&&opt.quiet)) log(d,fsum(f),{frame:f,cls:fcls(f),explain});
+  return true;
+}
+function deliver(pk){const L=S.links.find(l=>l.id===pk.link);if(!L)return;const to=pk.from==='a'?L.b:L.a;const d=dev(to.dev);if(d)receive(d,to.ifi,pk.f)}
+
+/* ---------- routing ---------- */
+function routeLookup(d,dst){
+  let best=null;const cand=r=>{if(!best||r.len>best.len||(r.len===best.len&&r.ad<best.ad))best=r};
+  d.ifaces.forEach((i,k)=>{if(i.ip&&i.mask&&ifOper(d,k)&&inNet(dst,i.ip,i.mask))cand({ifi:k,nh:dst,len:mask2len(i.mask),net:netOf(i.ip,i.mask),kind:'C',ad:0})});
+  if(d.type==='pc'){
+    if(!best&&d.gw){const i=d.ifaces[0];if(i.ip&&ifOper(d,0)&&inNet(d.gw,i.ip,i.mask))best={ifi:0,nh:d.gw,len:0,net:'0.0.0.0',kind:'G',ad:0}}
+  }else{
+    const viaIf=nh=>d.ifaces.findIndex((i,k)=>i.ip&&i.mask&&ifOper(d,k)&&inNet(nh,i.ip,i.mask));
+    d.routes.forEach(r=>{if(inNet(dst,r.net,r.mask)){const k=viaIf(r.nh);if(k>=0)cand({ifi:k,nh:r.nh,len:mask2len(r.mask),net:r.net,kind:'S',ad:1})}});
+    d.ripRoutes.forEach(r=>{if(inNet(dst,r.net,r.mask)&&ifOper(d,r.ifi))cand({ifi:r.ifi,nh:r.nh,len:mask2len(r.mask),net:r.net,kind:'R',ad:120,metric:r.metric})});
+  }
+  return best;
+}
+function routeDesc(d,r){const n=d.ifaces[r.ifi].name;return r.kind==='C'?`${r.net}/${r.len} is directly connected on ${n}`:r.kind==='S'?`static route ${r.net}/${r.len} via ${r.nh} (out ${n})`:r.kind==='R'?`RIP route ${r.net}/${r.len} via ${r.nh}, ${r.metric} hop${r.metric>1?'s':''} (out ${n})`:`its default gateway ${r.nh}`}
+function ipOut(d,pkt,explainFn){
+  const r=routeLookup(d,pkt.dst);if(!r)return null;
+  resolveAndSend(d,r,pkt,explainFn?explainFn(r):'');return r;
+}
+function resolveAndSend(d,r,pkt,explain){
+  const ifc=d.ifaces[r.ifi],e=d.arp[r.nh];
+  if(e){sendFrame(d,r.ifi,{dst:e.mac,src:ifc.mac,ip:pkt},`${explain} ${r.nh} is already in ${d.name}'s ARP cache (${e.mac}), so the frame goes straight to that MAC.`);return}
+  d.pending.push({nh:r.nh,ifi:r.ifi,pkt,explain});
+  if(!d.arpWait[r.nh]){
+    d.arpWait[r.nh]=true;
+    sendFrame(d,r.ifi,{dst:BCAST,src:ifc.mac,arp:{op:1,sha:ifc.mac,spa:ifc.ip,tha:ZMAC,tpa:r.nh}},`${explain} But ${d.name} has no ARP entry for ${r.nh}, so the packet waits while it broadcasts an ARP request: "Who has ${r.nh}? Tell ${ifc.ip}". The destination MAC ff:ff:ff:ff:ff:ff reaches every device on this LAN.`);
+    const nh=r.nh;
+    after(ARP_TIMEOUT,()=>{if(!d.arpWait[nh])return;delete d.arpWait[nh];const lost=d.pending.filter(p=>p.nh===nh);d.pending=d.pending.filter(p=>p.nh!==nh);
+      log(d,`ARP for ${nh} timed out`,{cls:'err',explain:`Nobody answered ${d.name}'s ARP request for ${nh}, so ${lost.length} queued packet${lost.length===1?'':'s'} ${lost.length===1?'is':'are'} dropped. Check that ${nh} exists, is cabled, and its interface is up.`});
+      lost.forEach(p=>sessionLocalFail(d,p.pkt,'Destination host unreachable.'));});
+  }
+}
+function flushPending(d,ip){
+  delete d.arpWait[ip];const e=d.arp[ip];if(!e)return;
+  const q=d.pending.filter(p=>p.nh===ip);d.pending=d.pending.filter(p=>p.nh!==ip);
+  q.forEach(p=>sendFrame(d,p.ifi,{dst:e.mac,src:d.ifaces[p.ifi].mac,ip:p.pkt},`ARP resolved ${ip} to ${e.mac}, so ${d.name} now sends the packet that was waiting: ${fsumIp(p.pkt)}.`));
+}
+const fsumIp=p=>p.icmp?`ICMP ${ICMPN[p.icmp.type]} ${p.src} → ${p.dst}`:`${p.src} → ${p.dst}`;
+
+/* ---------- receive path ---------- */
+function receive(d,ifi,f){
+  const ifc=d.ifaces[ifi];
+  if(!ifc.up){log(d,`Dropped on ${ifc.name} (shut down)`,{frame:f,cls:'err'});return}
+  if(d.type==='switch')return swRx(d,ifi,f);
+  const forMe=f.dst===ifc.mac||f.dst===BCAST||(f.dst===RIPMAC&&d.type==='router');
+  if(!forMe){log(d,`Discarded frame for ${f.dst}`,{frame:f,cls:'mute',explain:`${d.name} received a copy of a frame addressed to ${f.dst}. That isn't its MAC address, so its network card discards it.`});return}
+  if(f.arp)arpRx(d,ifi,f);else if(f.ip)ipRx(d,ifi,f);
+}
+function arpRx(d,ifi,f){
+  const a=f.arp,ifc=d.ifaces[ifi];
+  if(!ifc.ip||a.tpa!==ifc.ip){if(a.op===1)log(d,`Ignored ARP for ${a.tpa}`,{frame:f,cls:'mute',explain:`${d.name} received the broadcast ARP request too, but ${a.tpa} isn't its IP address, so it ignores it.`});return}
+  d.arp[a.spa]={mac:a.sha,ifi,t:sim.t};panelDirty=true;
+  if(a.op===1) sendFrame(d,ifi,{dst:a.sha,src:ifc.mac,arp:{op:2,sha:ifc.mac,spa:ifc.ip,tha:a.sha,tpa:a.spa}},`${d.name} owns ${a.tpa}, so it answers with a unicast ARP reply: "${a.tpa} is at ${ifc.mac}". It also saves ${a.spa} → ${a.sha} from the request in its own ARP cache.`);
+  else log(d,`ARP cache: ${a.spa} → ${a.sha}`,{frame:f,cls:'arp',explain:`${d.name} stores ${a.spa} → ${a.sha} in its ARP cache, so next time it won't need to ask.`});
+  flushPending(d,a.spa);
+}
+function isLocal(d,p){return d.ifaces.some(i=>i.ip&&i.ip===p.dst)||p.dst==='255.255.255.255'||(p.dst==='224.0.0.9'&&d.type==='router')}
+function ipRx(d,ifi,f){
+  const p=f.ip,ifc=d.ifaces[ifi];
+  if(isLocal(d,p)){
+    if(p.udp){
+      if(p.udp.dp===67&&d.type==='router')return dhcpServerRx(d,ifi,f);
+      if(p.udp.dp===68&&d.type==='pc')return dhcpClientRx(d,ifi,f);
+      if(p.udp.dp===520&&d.type==='router')return ripRx(d,ifi,f);
+      return log(d,`Ignored UDP port ${p.udp.dp}`,{frame:f,cls:'mute',explain:`${d.name} isn't running a service on UDP port ${p.udp.dp}, so it ignores this ${p.udp.dhcp?'DHCP':p.udp.rip?'RIP':''} message.`});
+    }
+    const ic=p.icmp;if(!ic)return;
+    if(p.dst==='255.255.255.255')return;
+    if(ic.type===8){
+      const reply={src:p.dst,dst:p.src,ttl:d.type==='pc'?128:255,ident:sim.ident++,icmp:{type:0,code:0,id:ic.id,seq:ic.seq}};
+      const r=ipOut(d,reply,r=>`The Echo Request reached ${d.name}. It answers ${p.src} with an ICMP Echo Reply (type 0). Path back: ${routeDesc(d,r)}.`);
+      if(!r)log(d,`No route back to ${p.src}`,{frame:f,cls:'err',explain:`The request reached ${d.name}, but it has no route back to ${p.src}, so the reply can't be sent and the ping will time out. Check the default gateway or the return route.`});
+      return;
+    }
+    if(!sessionRx(d,p,f))log(d,`${ICMPN[ic.type]} from ${p.src}`,{frame:f,cls:'mute'});
+    return;
+  }
+  if(p.dst==='255.255.255.255'||p.dst.startsWith('224.'))return;
+  if(d.type!=='router'){log(d,`Dropped packet for ${p.dst}`,{frame:f,cls:'mute',explain:`${d.name} is a host, not a router, so it drops packets addressed to someone else's IP.`});return}
+  const isErr=p.icmp&&(p.icmp.type===3||p.icmp.type===11);
+  if(p.ttl<=1){
+    if(!isErr)icmpError(d,ifi,p,11,0,`The TTL reached 0 at ${d.name}, so it discards the packet and sends ICMP Time Exceeded (type 11) back to ${p.src}. Traceroute relies on this to discover each router along the path.`);
+    else log(d,'TTL expired (ICMP error dropped)',{frame:f,cls:'err'});
+    return;
+  }
+  const np={...p,ttl:p.ttl-1};
+  const r=ipOut(d,np,r=>`${d.name} received a packet for ${p.dst} on ${ifc.name}. Best match in its routing table: ${routeDesc(d,r)}. It lowers the TTL from ${p.ttl} to ${p.ttl-1} and writes a new Ethernet header for the next link. The IP addresses (${p.src} → ${p.dst}) stay the same.`);
+  if(!r){
+    if(!isErr)icmpError(d,ifi,p,3,0,`${d.name} has no route to ${p.dst}. It drops the packet and sends ICMP Destination Unreachable (type 3, code 0: network unreachable) back to ${p.src}.`);
+    else log(d,`No route to ${p.dst}, ICMP error dropped`,{frame:f,cls:'err'});
+  }
+}
+function icmpError(d,ifi,orig,type,code,explain){
+  const e={src:d.ifaces[ifi].ip,dst:orig.src,ttl:255,ident:sim.ident++,icmp:{type,code,orig}};
+  if(!ipOut(d,e,()=>explain))log(d,`Can't return ICMP error to ${orig.src}: no route`,{cls:'err',explain:`${d.name} wanted to report an error to ${orig.src}, but it has no route back either.`});
+}
+function swRx(d,ifi,f){
+  const port=d.ifaces[ifi].name,prev=d.mact[f.src];
+  d.mact[f.src]={ifi,t:sim.t};panelDirty=true;
+  const learn=!prev?`${d.name} learns that ${f.src} is reachable through ${port} and adds it to its MAC address table.`:prev.ifi!==ifi?`${f.src} has moved to ${port}, so ${d.name} updates its MAC table.`:`${d.name} already knows ${f.src} is on ${port}.`;
+  const multi=f.dst===BCAST||f.dst.startsWith('01:00:5e');
+  const known=!multi&&d.mact[f.dst];
+  if(!known){
+    const outs=d.ifaces.map((_,k)=>k).filter(k=>k!==ifi&&ifOper(d,k));
+    outs.forEach(k=>sendFrame(d,k,f,null,{quiet:true}));
+    const names=outs.map(k=>d.ifaces[k].name).join(', ')||'no other active ports';
+    const why=f.dst===BCAST?'The destination is the broadcast address':multi?'The destination is a multicast address':`${f.dst} isn't in the MAC table yet (unknown unicast)`;
+    log(d,`Flood → ${names}`,{frame:f,cls:'sw',explain:`${learn} ${why}, so it floods the frame out every other active port: ${names}.`});
+  }else if(known.ifi===ifi){
+    log(d,`Filtered frame for ${f.dst}`,{frame:f,cls:'sw',explain:`${learn} ${f.dst} is on the same port the frame came from, so ${d.name} filters (drops) it.`});
+  }else{
+    sendFrame(d,known.ifi,f,null,{quiet:true});
+    log(d,`Forward → ${d.ifaces[known.ifi].name}`,{frame:f,cls:'sw',explain:`${learn} Its MAC table says ${f.dst} is on ${d.ifaces[known.ifi].name}, so it forwards the frame out that one port only.`});
+  }
+}
+
+/* ---------- ping / traceroute sessions ---------- */
+function startPing(d,dst,count,style){
+  if(!validIp(dst))return tprint(d,style==='win'?`Ping request could not find host ${dst}.`:'% Unrecognized host or address.');
+  if(d.session)return tprint(d,'A ping or trace is already running. Press Ctrl+C to stop it.');
+  d.session={kind:'ping',dst,count,seq:0,ok:0,id:1+Math.floor(Math.random()*65000),style,tok:null};
+  if(style==='win')tprint(d,`\nPinging ${dst} with 32 bytes of data:`);
+  else{tprint(d,'Type escape sequence to abort.');tprint(d,`Sending ${count}, 100-byte ICMP Echos to ${dst}, timeout is 2 seconds:`);tprint(d,'')}
+  nextProbe(d);
+}
+function startTrace(d,dst,style){
+  if(!validIp(dst))return tprint(d,`Unable to resolve target system name ${dst}.`);
+  if(d.session)return tprint(d,'A ping or trace is already running. Press Ctrl+C to stop it.');
+  d.session={kind:'trace',dst,count:15,seq:0,id:1+Math.floor(Math.random()*65000),style,tok:null};
+  if(style==='win')tprint(d,`\nTracing route to ${dst} over a maximum of 15 hops:\n`);
+  else{tprint(d,'Type escape sequence to abort.');tprint(d,`Tracing the route to ${dst}`)}
+  nextProbe(d);
+}
+function nextProbe(d){
+  const s=d.session;if(!s)return;
+  if(s.seq>=s.count)return finishSession(d);
+  s.seq++;const tok=s.tok=Math.random();s.sentAt=sim.t;
+  const r=routeLookup(d,s.dst);
+  if(!r||!d.ifaces[r.ifi].ip){
+    s.tok=null;
+    if(s.kind==='ping'){if(s.style==='win')tprint(d,'PING: transmit failed. General failure.');else tappend(d,'.');}
+    else tprint(d,`${String(s.seq).padStart(3)}     *        Transmit error: no route.`);
+    log(d,`No route to ${s.dst}`,{cls:'err',explain:`${d.name} has no route to ${s.dst}${d.type==='pc'?(d.gw?` and its gateway ${d.gw} isn't reachable on its subnet`:' and no default gateway is set'):''}, so nothing is sent.`});
+    if(s.kind==='trace')return finishSession(d);
+    return after(400,()=>nextProbe(d));
+  }
+  const pkt={src:d.ifaces[r.ifi].ip,dst:s.dst,ttl:s.kind==='trace'?s.seq:(d.type==='pc'?128:255),ident:sim.ident++,icmp:{type:8,code:0,id:s.id,seq:s.seq}};
+  const intro=s.kind==='trace'?`${d.name} sends traceroute probe ${s.seq}: an Echo Request to ${s.dst} with TTL ${s.seq}, so it expires at hop ${s.seq}.`:`${d.name} sends ICMP Echo Request #${s.seq} (type 8) to ${s.dst}.`;
+  resolveAndSend(d,r,pkt,`${intro} Next hop: ${routeDesc(d,r)}${r.kind==='G'?` (because ${s.dst} is outside its own subnet)`:''}.`);
+  after(PING_TIMEOUT,()=>{if(d.session===s&&s.tok===tok){s.tok=null;
+    if(s.kind==='ping'){if(s.style==='win')tprint(d,'Request timed out.');else tappend(d,'.')}
+    else tprint(d,`${String(s.seq).padStart(3)}     *        Request timed out.`);
+    log(d,`Probe ${s.seq} to ${s.dst} timed out`,{cls:'err'});after(400,()=>nextProbe(d))}});
+}
+function sessionLocalFail(d,pkt,msg){
+  const s=d.session;if(!s||!pkt.icmp||pkt.icmp.id!==s.id||pkt.icmp.seq!==s.seq||!s.tok)return;
+  s.tok=null;
+  if(s.kind==='ping'){if(s.style==='win')tprint(d,`Reply from ${pkt.src}: ${msg}`);else tappend(d,'.')}
+  else tprint(d,`${String(s.seq).padStart(3)}     *        ${msg}`);
+  if(s.kind==='trace')return finishSession(d);
+  after(400,()=>nextProbe(d));
+}
+function sessionRx(d,p,f){
+  const s=d.session;if(!s||!s.tok)return false;
+  const ic=p.icmp;let id,seq;
+  if(ic.type===0){id=ic.id;seq=ic.seq}else if(ic.orig&&ic.orig.icmp){id=ic.orig.icmp.id;seq=ic.orig.icmp.seq}else return false;
+  if(id!==s.id||seq!==s.seq)return false;
+  s.tok=null;const ms=Math.max(1,Math.round((sim.t-s.sentAt)/100));
+  if(s.kind==='ping'){
+    if(ic.type===0){s.ok++;if(s.style==='win')tprint(d,`Reply from ${p.src}: bytes=32 time=${ms}ms TTL=${p.ttl}`);else tappend(d,'!');
+      log(d,`Echo Reply from ${p.src}`,{frame:f,cls:'ok',explain:`${d.name} received the Echo Reply from ${p.src}. The round trip worked: ${p.src} is reachable.`});}
+    else if(ic.type===3){if(s.style==='win')tprint(d,`Reply from ${p.src}: Destination net unreachable.`);else tappend(d,'U');
+      log(d,`Unreachable from ${p.src}`,{frame:f,cls:'err',explain:`${d.name} got Destination Unreachable from router ${p.src}. That router has no route to ${s.dst}; check its routing table.`});}
+    else{if(s.style==='win')tprint(d,`Reply from ${p.src}: TTL expired in transit.`);else tappend(d,'.');log(d,`TTL expired at ${p.src}`,{frame:f,cls:'err'})}
+    after(500,()=>nextProbe(d));
+  }else{
+    tprint(d,`${String(s.seq).padStart(3)}  ${String(ms).padStart(4)} ms   ${p.src}`);
+    if(ic.type===11){log(d,`Hop ${s.seq}: ${p.src}`,{frame:f,cls:'icmp',explain:`Hop ${s.seq} is ${p.src}: that router sent back Time Exceeded. ${d.name} raises the TTL by one for the next probe.`});after(300,()=>nextProbe(d))}
+    else{log(d,`Trace reached ${p.src}`,{frame:f,cls:'ok',explain:ic.type===0?`${s.dst} answered with an Echo Reply, so the trace is complete after ${s.seq} hops.`:`${p.src} reported the destination unreachable, so the trace stops here.`});finishSession(d)}
+  }
+  return true;
+}
+function finishSession(d){
+  const s=d.session;if(!s)return;d.session=null;
+  if(s.kind==='ping'){const lost=s.seq-s.ok,pct=Math.round(lost/Math.max(1,s.seq)*100);
+    if(s.style==='win'){tprint(d,`\nPing statistics for ${s.dst}:`);tprint(d,`    Packets: Sent = ${s.seq}, Received = ${s.ok}, Lost = ${lost} (${pct}% loss)`)}
+    else tprint(d,`Success rate is ${100-pct} percent (${s.ok}/${s.seq})`);
+  }else tprint(d,'\nTrace complete.');
+}
+
+/* ---------- DHCP ---------- */
+const DHCPT={DISCOVER:1,OFFER:2,REQUEST:3,ACK:5,NAK:6};
+function startDhcp(d){
+  if(!ifOper(d,0))return tprint(d,'DHCP failed: eth0 has no working link.');
+  d.dhcpClient=true;d.ifaces[0].ip='';d.ifaces[0].mask='';d.gw='';topoDirty=true;save();
+  const xid=(Math.random()*0xffffffff)>>>0;d.dhcpc={xid,state:'selecting'};
+  tprint(d,'DHCP: sending DISCOVER…');
+  dhcpSend(d,{type:'DISCOVER',xid,chaddr:d.ifaces[0].mac},`${d.name} has no IP address yet, so it broadcasts a DHCP DISCOVER from 0.0.0.0 to 255.255.255.255 (UDP 68 → 67), asking any DHCP server for an address.`);
+  after(DHCP_TIMEOUT,()=>{if(d.dhcpc&&d.dhcpc.xid===xid&&d.dhcpc.state!=='bound'){d.dhcpc=null;tprint(d,"DHCP: no response from any server. Check the router's ip dhcp pool.");log(d,'DHCP timed out',{cls:'err'})}});
+}
+function dhcpSend(d,msg,explain){sendFrame(d,0,{dst:BCAST,src:d.ifaces[0].mac,ip:{src:'0.0.0.0',dst:'255.255.255.255',ttl:128,ident:sim.ident++,udp:{sp:68,dp:67,dhcp:msg}}},explain)}
+function dhcpClientRx(d,ifi,f){
+  const m=f.ip.udp.dhcp,c=d.dhcpc;
+  if(!c||m.xid!==c.xid||m.chaddr!==d.ifaces[0].mac){log(d,`Ignored DHCP ${m.type}`,{frame:f,cls:'mute',explain:`${d.name} received a broadcast DHCP ${m.type}, but the transaction ID belongs to another client, so it ignores it.`});return}
+  if(m.type==='OFFER'&&c.state==='selecting'){
+    c.state='requesting';tprint(d,`DHCP: OFFER ${m.yiaddr} from ${m.siaddr}. Sending REQUEST…`);
+    dhcpSend(d,{type:'REQUEST',xid:c.xid,chaddr:d.ifaces[0].mac,requested:m.yiaddr,server:m.siaddr},`${d.name} accepts the offer of ${m.yiaddr}. It broadcasts a DHCP REQUEST naming server ${m.siaddr}, so any other servers know their offers were declined.`);
+  }else if(m.type==='ACK'&&c.state==='requesting'){
+    c.state='bound';const i=d.ifaces[0];i.ip=m.yiaddr;i.mask=m.mask;d.gw=m.router||'';topoDirty=panelDirty=true;save();
+    tprint(d,`DHCP: ACK. IP ${m.yiaddr}/${mask2len(m.mask)}  gateway ${m.router||'none'}  lease ${m.lease/3600} h`);
+    log(d,`Bound to ${m.yiaddr}`,{frame:f,cls:'dhcp',explain:`The DHCP ACK confirms the lease. ${d.name} now uses ${m.yiaddr}/${mask2len(m.mask)} with gateway ${m.router||'none'}. That completes D-O-R-A: Discover, Offer, Request, Acknowledge.`});
+  }else if(m.type==='NAK'){d.dhcpc=null;tprint(d,'DHCP: server refused the request (NAK).')}
+}
+function dhcpServerRx(d,ifi,f){
+  const m=f.ip.udp.dhcp,ifc=d.ifaces[ifi];
+  if(!ifc.ip)return;
+  const pool=d.dhcp.pools.find(p=>p.net&&inNet(ifc.ip,p.net,p.mask));
+  if(!pool){log(d,`No DHCP pool for ${ifc.name}`,{frame:f,cls:'mute',explain:`${d.name} received a DHCP ${m.type} on ${ifc.name} (${ifc.ip}) but has no DHCP pool for that subnet, so it stays silent.`});return}
+  const reply=(type,extra,explain)=>sendFrame(d,ifi,{dst:BCAST,src:ifc.mac,ip:{src:ifc.ip,dst:'255.255.255.255',ttl:255,ident:sim.ident++,udp:{sp:67,dp:68,dhcp:{type,xid:m.xid,chaddr:m.chaddr,siaddr:ifc.ip,mask:pool.mask,router:pool.gw||'',lease:86400,...extra}}}},explain);
+  if(m.type==='DISCOVER'){
+    const ip=allocate(d,pool,m.chaddr);
+    if(!ip){log(d,`Pool ${pool.name} exhausted`,{frame:f,cls:'err',explain:`DHCP pool ${pool.name} has no free addresses left.`});return}
+    d.bindings[m.chaddr]={ip,state:'offered',pool:pool.name,t:sim.t};panelDirty=true;
+    reply('OFFER',{yiaddr:ip},`${d.name} runs a DHCP server with pool "${pool.name}" (${pool.net}/${mask2len(pool.mask)}). It picks the free address ${ip} and broadcasts a DHCP OFFER with the mask ${pool.mask}, gateway ${pool.gw||'none'} and a 24-hour lease.`);
+  }else if(m.type==='REQUEST'){
+    const b=d.bindings[m.chaddr];
+    if(m.server!==ifc.ip){log(d,'DHCP REQUEST for another server',{frame:f,cls:'mute'});return}
+    if(!b||b.ip!==m.requested){reply('NAK',{},`${d.name} can't confirm ${m.requested}, so it sends a DHCP NAK.`);return}
+    b.state='bound';b.t=sim.t;panelDirty=true;
+    reply('ACK',{yiaddr:b.ip},`${d.name} records the binding ${b.ip} ↔ ${m.chaddr} and confirms it with a DHCP ACK.`);
+  }
+}
+function allocate(d,pool,mac){
+  if(d.bindings[mac])return d.bindings[mac].ip;
+  const used=new Set(Object.values(d.bindings).map(b=>b.ip));
+  S.devices.forEach(x=>x.ifaces.forEach(i=>{if(i.ip)used.add(i.ip)}));
+  const base=ip2n(pool.net),size=2**(32-mask2len(pool.mask));
+  for(let n=base+1;n<base+size-1;n++){const ip=n2ip(n);
+    if(used.has(ip)||ip===pool.gw)continue;
+    if(d.dhcp.excluded.some(([a,b])=>n>=ip2n(a)&&n<=ip2n(b||a)))continue;
+    return ip;}
+  return null;
+}
+
+/* ---------- RIPv2 ---------- */
+function ripIfs(d){return d.ifaces.map((_,k)=>k).filter(k=>{const i=d.ifaces[k];return i.ip&&i.mask&&ifOper(d,k)&&d.rip.nets.some(n=>inNet(i.ip,n,classful(n)))})}
+function ripSend(d){
+  const ifs=ripIfs(d);
+  ifs.forEach(k=>{
+    const ifc=d.ifaces[k],entries=[];
+    ifs.forEach(j=>{if(j!==k){const i=d.ifaces[j];entries.push({net:netOf(i.ip,i.mask),mask:i.mask,metric:1})}});
+    d.ripRoutes.forEach(r=>{if(r.ifi!==k&&!entries.some(e=>e.net===r.net&&e.mask===r.mask))entries.push({net:r.net,mask:r.mask,metric:r.metric})});
+    if(!entries.length)return;
+    const list=entries.map(e=>`${e.net}/${mask2len(e.mask)} (${e.metric})`).join(', ');
+    sendFrame(d,k,{dst:RIPMAC,src:ifc.mac,ip:{src:ifc.ip,dst:'224.0.0.9',ttl:2,ident:sim.ident++,udp:{sp:520,dp:520,rip:{cmd:2,entries}}}},
+      `${d.name} sends a RIPv2 update out ${ifc.name} to the multicast address 224.0.0.9 (UDP 520). It advertises ${list}. Split horizon: routes learned on ${ifc.name} aren't sent back out ${ifc.name}. Real routers do this every 30 s; this lab uses a shorter interval.`);
+  });
+}
+function ripRx(d,ifi,f){
+  const p=f.ip,ifc=d.ifaces[ifi];
+  if(!d.rip.on||!ripIfs(d).includes(ifi)){log(d,'Ignored RIP update',{frame:f,cls:'mute',explain:`${d.name} isn't running RIP on ${ifc.name}, so it ignores the update.`});return}
+  const added=[],updated=[];
+  p.udp.rip.entries.forEach(e=>{
+    const m=e.metric+1;if(m>15)return;
+    if(d.ifaces.some((i,k)=>i.ip&&ifOper(d,k)&&netOf(i.ip,i.mask)===e.net&&i.mask===e.mask))return;
+    const ex=d.ripRoutes.find(r=>r.net===e.net&&r.mask===e.mask);
+    if(!ex){d.ripRoutes.push({net:e.net,mask:e.mask,nh:p.src,ifi,metric:m,t:sim.t});added.push(`${e.net}/${mask2len(e.mask)} via ${p.src} (${m} hop${m>1?'s':''})`)}
+    else if(ex.nh===p.src){if(ex.metric!==m)updated.push(e.net);ex.metric=m;ex.t=sim.t;ex.ifi=ifi}
+    else if(m<ex.metric){Object.assign(ex,{nh:p.src,ifi,metric:m,t:sim.t});updated.push(e.net)}
+  });
+  panelDirty=true;
+  if(added.length||updated.length){
+    log(d,`RIP: +${added.length} route${added.length===1?'':'s'}`,{frame:f,cls:'rip',explain:`${d.name} received a RIP update from ${p.src} on ${ifc.name}. It adds one hop to each advertised metric and installs ${added.length?'new routes: '+added.join(', '):'better paths'}. This triggers an update to its other neighbours.`});
+    d.ripNext=Math.min(d.ripNext,sim.t+500);
+  }else log(d,`RIP refresh from ${p.src}`,{frame:f,cls:'rip',explain:`${d.name} received a periodic RIP update from ${p.src}. Nothing changed, so it just resets the age timer of those routes.`});
+}
+function ripTick(){
+  S.devices.forEach(d=>{
+    if(d.type!=='router')return;
+    const before=d.ripRoutes.length;
+    d.ripRoutes=d.ripRoutes.filter(r=>sim.t-r.t<RIP_INT*3.5&&d.rip.on);
+    if(d.ripRoutes.length!==before){panelDirty=true;log(d,'RIP routes expired',{cls:'rip',explain:`${d.name} stopped hearing updates for some routes, so after the timeout it removes them from its routing table.`})}
+    if(d.rip.on&&sim.t>=d.ripNext){d.ripNext=sim.t+RIP_INT+Math.random()*800;ripSend(d)}
+  });
+}
+
+/* ---------- terminal ---------- */
+function tprint(d,s){String(s).split('\n').forEach(l=>d.term.lines.push(l));if(d.term.lines.length>500)d.term.lines.splice(0,d.term.lines.length-500);if(d.id===selId)termDirty=true}
+function tappend(d,s){const L=d.term.lines;L[L.length-1]=(L[L.length-1]||'')+s;if(d.id===selId)termDirty=true}
+let termDirty=true;
+function promptOf(d){
+  if(d.type==='pc')return d.name+'> ';
+  const m=d.term.mode;return d.name+({user:'>',priv:'#',config:'(config)#',if:'(config-if)#',dhcp:'(dhcp-config)#',rip:'(config-router)#'}[m]);
+}
+function runCmd(d,line,echo=true){
+  if(echo)tprint(d,promptOf(d)+line);
+  if(d.type==='pc')pcCmd(d,line);else iosCmd(d,line);
+  topoDirty=panelDirty=true;termDirty=true;save();
+}
+function pcCmd(d,line){
+  const t=line.trim().split(/\s+/).filter(Boolean);if(!t.length)return;
+  const c=t[0].toLowerCase(),i=d.ifaces[0];
+  if(c==='help'||c==='?')return tprint(d,['Commands:',
+    '  ipconfig                          show IP settings',
+    '  ip <addr>/<len> [gateway]         set a static address, e.g. ip 192.168.1.10/24 192.168.1.1',
+    '  ip <addr> <mask> [gateway]        same, with a dotted mask',
+    '  ip dhcp                           get an address from a DHCP server',
+    '  ping <ip> [-n count]              send ICMP echo requests',
+    '  tracert <ip>                      list every router on the path',
+    '  arp -a  |  arp -d                 show or clear the ARP cache',
+    '  cls                               clear the screen',
+    'Press Ctrl+C to stop a running ping.'].join('\n'));
+  if(c==='ipconfig'){
+    if(t[1]==='/renew')return startDhcp(d);
+    return tprint(d,`\nEthernet adapter eth0:\n   Physical Address . . . . : ${i.mac}\n   DHCP Enabled . . . . . . : ${d.dhcpClient?'Yes':'No'}\n   IPv4 Address . . . . . . : ${i.ip||'(none)'}\n   Subnet Mask  . . . . . . : ${i.mask||'(none)'}\n   Default Gateway  . . . . : ${d.gw||'(none)'}\n   Link . . . . . . . . . . : ${ifOper(d,0)?'up':'down'}`);
+  }
+  if(c==='ip'){
+    if((t[1]||'').toLowerCase()==='dhcp')return startDhcp(d);
+    let a=parseCidr(t[1],t[2]),gw=t[1]&&t[1].includes('/')?t[2]:t[3];
+    if(!a)return tprint(d,'Usage: ip 192.168.1.10/24 192.168.1.1   or   ip 192.168.1.10 255.255.255.0 192.168.1.1');
+    if(gw&&!validIp(gw))return tprint(d,`Invalid gateway: ${gw}`);
+    if(gw&&!inNet(gw,a.ip,a.mask))tprint(d,`Warning: gateway ${gw} is not in ${netOf(a.ip,a.mask)}/${mask2len(a.mask)}. It won't be reachable.`);
+    i.ip=a.ip;i.mask=a.mask;d.gw=gw||'';d.dhcpClient=false;d.arp={};
+    return tprint(d,`IP ${a.ip}/${mask2len(a.mask)}${gw?'  gateway '+gw:''}`);
+  }
+  if(c==='ping'){const n=t.indexOf('-n');return startPing(d,t[1],n>0?Math.max(1,Math.min(20,+t[n+1]||4)):4,'win')}
+  if(c==='tracert'||c==='traceroute')return startTrace(d,t[1],'win');
+  if(c==='arp'){
+    if(t[1]==='-d'){d.arp={};return tprint(d,'ARP cache cleared.')}
+    const rows=Object.entries(d.arp);
+    if(!rows.length)return tprint(d,'No ARP entries found.');
+    return tprint(d,`\nInterface: ${i.ip||'0.0.0.0'} --- eth0\n  Internet Address      Physical Address      Type\n`+rows.map(([ip,e])=>`  ${ip.padEnd(22)}${e.mac.padEnd(22)}dynamic`).join('\n'));
+  }
+  if(c==='cls'||c==='clear'){d.term.lines=[];return}
+  tprint(d,`'${t[0]}' is not recognized as a command. Type help for the list.`);
+}
+function matchCmd(toks,pat){
+  const P=pat.split(' ');if(toks.length!==P.length)return null;const args=[];
+  for(let k=0;k<P.length;k++){const p=P[k],t=toks[k];if(p[0]==='<')args.push(t);else if(!p.startsWith(t.toLowerCase()))return null}
+  return args;
+}
+function parseIf(d,rest){
+  const s=rest.join('').toLowerCase(),m=s.match(/^([a-z]+)(\d+\/\d+)$/);if(!m)return -1;
+  const ok=(d.type==='router'?'gigabitethernet':'fastethernet').startsWith(m[1]);if(!ok)return -1;
+  return d.ifaces.findIndex(i=>i.name.toLowerCase()===(d.type==='router'?'gi':'fa')+m[2]);
+}
+const IOSHELP={
+  user:['enable                         enter privileged mode','ping <ip>','traceroute <ip>','show ...                       (see privileged mode)'],
+  priv:['configure terminal             enter configuration mode','show ip interface brief','show ip route','show arp','show ip dhcp binding','show mac address-table','show running-config','ping <ip>  |  traceroute <ip>','clear arp-cache  |  clear mac address-table','disable'],
+  config:['hostname <name>','interface <gi0/0 | fa0/1>','ip route <network> <mask> <next-hop>','no ip route <network> <mask> <next-hop>','ip dhcp pool <name>','ip dhcp excluded-address <low> [high]','router rip  |  no router rip','do <command>                  run a privileged command','exit  |  end'],
+  if:['ip address <ip> <mask>','no ip address','shutdown  |  no shutdown','exit  |  end'],
+  dhcp:['network <network> <mask>','default-router <ip>','dns-server <ip>','exit  |  end'],
+  rip:['version 2','network <classful network>   e.g. network 10.0.0.0','no network <network>','no auto-summary','exit  |  end']
+};
+function linkMsg(d,ifi){const i=d.ifaces[ifi],L=longIf(i.name);
+  tprint(d,`%LINK-5-CHANGED: Interface ${L}, changed state to ${i.up?'up':'administratively down'}`);
+  if(linkAt(d,ifi))tprint(d,`%LINEPROTO-5-UPDOWN: Line protocol on Interface ${L}, changed state to ${ifOper(d,ifi)?'up':'down'}`);
+  if(d.rip.on)d.ripNext=sim.t+400;const l=linkAt(d,ifi);if(l){const p=peer(l,d,ifi);if(p.d.rip.on)p.d.ripNext=sim.t+400}
+}
+function iosCmd(d,line){
+  const T=d.term,isR=d.type==='router';
+  const toks=line.trim().split(/\s+/).filter(Boolean);if(!toks.length)return;
+  if(toks[0]==='?'||toks[toks.length-1]==='?'){
+    let h=IOSHELP[T.mode].slice();if(!isR)h=h.filter(x=>!/ip route|dhcp|rip|ip address|traceroute|show arp|show ip route|clear arp/.test(x));else h=h.filter(x=>!/mac address/.test(x));
+    return tprint(d,h.map(x=>'  '+x).join('\n'));
+  }
+  if(['config','if','dhcp','rip'].includes(T.mode)&&/^do$/i.test(toks[0])){const sv=T.mode;T.mode='priv';iosCmd(d,toks.slice(1).join(' '));T.mode=sv;return}
+  const M=p=>matchCmd(toks,p);let a;
+  const bad=()=>tprint(d,`${' '.repeat(promptOf(d).length)}^\n% Invalid input detected at '^' marker. Type ? for help.`);
+  if(/^(end)$/i.test(toks[0])&&T.mode!=='user'&&T.mode!=='priv'){T.mode='priv';return}
+  const show=()=>{
+    if(M('show ip interface brief')){
+      tprint(d,'Interface              IP-Address      OK? Method Status                Protocol');
+      d.ifaces.forEach((i,k)=>tprint(d,`${longIf(i.name).padEnd(23)}${(i.ip||'unassigned').padEnd(16)}YES ${(i.ip?(d.dhcpClient?'DHCP':'manual'):'unset').padEnd(7)}${(i.up?(ifOper(d,k)?'up':'down'):'administratively down').padEnd(22)}${ifOper(d,k)?'up':'down'}`));return true}
+    if(isR&&M('show ip route')){
+      const L=['Codes: L - local, C - connected, S - static, R - RIP',''];
+      const def=d.routes.find(r=>r.net==='0.0.0.0'&&r.mask==='0.0.0.0');L.push(def?`Gateway of last resort is ${def.nh} to network 0.0.0.0`:'Gateway of last resort is not set','');
+      const rows=[];
+      d.ifaces.forEach((i,k)=>{if(i.ip&&i.mask&&ifOper(d,k)){rows.push([ip2n(netOf(i.ip,i.mask)),`C        ${netOf(i.ip,i.mask)}/${mask2len(i.mask)} is directly connected, ${longIf(i.name)}`]);rows.push([ip2n(i.ip),`L        ${i.ip}/32 is directly connected, ${longIf(i.name)}`])}});
+      d.routes.forEach(r=>{const ok=routeLookup(d,r.net)&&d.ifaces.some((i,k)=>i.ip&&ifOper(d,k)&&inNet(r.nh,i.ip,i.mask));if(ok)rows.push([ip2n(r.net),`S${r.net==='0.0.0.0'?'*':' '}       ${r.net}/${mask2len(r.mask)} [1/0] via ${r.nh}`])});
+      d.ripRoutes.forEach(r=>{if(!d.routes.some(s=>s.net===r.net&&s.mask===r.mask))rows.push([ip2n(r.net),`R        ${r.net}/${mask2len(r.mask)} [120/${r.metric}] via ${r.nh}, 00:00:${String(Math.min(59,Math.round((sim.t-r.t)/1000))).padStart(2,'0')}, ${longIf(d.ifaces[r.ifi].name)}`])});
+      rows.sort((x,y)=>x[0]-y[0]).forEach(r=>L.push(r[1]));
+      if(!rows.length)L.push('(no routes: configure interface addresses and bring them up)');
+      tprint(d,L.join('\n'));return true}
+    if(isR&&(M('show arp')||M('show ip arp'))){
+      tprint(d,'Protocol  Address          Age (min)  Hardware Addr   Type   Interface');
+      d.ifaces.forEach(i=>{if(i.ip)tprint(d,`Internet  ${i.ip.padEnd(17)}       -   ${macDot(i.mac)}  ARPA   ${longIf(i.name)}`)});
+      Object.entries(d.arp).forEach(([ip,e])=>tprint(d,`Internet  ${ip.padEnd(17)}${String(Math.floor((sim.t-e.t)/60000)).padStart(8)}   ${macDot(e.mac)}  ARPA   ${longIf(d.ifaces[e.ifi].name)}`));return true}
+    if(isR&&M('show ip dhcp binding')){
+      tprint(d,'IP address       Client-ID/Hardware address   Lease expiration     Type       State');
+      const b=Object.entries(d.bindings);if(!b.length)tprint(d,'(no bindings)');
+      b.forEach(([mac,x])=>tprint(d,`${x.ip.padEnd(17)}${macDot(mac).padEnd(29)}${'in 24 hours'.padEnd(21)}Automatic  ${x.state==='bound'?'Active':'Selecting'}`));return true}
+    if(!isR&&M('show mac address-table')){
+      tprint(d,'          Mac Address Table\n-------------------------------------------\n\nVlan    Mac Address       Type        Ports\n----    -----------       --------    -----');
+      const e=Object.entries(d.mact);e.forEach(([m,x])=>tprint(d,`   1    ${macDot(m)}    DYNAMIC     ${d.ifaces[x.ifi].name}`));
+      tprint(d,`Total Mac Addresses for this criterion: ${e.length}`);return true}
+    if(M('show running-config')||M('show run')){
+      const L=['Building configuration...','','Current configuration:','!',`hostname ${d.name}`,'!'];
+      if(isR){d.dhcp.excluded.forEach(([x,y])=>L.push(`ip dhcp excluded-address ${x}${y&&y!==x?' '+y:''}`));
+        d.dhcp.pools.forEach(p=>{L.push(`ip dhcp pool ${p.name}`);if(p.net)L.push(` network ${p.net} ${p.mask}`);if(p.gw)L.push(` default-router ${p.gw}`);if(p.dns)L.push(` dns-server ${p.dns}`);L.push('!')})}
+      d.ifaces.forEach(i=>{L.push(`interface ${longIf(i.name)}`);if(isR)L.push(i.ip?` ip address ${i.ip} ${i.mask}`:' no ip address');if(!i.up)L.push(' shutdown');L.push('!')});
+      if(d.rip.on){L.push('router rip',' version 2');d.rip.nets.forEach(n=>L.push(` network ${n}`));L.push(' no auto-summary','!')}
+      d.routes.forEach(r=>L.push(`ip route ${r.net} ${r.mask} ${r.nh}`));L.push('!','end');tprint(d,L.join('\n'));return true}
+    return false;
+  };
+  const cfg=()=>{
+    if(a=M('hostname <n>')){d.name=a[0].slice(0,20);return true}
+    if(toks.length>=2&&'interface'.startsWith(toks[0].toLowerCase())&&toks[0].length>=3){const k=parseIf(d,toks.slice(1));if(k<0){tprint(d,'% Invalid interface. Use '+(isR?'gi0/0 … gi0/3':'fa0/1 … fa0/8'));return true}T.mode='if';T.sub=k;return true}
+    if(isR&&(a=M('ip route <n> <m> <h>'))){
+      if(!validIp(a[0])||!validMask(a[1])||!validIp(a[2])){tprint(d,'% Invalid address or mask');return true}
+      if(netOf(a[0],a[1])!==a[0]){tprint(d,'%Inconsistent address and mask');return true}
+      if(!d.routes.some(r=>r.net===a[0]&&r.mask===a[1]&&r.nh===a[2]))d.routes.push({net:a[0],mask:a[1],nh:a[2]});return true}
+    if(isR&&(a=M('no ip route <n> <m> <h>'))){d.routes=d.routes.filter(r=>!(r.net===a[0]&&r.mask===a[1]&&r.nh===a[2]));return true}
+    if(isR&&(a=M('ip dhcp pool <n>'))){let p=d.dhcp.pools.find(x=>x.name===a[0]);if(!p){p={name:a[0],net:'',mask:'',gw:'',dns:''};d.dhcp.pools.push(p)}T.mode='dhcp';T.sub=a[0];return true}
+    if(isR&&(a=M('no ip dhcp pool <n>'))){d.dhcp.pools=d.dhcp.pools.filter(x=>x.name!==a[0]);return true}
+    if(isR&&((a=M('ip dhcp excluded-address <a> <b>'))||(a=M('ip dhcp excluded-address <a>')))){if(!a.every(validIp)){tprint(d,'% Invalid address');return true}d.dhcp.excluded.push([a[0],a[1]||a[0]]);return true}
+    if(isR&&M('router rip')){d.rip.on=true;d.ripNext=sim.t+400;T.mode='rip';return true}
+    if(isR&&M('no router rip')){d.rip={on:false,nets:[]};d.ripRoutes=[];return true}
+    return false;
+  };
+  switch(T.mode){
+    case 'user':
+      if(M('enable')){T.mode='priv';return}
+      if(a=M('ping <ip>'))return startPing(d,a[0],5,'ios');
+      if(a=M('traceroute <ip>'))return startTrace(d,a[0],'ios');
+      if(toks[0].toLowerCase().startsWith('sh')){tprint(d,'Use enable first to run show commands in this lab.');return}
+      return bad();
+    case 'priv':
+      if(M('configure terminal')){T.mode='config';return tprint(d,'Enter configuration commands, one per line.  End with end.')}
+      if(M('disable')||M('exit')){T.mode='user';return}
+      if(a=M('ping <ip>'))return startPing(d,a[0],5,'ios');
+      if(a=M('traceroute <ip>'))return startTrace(d,a[0],'ios');
+      if(isR&&M('clear arp-cache')){d.arp={};return}
+      if(!isR&&M('clear mac address-table')){d.mact={};return}
+      if(M('write memory')||M('copy running-config startup-config')){save();return tprint(d,'[OK] (saved in this browser)')}
+      if(show())return;
+      return bad();
+    case 'config':
+      if(M('exit')){T.mode='priv';return}
+      if(cfg())return;
+      return bad();
+    case 'if':{
+      const i=d.ifaces[T.sub];
+      if(M('exit')){T.mode='config';return}
+      if(isR&&(a=M('ip address <ip> <m>'))){
+        if(!validIp(a[0])||!validMask(a[1]))return tprint(d,'% Invalid address or mask');
+        if(netOf(a[0],a[1])===a[0]||n2ip((ip2n(netOf(a[0],a[1]))+2**(32-mask2len(a[1]))-1)>>>0)===a[0])return tprint(d,'% Bad mask /'+mask2len(a[1])+' for address '+a[0]);
+        const clash=d.ifaces.find((x,k)=>k!==T.sub&&x.ip&&inNet(a[0],x.ip,x.mask));
+        if(clash)return tprint(d,`% ${netOf(a[0],a[1])} overlaps with ${clash.name}`);
+        i.ip=a[0];i.mask=a[1];if(d.rip.on)d.ripNext=sim.t+400;return}
+      if(isR&&M('no ip address')){i.ip='';i.mask='';return}
+      if(M('shutdown')){i.up=false;return linkMsg(d,T.sub)}
+      if(M('no shutdown')){i.up=true;return linkMsg(d,T.sub)}
+      if(toks[0].toLowerCase().startsWith('desc'))return;
+      if(cfg())return;return bad();}
+    case 'dhcp':{
+      const p=d.dhcp.pools.find(x=>x.name===T.sub);
+      if(M('exit')){T.mode='config';return}
+      if(a=M('network <n> <m>')){if(!validIp(a[0])||!validMask(a[1]))return tprint(d,'% Invalid network');p.net=netOf(a[0],a[1]);p.mask=a[1];return}
+      if(a=M('default-router <ip>')){if(!validIp(a[0]))return tprint(d,'% Invalid address');p.gw=a[0];return}
+      if(a=M('dns-server <ip>')){p.dns=a[0];return}
+      if(cfg())return;return bad();}
+    case 'rip':
+      if(M('exit')){T.mode='config';return}
+      if(M('version 2')||M('no auto-summary'))return;
+      if(M('version 1'))return tprint(d,'This lab supports RIP version 2 only.');
+      if(a=M('network <n>')){if(!validIp(a[0]))return tprint(d,'% Invalid network');const n=netOf(a[0],classful(a[0]));if(!d.rip.nets.includes(n))d.rip.nets.push(n);d.ripNext=sim.t+400;return}
+      if(a=M('no network <n>')){d.rip.nets=d.rip.nets.filter(n=>n!==netOf(a[0],classful(a[0])));return}
+      if(cfg())return;return bad();
+  }
+}
+
+/* ---------- byte encoding for the inspector ---------- */
+const macB=m=>m.split(':').map(h=>parseInt(h,16)),ipB=s=>s.split('.').map(Number),u16=n=>[(n>>8)&255,n&255],u32=n=>[n>>>24,(n>>>16)&255,(n>>>8)&255,n&255];
+function csum(a){let s=0;for(let i=0;i<a.length;i+=2)s+=(a[i]<<8)+(a[i+1]||0);while(s>>16)s=(s&0xffff)+(s>>16);return (~s)&0xffff}
+const PAYLOAD=[...'abcdefghijklmnopqrstuvwabcdefghi'].map(c=>c.charCodeAt(0));
+function icmpBytes(ic){
+  const echo=ic.type===0||ic.type===8;
+  let data=echo?PAYLOAD:(ic.orig?ipHdr(ic.orig,l4Bytes(ic.orig).length).concat(l4Bytes(ic.orig).slice(0,8)):[]);
+  const b=[ic.type,ic.code||0,0,0,...(echo?[...u16(ic.id),...u16(ic.seq)]:[0,0,0,0]),...data];const c=csum(b);b[2]=c>>8;b[3]=c&255;return b;
+}
+function dhcpBytes(m){
+  const op=(m.type==='DISCOVER'||m.type==='REQUEST')?1:2;
+  const b=[op,1,6,0,...u32(m.xid),0,0,0x80,0,0,0,0,0,...ipB(m.yiaddr||'0.0.0.0'),...ipB(m.siaddr||'0.0.0.0'),0,0,0,0,...macB(m.chaddr),...new Array(10).fill(0),...new Array(192).fill(0),99,130,83,99,53,1,DHCPT[m.type]];
+  if(m.requested)b.push(50,4,...ipB(m.requested));
+  if(m.server)b.push(54,4,...ipB(m.server));
+  if(op===2&&m.type!=='NAK'){b.push(54,4,...ipB(m.siaddr),51,4,...u32(m.lease),1,4,...ipB(m.mask));if(m.router)b.push(3,4,...ipB(m.router))}
+  b.push(255);return b;
+}
+function ripBytes(r){const b=[2,2,0,0];r.entries.forEach(e=>b.push(0,2,0,0,...ipB(e.net),...ipB(e.mask),0,0,0,0,0,0,0,e.metric));return b}
+function l4Bytes(p){if(p.icmp)return icmpBytes(p.icmp);const pl=p.udp.dhcp?dhcpBytes(p.udp.dhcp):ripBytes(p.udp.rip);return [...u16(p.udp.sp),...u16(p.udp.dp),...u16(8+pl.length),0,0,...pl]}
+function ipHdr(p,plen){const h=[0x45,p.udp&&p.udp.rip?0xc0:0,...u16(20+plen),...u16(p.ident||0),0,0,p.ttl,p.icmp?1:17,0,0,...ipB(p.src),...ipB(p.dst)];const c=csum(h);h[10]=c>>8;h[11]=c&255;return h}
+const hx=(a)=>'0x'+a.map(x=>x.toString(16).padStart(2,'0')).join('');
+function dissect(f){
+  const L=[],bytes=[];
+  const add=(ly,name,val,arr,note)=>{ly.fields.push({name,val,s:bytes.length,l:arr.length,note});bytes.push(...arr)};
+  const eth={name:'Ethernet II',cls:'l2',fields:[]};L.push(eth);
+  add(eth,'Destination',f.dst+(f.dst===BCAST?' (broadcast)':f.dst===RIPMAC?' (IPv4 multicast 224.0.0.9)':''),macB(f.dst),'Rewritten at every router hop');
+  add(eth,'Source',f.src,macB(f.src));
+  add(eth,'EtherType',f.arp?'0x0806 (ARP)':'0x0800 (IPv4)',u16(f.arp?0x0806:0x0800));
+  if(f.arp){const a=f.arp,l={name:`ARP ${a.op===1?'request':'reply'}`,cls:'arp',fields:[]};L.push(l);
+    add(l,'Hardware type','1 (Ethernet)',[0,1]);add(l,'Protocol type','0x0800 (IPv4)',[8,0]);add(l,'Hardware size','6',[6]);add(l,'Protocol size','4',[4]);
+    add(l,'Opcode',a.op===1?'1 (request)':'2 (reply)',u16(a.op));add(l,'Sender MAC',a.sha,macB(a.sha));add(l,'Sender IP',a.spa,ipB(a.spa));
+    add(l,'Target MAC',a.tha+(a.op===1?' (unknown, being asked)':''),macB(a.tha));add(l,'Target IP',a.tpa,ipB(a.tpa));
+  }else{
+    const p=f.ip,l4=l4Bytes(p),h=ipHdr(p,l4.length),l={name:'Internet Protocol v4',cls:'l3',fields:[]};L.push(l);
+    add(l,'Version / IHL','4 / 20 bytes',[h[0]]);add(l,'DSCP / ECN',hx([h[1]])+(h[1]?' (CS6, network control)':''),[h[1]]);add(l,'Total length',String(20+l4.length),h.slice(2,4));
+    add(l,'Identification',hx(h.slice(4,6)),h.slice(4,6));add(l,'Flags / offset','0x0000',h.slice(6,8));
+    add(l,'Time to live',String(p.ttl),[h[8]],'Each router lowers this by 1; at 0 the packet is discarded');
+    add(l,'Protocol',p.icmp?'1 (ICMP)':'17 (UDP)',[h[9]]);add(l,'Header checksum',hx(h.slice(10,12)),h.slice(10,12));
+    add(l,'Source',p.src,h.slice(12,16));add(l,'Destination',p.dst,h.slice(16,20),'Stays the same end to end');
+    if(p.icmp){const ic=p.icmp,m={name:`ICMP ${ICMPN[ic.type]}`,cls:'l4',fields:[]};L.push(m);
+      add(m,'Type',`${ic.type} (${ICMPN[ic.type]})`,[l4[0]]);add(m,'Code',String(ic.code||0)+(ic.type===3?' (net unreachable)':ic.type===11?' (TTL exceeded in transit)':''),[l4[1]]);add(m,'Checksum',hx(l4.slice(2,4)),l4.slice(2,4));
+      if(ic.type===0||ic.type===8){add(m,'Identifier',String(ic.id),l4.slice(4,6),'Matches replies to the ping session');add(m,'Sequence',String(ic.seq),l4.slice(6,8));add(m,'Data','32 bytes "abcdefghijklmnopqrstuvwabcdefghi"',l4.slice(8))}
+      else{add(m,'Unused','0',l4.slice(4,8));add(m,'Original datagram',`IP header + first 8 bytes of ${fsumIp(ic.orig)}`,l4.slice(8),'Lets the sender match the error to its packet')}
+    }else{const u=p.udp,m={name:'User Datagram Protocol',cls:'l4',fields:[]};L.push(m);
+      add(m,'Source port',`${u.sp}${u.sp===68?' (bootpc)':u.sp===67?' (bootps)':u.sp===520?' (rip)':''}`,l4.slice(0,2));add(m,'Destination port',`${u.dp}${u.dp===68?' (bootpc)':u.dp===67?' (bootps)':u.dp===520?' (rip)':''}`,l4.slice(2,4));
+      add(m,'Length',String(l4.length),l4.slice(4,6));add(m,'Checksum','0x0000 (not computed)',l4.slice(6,8));
+      const pl=l4.slice(8);
+      if(u.dhcp){const x=u.dhcp,a={name:`DHCP ${x.type}`,cls:'dhcp',fields:[]};L.push(a);let o=0;const take=(n,name,val,note)=>{add(a,name,val,pl.slice(o,o+n),note);o+=n};
+        take(1,'Message type (op)',pl[0]===1?'1 (Boot Request)':'2 (Boot Reply)');take(3,'HW type / len / hops','Ethernet / 6 / 0');take(4,'Transaction ID',hx(u32(x.xid)),'Client picks it; replies must match');
+        take(2,'Seconds','0');take(2,'Flags','0x8000 (broadcast)');take(4,'Client IP (ciaddr)','0.0.0.0');take(4,'Your IP (yiaddr)',x.yiaddr||'0.0.0.0','The address being offered');take(4,'Server IP (siaddr)',x.siaddr||'0.0.0.0');take(4,'Relay agent (giaddr)','0.0.0.0');
+        take(16,'Client MAC (chaddr)',x.chaddr);take(192,'Server name / boot file','(empty)');take(4,'Magic cookie','0x63825363 (DHCP)');
+        const opts=[`53 Message type = ${x.type}`];if(x.requested)opts.push(`50 Requested IP = ${x.requested}`);if(x.server)opts.push(`54 Server ID = ${x.server}`);
+        if(pl[0]===2&&x.type!=='NAK'){opts.push(`54 Server ID = ${x.siaddr}`,`51 Lease = ${x.lease} s`,`1 Subnet mask = ${x.mask}`);if(x.router)opts.push(`3 Router = ${x.router}`)}opts.push('255 End');
+        take(pl.length-o,'Options',opts.join(' · '));
+      }else{const a={name:'RIP version 2',cls:'rip',fields:[]};L.push(a);add(a,'Command','2 (Response)',pl.slice(0,1));add(a,'Version','2',pl.slice(1,2));add(a,'Reserved','0',pl.slice(2,4));
+        u.rip.entries.forEach((e,k)=>add(a,`Route ${k+1}`,`${e.net}/${mask2len(e.mask)} metric ${e.metric}`,pl.slice(4+k*20,24+k*20),'AFI 2 · tag 0 · next hop 0.0.0.0 (use sender)'));}
+    }
+  }
+  if(bytes.length<60){const pad={name:'Ethernet padding',cls:'pad',fields:[]};L.push(pad);add(pad,'Padding',`${60-bytes.length} bytes, because Ethernet frames are at least 60 bytes`,new Array(60-bytes.length).fill(0))}
+  return {L,bytes};
+}
+
+/* ---------- SVG rendering ---------- */
+const svg=$('#svg'),gLinks=$('#gLinks'),gDevs=$('#gDevs'),gPkts=$('#gPkts');
+const GLYPH={
+  pc:'<rect class="body" x="-21" y="-19" width="42" height="29" rx="4"/><rect class="scr" x="-16" y="-14" width="32" height="19" rx="1.5"/><path class="glyph" d="M-7 10l-2 8h18l-2-8M-12 18h24"/>',
+  switch:'<rect class="body" x="-28" y="-14" width="56" height="28" rx="5"/><path class="glyph" d="M-16-5h26m-5-4l5 4-5 4M16 5h-26m5-4l-5 4 5 4"/>',
+  router:'<circle class="body" r="22"/><path class="glyph" d="M-13 0h26M0-13v26M9-4l4 4-4 4M-9-4l-4 4 4 4M-4-9l4-4 4 4M-4 9l4 4 4-4"/>'
+};
+function renderTopo(){
+  let h='';
+  for(const l of S.links){const A=dev(l.a.dev),B=dev(l.b.dev);if(!A||!B)continue;
+    const ok=ifOper(A,l.a.ifi);
+    h+=`<g class="link" data-link="${l.id}"><line class="hit" x1="${A.x}" y1="${A.y}" x2="${B.x}" y2="${B.y}"/><line class="wire${ok?'':' down'}" x1="${A.x}" y1="${A.y}" x2="${B.x}" y2="${B.y}"/>`;
+    const dx=B.x-A.x,dy=B.y-A.y,len=Math.hypot(dx,dy)||1,ux=dx/len,uy=dy/len,nx=-uy,ny=ux;
+    [[A,l.a.ifi,1],[B,l.b.ifi,-1]].forEach(([D,ifi,dir])=>{
+      const off=36,px=D.x+ux*off*dir,py=D.y+uy*off*dir,lx=D.x+ux*(off+20)*dir+nx*12,ly=D.y+uy*(off+20)*dir+ny*12;
+      h+=`<circle class="ldot ${ifOper(D,ifi)?'up':'dn'}" cx="${px}" cy="${py}" r="4.5"/><text class="llab" x="${lx}" y="${ly}" text-anchor="middle" dominant-baseline="middle">${esc(D.ifaces[ifi].name)}</text>`;
+    });h+='</g>';}
+  gLinks.innerHTML=h;h='';
+  for(const d of S.devices){
+    const sub=d.type==='pc'?(d.ifaces[0].ip?d.ifaces[0].ip+'/'+mask2len(d.ifaces[0].mask):'no IP'):d.type==='router'?(d.rip.on?'RIP':''):'';
+    h+=`<g class="dev ${d.type}${linkFrom===d.id?' linkfrom':''}" data-dev="${d.id}" transform="translate(${d.x},${d.y})"><rect class="hitbox" x="-34" y="-30" width="68" height="78"/>${(selId===d.id||linkFrom===d.id)?'<rect class="selring" x="-36" y="-32" width="72" height="88" rx="10"/>':''}${GLYPH[d.type]}<text class="dname" y="${d.type==='switch'?32:38}">${esc(d.name)}</text>${sub?`<text class="dsub" y="${d.type==='switch'?46:52}">${esc(sub)}</text>`:''}</g>`;
+  }
+  gDevs.innerHTML=h;topoDirty=false;
+}
+const pktEls=new Map();
+function renderPackets(){
+  const keep=new Set();
+  for(const pk of sim.packets){const L=S.links.find(l=>l.id===pk.link);if(!L)continue;
+    const A=dev(pk.from==='a'?L.a.dev:L.b.dev),B=dev(pk.from==='a'?L.b.dev:L.a.dev);if(!A||!B)continue;
+    const p=Math.min(1,pk.p),x=A.x+(B.x-A.x)*p,y=A.y+(B.y-A.y)*p;
+    let el=pktEls.get(pk.id);
+    if(!el){el=document.createElementNS('http://www.w3.org/2000/svg','g');el.setAttribute('class','pkt '+fcls(pk.f));el.dataset.pkt=pk.id;
+      el.innerHTML='<rect x="-10" y="-7" width="20" height="14" rx="2.5"/><path d="M-10-6l10 7 10-7"/>';gPkts.appendChild(el);pktEls.set(pk.id,el)}
+    el.setAttribute('transform',`translate(${x.toFixed(1)},${y.toFixed(1)})`);
+    const ring=inspected&&inspected.id===pk.f.id;
+    if(ring&&!el.querySelector('.ring')){const r=document.createElementNS('http://www.w3.org/2000/svg','rect');r.setAttribute('class','ring');r.setAttribute('x','-14');r.setAttribute('y','-11');r.setAttribute('width','28');r.setAttribute('height','22');r.setAttribute('rx','5');el.appendChild(r)}
+    if(!ring){const r=el.querySelector('.ring');if(r)r.remove()}
+    keep.add(pk.id);}
+  for(const [id,el] of pktEls)if(!keep.has(id)){el.remove();pktEls.delete(id)}
+}
+
+/* ---------- panel: device ---------- */
+let lastDevPane=null;
+function renderDevicePane(force){
+  const pane=$('#pane-device'),d=dev(selId);
+  if(!d){if(lastDevPane!=='none'||force){pane.innerHTML=`<div class="empty"><b>Pick a device on the canvas</b> to open its console and see its tables.<br><br>PCs use a Windows-style prompt (<span class="cmd">ipconfig</span>, <span class="cmd">ping</span>, <span class="cmd">tracert</span>, <span class="cmd">ip dhcp</span>). Routers and switches use an IOS-style CLI: <span class="cmd">enable</span>, <span class="cmd">configure terminal</span>, <span class="cmd">show ip route</span>.<br><br>Packets are colour-coded: <b style="color:var(--arp)">ARP</b>, <b style="color:var(--icmp)">ICMP</b>, <b style="color:var(--err)">ICMP errors</b>, <b style="color:var(--dhcp)">DHCP</b>, <b style="color:var(--rip)">RIP</b>. Click a moving packet to dissect it.</div>`;lastDevPane='none'}return}
+  if(lastDevPane!==d.id||force){
+    pane.innerHTML=`<div class="dhead"><input id="devName" value="${esc(d.name)}" aria-label="Device name" maxlength="20"><span class="tag">${d.type==='pc'?'PC / host':d.type==='switch'?'Layer 2 switch · 8 ports':'Router · 4 ports'}</span></div>
+      ${d.type==='pc'?`<div class="qcfg"><label>IPv4 address<input id="qIp" placeholder="192.168.1.10"></label><label>Mask<input id="qMask" placeholder="255.255.255.0"></label><label>Gateway<input id="qGw" placeholder="192.168.1.1"></label><button class="btn" id="qApply">Apply</button></div>`:''}
+      <div class="term" id="term"><pre class="tout" id="tout"></pre><div class="tin"><label for="tin" id="tprompt"></label><input id="tin" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Console input"></div></div>
+      <div id="tables"></div>`;
+    lastDevPane=d.id;termDirty=true;
+    $('#devName').addEventListener('change',e=>{const v=e.target.value.trim().slice(0,20);if(v){d.name=v;topoDirty=true;termDirty=true;save()}});
+    if(d.type==='pc'){const fill=()=>{$('#qIp').value=d.ifaces[0].ip;$('#qMask').value=d.ifaces[0].mask;$('#qGw').value=d.gw};fill();
+      $('#qApply').addEventListener('click',()=>{const ip=$('#qIp').value.trim(),m=$('#qMask').value.trim()||'255.255.255.0',g=$('#qGw').value.trim();runCmd(d,`ip ${ip} ${m}${g?' '+g:''}`)})}
+    const tin=$('#tin');
+    tin.addEventListener('keydown',e=>{const T=d.term;
+      if(e.key==='Enter'){const v=tin.value;tin.value='';if(v.trim()){T.hist.push(v);T.hi=T.hist.length}runCmd(d,v);afterUserCmd()}
+      else if(e.key==='ArrowUp'){if(T.hi>0){T.hi--;tin.value=T.hist[T.hi]||''}e.preventDefault()}
+      else if(e.key==='ArrowDown'){if(T.hi<T.hist.length){T.hi++;tin.value=T.hist[T.hi]||''}e.preventDefault()}
+      else if(e.key==='c'&&e.ctrlKey){if(d.session){d.session=null;tprint(d,'^C')}else if(!['user','priv'].includes(T.mode)&&d.type!=='pc'){T.mode='priv';tprint(d,'^C')}e.preventDefault()}
+      else if(e.key==='z'&&e.ctrlKey&&d.type!=='pc'){if(!['user','priv'].includes(T.mode))T.mode='priv';tprint(d,'^Z');termDirty=true;e.preventDefault()}
+    });
+    $('#term').addEventListener('click',e=>{if(e.target.id!=='tin'&&!window.getSelection().toString())tin.focus()});
+  }
+  if(termDirty){const o=$('#tout');o.textContent=d.term.lines.join('\n');o.scrollTop=o.scrollHeight;$('#tprompt').textContent=promptOf(d);termDirty=false}
+  renderTables(d);
+}
+function tbl(head,rows,empty){return `<div class="tblwrap"><table class="tbl"><thead><tr>${head.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${rows.length?rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join(''):`<tr><td class="none" colspan="${head.length}">${empty}</td></tr>`}</tbody></table></div>`}
+function renderTables(d){
+  let h='';
+  const ifRows=d.ifaces.map((i,k)=>{const l=linkAt(d,k),p=l&&peer(l,d,k);if(d.type==='switch'&&!l)return null;
+    return [`<span class="st ${ifOper(d,k)?'up':'dn'}"></span>${esc(i.name)}`,d.type==='switch'?'':(i.ip?`${i.ip}/${mask2len(i.mask)}`:'—'),i.mac,p?esc(p.d.name+' '+p.d.ifaces[p.ifi].name):'—',i.up?(ifOper(d,k)?'up':'down'):'shut'].filter((c,j)=>!(d.type==='switch'&&j===1))}).filter(Boolean);
+  h+=`<div class="sec"><h3>Interfaces</h3>${tbl(d.type==='switch'?['Port','MAC','Connected to','State']:['Port','Address','MAC','Connected to','State'],ifRows,'No cables yet')}</div>`;
+  if(d.type==='pc')h+=`<div class="sec"><h3>Default gateway</h3><div class="tbl" style="font:12px var(--mono)">${d.gw||'not set'}${d.dhcpClient?' · via DHCP':''}</div></div>`;
+  if(d.type==='switch'){const e=Object.entries(d.mact);h+=`<div class="sec"><h3>MAC address table</h3>${tbl(['VLAN','MAC','Port','Age'],e.map(([m,x])=>['1',m,d.ifaces[x.ifi].name,((sim.t-x.t)/1000).toFixed(0)+' s']),'Empty. The switch learns source MACs as frames arrive.')}</div>`}
+  if(d.type==='router'){
+    const rows=[];d.ifaces.forEach((i,k)=>{if(i.ip&&ifOper(d,k))rows.push(['C',`${netOf(i.ip,i.mask)}/${mask2len(i.mask)}`,'connected',i.name])});
+    d.routes.forEach(r=>{const k=d.ifaces.findIndex((i,j)=>i.ip&&ifOper(d,j)&&inNet(r.nh,i.ip,i.mask));rows.push(['S',`${r.net}/${mask2len(r.mask)}`,`via ${r.nh} [1/0]`,k>=0?d.ifaces[k].name:'(next hop unreachable)'])});
+    d.ripRoutes.forEach(r=>rows.push(['R',`${r.net}/${mask2len(r.mask)}`,`via ${r.nh} [120/${r.metric}]`,d.ifaces[r.ifi].name]));
+    h+=`<div class="sec"><h3>Routing table</h3>${tbl(['','Network','Next hop','Out'],rows,'No routes. Give an interface an address and bring it up.')}</div>`;
+    const b=Object.entries(d.bindings);if(d.dhcp.pools.length)h+=`<div class="sec"><h3>DHCP bindings · ${d.dhcp.pools.map(p=>esc(p.name)).join(', ')}</h3>${tbl(['IP','Client MAC','State'],b.map(([m,x])=>[x.ip,m,x.state]),'No leases yet')}</div>`;
+  }
+  if(d.type!=='switch'){const e=Object.entries(d.arp);h+=`<div class="sec"><h3>ARP cache</h3>${tbl(['IP','MAC','Port','Age'],e.map(([ip,x])=>[ip,x.mac,d.ifaces[x.ifi].name,((sim.t-x.t)/1000).toFixed(0)+' s']),'Empty. Entries appear after ARP replies.')}</div>`}
+  const el=$('#tables');if(el&&el.innerHTML!==h)el.innerHTML=h;
+}
+
+/* ---------- panel: packet inspector ---------- */
+function inspect(f){inspected=f;renderInspector();setTab('packet')}
+function renderInspector(){
+  const pane=$('#pane-packet');
+  if(!inspected){pane.innerHTML=`<div class="empty"><b>No packet selected.</b> Click a moving packet on the canvas, or a row in Events, to see every header field and the raw bytes on the wire.</div>`;return}
+  const f=inspected,{L,bytes}=dissect(f);
+  let h=`<div class="isum"><span class="t">${esc(fsum(f))}</span><span class="h">${esc(f.hop||'')} · ${bytes.length} bytes on the wire</span></div>`;
+  L.forEach(ly=>{h+=`<details class="layer" open><summary><i class="L-${ly.cls}"></i>${esc(ly.name)}</summary><div class="rows">${ly.fields.map(fl=>`<div class="frow" data-s="${fl.s}" data-l="${fl.l}"><span class="k">${esc(fl.name)}</span><span class="v">${esc(fl.val)}</span>${fl.note?`<span class="n">${esc(fl.note)}</span>`:''}</div>`).join('')}</div></details>`});
+  const cls=new Array(bytes.length);L.forEach(ly=>ly.fields.forEach(fl=>{for(let i=fl.s;i<fl.s+fl.l;i++)cls[i]=ly.cls}));
+  let hex='';for(let r=0;r<bytes.length;r+=16){hex+=`<span class="off">${r.toString(16).padStart(4,'0')}</span>`;for(let i=r;i<Math.min(r+16,bytes.length);i++)hex+=`<span class="b ${cls[i]}" data-i="${i}">${bytes[i].toString(16).padStart(2,'0')}</span>${i===r+7?'  ':' '}`;hex+='\n'}
+  h+=`<div class="sec"><h3>Raw bytes · hover a field to find it</h3><div class="hex" id="hex">${hex}</div></div>`;
+  pane.innerHTML=h;
+  const bs=[...pane.querySelectorAll('.hex .b')];
+  pane.querySelectorAll('.frow').forEach(r=>{r.addEventListener('mouseenter',()=>{const s=+r.dataset.s,l=+r.dataset.l;bs.forEach((b,i)=>b.classList.toggle('hl',i>=s&&i<s+l))});r.addEventListener('mouseleave',()=>bs.forEach(b=>b.classList.remove('hl')))});
+}
+
+/* ---------- panel: events ---------- */
+const evMatch=e=>evFilter==='all'||e.cls===evFilter||(evFilter==='icmp'&&e.cls==='ok');
+function evRow(e){const el=document.createElement('div');el.className='ev c-'+e.cls;el.innerHTML=`<span class="tm">${(e.t/1000).toFixed(2)}</span><span class="dv">${esc(e.dev)}</span><span class="tx">${esc(e.text)}</span>`;if(e.explain)el.title=e.explain;el.addEventListener('click',()=>{$$('.ev.sel').forEach(x=>x.classList.remove('sel'));el.classList.add('sel');if(e.frame)inspect(e.frame);else if(e.explain)toast(e.explain)});return el}
+function appendEvent(e){$('#evCount').textContent=events.length;if(!evMatch(e))return;const list=$('#evList');list.appendChild(evRow(e));while(list.children.length>400)list.firstChild.remove();if(tab==='events'){const p=$('#pane-events');if(p.scrollHeight-p.scrollTop-p.clientHeight<120)p.scrollTop=p.scrollHeight}}
+function renderEvents(){const list=$('#evList');list.innerHTML='';events.filter(evMatch).slice(-400).forEach(e=>list.appendChild(evRow(e)));$('#evCount').textContent=events.length}
+
+/* ---------- narration card ---------- */
+let narrKey='';
+function renderNarr(){
+  const el=$('#narr'),D=narr.demo;narrDirty=false;
+  const paused=!sim.running&&(sim.packets.length||sim.timers.length);
+  const key=[D?D.title:'',narr.step,narr.min,paused?1:0,narr.lines.length?1:0].join('|');
+  if(key!==narrKey){narrKey=key;el.classList.toggle('min',narr.min);
+    let h=`<div class="nhead"><span class="eyebrow">${D?`${narr.step<D.steps.length?`Guided demo · step ${narr.step+1} of ${D.steps.length}`:'Guided demo · complete'}`:'Live explanation'}</span><span class="sp"></span><button class="btn" id="nMin" aria-label="${narr.min?'Expand':'Collapse'} explanation">${narr.min?'Show':'Hide'}</button></div><div class="nbody">`;
+    if(D){h+=`<h2 class="ntitle">${esc(D.title)}</h2>`;const st=D.steps[narr.step];
+      if(st)h+=`<div class="stepbox"><p>${st.text}</p><div class="nbtns"><button class="btn primary" id="nRun">Run on ${esc(st.dev)}: <span style="font-family:var(--mono);font-size:12px">${esc(st.label||st.cmds[st.cmds.length-1])}</span></button></div></div>`;
+      else h+=`<div class="stepbox"><p>${D.outro||'Demo complete. Keep experimenting with the consoles, or pick another demo.'}</p></div>`;
+    }else if(!narr.lines.length)h+=`<p>Select <b>PC1</b> and type <span class="cmd">ping 192.168.2.10</span>. Each step is explained here as it happens. Turn on <b>Pause each hop</b> to go one packet at a time, or start a guided demo from the menu.</p>`;
+    h+=`<ul class="nlines" id="nLines"></ul><div class="nbtns">${paused?'<button class="btn primary" id="nStep">Next hop ▸</button>':''}${D?'<button class="btn" id="nExit">Exit demo</button>':''}</div></div>`;
+    el.innerHTML=h;}
+  const ul=$('#nLines');ul.hidden=!narr.lines.length;
+  const lh=narr.lines.map(l=>`<li class="c-${l.cls}"><b>${esc(l.who)}</b> ${esc(l.text)}</li>`).join('');if(ul.innerHTML!==lh)ul.innerHTML=lh;
+}
+$('#narr').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
+  if(b.id==='nMin'){narr.min=!narr.min;narrDirty=true}
+  else if(b.id==='nRun')runDemoStep();
+  else if(b.id==='nStep')stepHop();
+  else if(b.id==='nExit'){narr.demo=null;narr.lines=[];$('#demoSel').value='';narrDirty=true}});
+
+/* ---------- sim controls ---------- */
+function stepHop(){if(!sim.packets.length&&!sim.timers.length){toast('Nothing is in flight. Start a ping first.');return}narr.lines=[];sim.running=true;sim.stepOnce=true;updCtl();narrDirty=true}
+function afterUserCmd(){if(!sim.running&&sim.stepMode&&sim.packets.length){sim.running=true;sim.stepOnce=true;updCtl()}}
+function updCtl(){$('#playBtn').innerHTML=sim.running?'<svg viewBox="0 0 16 16"><path d="M4 3h3v10H4zM9 3h3v10H9z" fill="currentColor"/></svg><span class="lbl">Pause</span>':'<svg viewBox="0 0 16 16"><path d="M4 3l9 5-9 5z" fill="currentColor"/></svg><span class="lbl">Play</span>';narrDirty=true}
+$('#playBtn').onclick=()=>{sim.running=!sim.running;sim.stepOnce=false;if(sim.running&&sim.stepMode)narr.lines=[];updCtl()};
+$('#stepBtn').onclick=stepHop;
+$('#stepMode').onchange=e=>{sim.stepMode=e.target.checked;if(sim.stepMode)narr.lines=[];narrDirty=true};
+$('#speed').oninput=e=>{sim.speed=+e.target.value;$('#speedVal').textContent=sim.speed+'×'};
+$('#resetBtn').onclick=()=>{resetTables();toast('Cleared packets, ARP caches, MAC tables, DHCP leases and RIP routes.')};
+
+/* ---------- tools & pointer ---------- */
+const HINTS={select:'Drag devices to move them. Click one to open its console. Click a moving packet to inspect it.',pc:'Click the canvas to place a PC.',switch:'Click the canvas to place a switch.',router:'Click the canvas to place a router.',link:'Click a device, then another, to connect them with a cable. Free ports are picked automatically.',delete:'Click a device or a cable to remove it.'};
+function setTool(t){tool=t;linkFrom=null;$$('[data-tool]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.tool===t));$('#hint').innerHTML=esc(HINTS[t]);svg.classList.toggle('mode-delete',t==='delete');topoDirty=true}
+$$('[data-tool]').forEach(b=>b.onclick=()=>setTool(b.dataset.tool));
+function svgPt(e){const p=svg.createSVGPoint();p.x=e.clientX;p.y=e.clientY;return p.matrixTransform(svg.getScreenCTM().inverse())}
+let drag=null;
+svg.addEventListener('pointerdown',e=>{
+  const pt=svgPt(e),pk=e.target.closest('[data-pkt]'),de=e.target.closest('[data-dev]'),li=e.target.closest('[data-link]');
+  if(pk){const p=sim.packets.find(x=>x.id===+pk.dataset.pkt);if(p)inspect(p.f);return}
+  const d=de&&dev(de.dataset.dev);
+  if(tool==='select'){if(d){drag={d,dx:pt.x-d.x,dy:pt.y-d.y,moved:false,id:e.pointerId};svg.setPointerCapture(e.pointerId)}else{selId=null;topoDirty=true;renderDevicePane()}return}
+  if(['pc','switch','router'].includes(tool)){if(!d){const nd=addDev(tool,Math.round(pt.x),Math.round(pt.y));selId=nd.id;setTool('select');renderDevicePane()}return}
+  if(tool==='link'){if(!d)return;if(!linkFrom){linkFrom=d.id;topoDirty=true;return}
+    if(linkFrom===d.id){linkFrom=null;topoDirty=true;return}
+    const a=dev(linkFrom);if(S.links.some(l=>(l.a.dev===a.id&&l.b.dev===d.id)||(l.b.dev===a.id&&l.a.dev===d.id))){toast('These two devices are already connected.');linkFrom=null;topoDirty=true;return}
+    const l=connect(a,d);linkFrom=null;topoDirty=true;if(l)toast(`Cabled ${a.name} ${a.ifaces[l.a.ifi].name} ↔ ${d.name} ${d.ifaces[l.b.ifi].name}`);return}
+  if(tool==='delete'){if(d)removeDev(d);else if(li){const l=S.links.find(x=>x.id===li.dataset.link);if(l)removeLink(l)}renderDevicePane();return}
+});
+svg.addEventListener('pointermove',e=>{if(!drag)return;const pt=svgPt(e);const nx=Math.max(30,Math.min(1170,pt.x-drag.dx)),ny=Math.max(30,Math.min(680,pt.y-drag.dy));if(Math.abs(nx-drag.d.x)+Math.abs(ny-drag.d.y)>1)drag.moved=true;drag.d.x=nx;drag.d.y=ny;topoDirty=true});
+svg.addEventListener('pointerup',e=>{if(!drag)return;const d=drag.d;if(!drag.moved){selId=d.id;renderDevicePane();setTab('device');}else save();drag=null;topoDirty=true});
+document.addEventListener('keydown',e=>{if(e.target.matches('input,textarea,select'))return;
+  if(e.key==='Escape')setTool('select');else if(e.key==='v')setTool('select');else if(e.key==='l')setTool('link');
+  else if((e.key==='Delete'||e.key==='Backspace')&&selId){const d=dev(selId);if(d){removeDev(d);renderDevicePane()}}});
+
+/* ---------- tabs ---------- */
+function setTab(t){tab=t;$$('.tab').forEach(b=>b.setAttribute('aria-selected',b.dataset.tab===t));['device','packet','events'].forEach(x=>$('#pane-'+x).hidden=x!==t);if(t==='packet')renderInspector();if(t==='events'){const p=$('#pane-events');p.scrollTop=p.scrollHeight}}
+$$('.tab').forEach(b=>b.onclick=()=>setTab(b.dataset.tab));
+$$('#evTools [data-f]').forEach(b=>b.onclick=()=>{evFilter=b.dataset.f;$$('#evTools [data-f]').forEach(x=>x.setAttribute('aria-pressed',x===b));renderEvents()});
+$('#evClear').onclick=()=>{events=[];renderEvents()};
+
+/* ---------- save / load modal ---------- */
+$('#fileBtn').onclick=()=>{$('#jsonBox').value=JSON.stringify(serialize(),null,1);$('#modal').hidden=false};
+$('#closeBtn').onclick=()=>$('#modal').hidden=true;
+$('#copyBtn').onclick=()=>{const t=$('#jsonBox');navigator.clipboard.writeText(t.value).then(()=>toast('Topology copied.'),()=>{t.select();toast('Press Ctrl+C to copy the selected text.')})};
+$('#loadBtn').onclick=()=>{try{load(JSON.parse($('#jsonBox').value));narr.demo=null;$('#modal').hidden=true;toast('Topology loaded.')}catch(e){toast("That text isn't a valid Packetyard topology.")}};
+$('#newBtn').onclick=()=>{clearAll();narr.demo=null;save();$('#modal').hidden=true;toast('Canvas cleared. Add devices from the toolbar.')};
+
+/* ---------- toast ---------- */
+let toastT;function toast(m){const t=$('#toast');t.textContent=m;t.hidden=false;clearTimeout(toastT);toastT=setTimeout(()=>t.hidden=true,3600)}
+
+/* ---------- topology builders & demos ---------- */
+const mk=(type,name,x,y)=>addDev(type,x,y,name);
+const ln=(a,ai,b,bi)=>connect(a,b,ai,bi);
+function pcip(d,cidr,gw){const a=parseCidr(cidr);d.ifaces[0].ip=a.ip;d.ifaces[0].mask=a.mask;d.gw=gw||''}
+function rif(d,k,cidr){const a=parseCidr(cidr);Object.assign(d.ifaces[k],{ip:a.ip,mask:a.mask,up:true})}
+function sr(d,net,mask,nh){d.routes.push({net,mask,nh})}
+function twoLans(){
+  const pc1=mk('pc','PC1',170,170),pc2=mk('pc','PC2',170,450),sw1=mk('switch','SW1',380,310),r1=mk('router','R1',600,310),sw2=mk('switch','SW2',820,310),pc3=mk('pc','PC3',1030,170),pc4=mk('pc','PC4',1030,450);
+  ln(pc1,0,sw1,0);ln(pc2,0,sw1,1);ln(sw1,7,r1,0);ln(r1,1,sw2,7);ln(pc3,0,sw2,0);ln(pc4,0,sw2,1);
+  pcip(pc1,'192.168.1.10/24','192.168.1.1');pcip(pc2,'192.168.1.11/24','192.168.1.1');rif(r1,0,'192.168.1.1/24');rif(r1,1,'192.168.2.1/24');pcip(pc3,'192.168.2.10/24','192.168.2.1');pcip(pc4,'192.168.2.11/24','192.168.2.1');
+}
+function chain(withStatic,broken){
+  const pc1=mk('pc','PC1',110,470),r1=mk('router','R1',340,300),r2=mk('router','R2',600,450),r3=mk('router','R3',860,300),pc2=mk('pc','PC2',1090,470);
+  ln(pc1,0,r1,0);ln(r1,1,r2,0);ln(r2,1,r3,0);ln(r3,1,pc2,0);
+  pcip(pc1,'10.1.0.10/24','10.1.0.1');rif(r1,0,'10.1.0.1/24');rif(r1,1,'10.0.12.1/30');rif(r2,0,'10.0.12.2/30');rif(r2,1,'10.0.23.1/30');rif(r3,0,'10.0.23.2/30');rif(r3,1,'10.3.0.1/24');pcip(pc2,'10.3.0.10/24','10.3.0.1');
+  if(withStatic){sr(r1,'10.3.0.0','255.255.255.0','10.0.12.2');sr(r1,'10.0.23.0','255.255.255.252','10.0.12.2');sr(r2,'10.1.0.0','255.255.255.0','10.0.12.1');if(!broken)sr(r2,'10.3.0.0','255.255.255.0','10.0.23.2');sr(r3,'10.1.0.0','255.255.255.0','10.0.23.1');sr(r3,'10.0.12.0','255.255.255.252','10.0.23.1')}
+}
+const RIPCMDS=['enable','configure terminal','router rip','version 2','network 10.0.0.0','no auto-summary','end'];
+const DEMOS={
+  arp:{title:'How ARP finds a MAC address',step:true,build(){const pc1=mk('pc','PC1',220,200),sw=mk('switch','SW1',600,340),pc2=mk('pc','PC2',980,200),pc3=mk('pc','PC3',600,580);ln(pc1,0,sw,0);ln(pc2,0,sw,1);ln(pc3,0,sw,2);pcip(pc1,'192.168.1.10/24');pcip(pc2,'192.168.1.20/24');pcip(pc3,'192.168.1.30/24')},
+    steps:[{dev:'PC1',cmds:['ping 192.168.1.20 -n 1'],text:'PC1 wants to ping PC2. It knows PC2\'s IP address but not its MAC address, and Ethernet frames need a MAC. Watch the ARP broadcast reach everyone, then the unicast reply. Press <b>Next hop</b> to advance one hop at a time.'},
+           {dev:'PC1',cmds:['arp -a'],text:'Look at PC1\'s ARP cache. The mapping it learned saves it from asking again for the next packets.'}],
+    outro:'ARP turned an IP address into a MAC address with one broadcast and one unicast reply. PC3 saw the request but stayed silent because it wasn\'t the target.'},
+  mac:{title:'How a switch learns MAC addresses',step:true,build(){const sw=mk('switch','SW1',600,360),a=mk('pc','PC1',260,170),b=mk('pc','PC2',940,170),c=mk('pc','PC3',260,560),e=mk('pc','PC4',940,560);ln(a,0,sw,0);ln(b,0,sw,1);ln(c,0,sw,2);ln(e,0,sw,3);pcip(a,'192.168.1.10/24');pcip(b,'192.168.1.20/24');pcip(c,'192.168.1.30/24');pcip(e,'192.168.1.40/24')},
+    steps:[{dev:'PC1',cmds:['ping 192.168.1.30 -n 1'],text:'The switch\'s MAC table starts empty. When PC1\'s ARP broadcast arrives, the switch learns PC1\'s port and floods the frame. The reply from PC3 is then forwarded to one port only.'},
+           {dev:'SW1',cmds:['enable','show mac address-table'],text:'Check what SW1 has learned so far.'},
+           {dev:'SW1',cmds:['enable','clear mac address-table'],text:'Now wipe the MAC table but keep the PCs\' ARP caches. The next ping is unicast to a MAC the switch no longer knows.'},
+           {dev:'PC1',cmds:['ping 192.168.1.30 -n 1'],text:'Watch the unknown unicast flood: PC2 and PC4 receive a frame that isn\'t for them and discard it. After the reply, the switch knows both ports again.'}],
+    outro:'Switches learn from source MACs and forward on destination MACs. Unknown destinations and broadcasts are flooded.'},
+  routing:{title:'Routing between two subnets',step:true,build:twoLans,
+    steps:[{dev:'PC1',cmds:['ping 192.168.2.10 -n 1'],text:'PC3 is on a different subnet, so PC1 sends the packet to its default gateway R1. Watch how R1 rewrites the Ethernet header at each hop while the IP addresses stay the same.'},
+           {dev:'R1',cmds:['enable','show ip route'],text:'R1 knows both subnets because they\'re directly connected (C routes).'}],
+    outro:'Hosts send off-subnet traffic to the gateway; routers pick the outgoing interface from the routing table and rebuild the Layer 2 header for each link.'},
+  dhcp:{title:'DHCP: getting an address automatically',step:true,build(){const pc1=mk('pc','PC1',200,190),pc2=mk('pc','PC2',200,500),sw=mk('switch','SW1',500,340),r1=mk('router','R1',820,340);ln(pc1,0,sw,0);ln(pc2,0,sw,1);ln(sw,7,r1,0);rif(r1,0,'192.168.10.1/24');r1.dhcp.excluded.push(['192.168.10.1','192.168.10.99']);r1.dhcp.pools.push({name:'LAN',net:'192.168.10.0',mask:'255.255.255.0',gw:'192.168.10.1',dns:''})},
+    steps:[{dev:'PC1',cmds:['ip dhcp'],text:'PC1 has no address. R1 runs a DHCP pool for 192.168.10.0/24, with .1 to .99 excluded. Follow the four messages: <b>D</b>iscover, <b>O</b>ffer, <b>R</b>equest, <b>A</b>cknowledge. All of them are broadcasts.'},
+           {dev:'R1',cmds:['enable','show ip dhcp binding'],text:'R1 now has a lease binding for PC1\'s MAC address.'},
+           {dev:'PC1',cmds:['ping 192.168.10.1 -n 1'],text:'With its leased address and gateway, PC1 can reach R1.'}],
+    outro:'DHCP handed out the IP, mask and gateway in four messages, with no manual configuration.'},
+  trace:{title:'Traceroute and TTL',step:false,build(){chain(true)},
+    steps:[{dev:'PC1',cmds:['tracert 10.3.0.10'],text:'Traceroute sends probes with TTL 1, 2, 3… Each router that drops a probe with TTL 0 reports back with ICMP Time Exceeded, which reveals the path one hop at a time.'}],
+    outro:'Every hop on the path was found from the source address of its Time Exceeded message.'},
+  broken:{title:'Troubleshoot a missing route',step:false,build(){chain(true,true)},
+    steps:[{dev:'PC1',cmds:['ping 10.3.0.10 -n 2'],text:'Something is wrong on this network. Ping PC2 and read the reply carefully: who answers?'},
+           {dev:'R2',cmds:['enable','show ip route'],text:'R2 sent "Destination net unreachable". Check its routing table: is there a route to 10.3.0.0/24?'},
+           {dev:'R2',cmds:['enable','configure terminal','ip route 10.3.0.0 255.255.255.0 10.0.23.2','end'],label:'ip route 10.3.0.0 255.255.255.0 10.0.23.2',text:'Add the missing static route on R2, pointing at R3 (10.0.23.2).'},
+           {dev:'PC1',cmds:['ping 10.3.0.10 -n 2'],text:'Ping again to verify the fix.'}],
+    outro:'Fixed. ICMP Unreachable tells you which router is missing a route, so you know where to look.'},
+  rip:{title:'RIPv2: routers learning routes',step:false,build(){chain(false)},
+    steps:[{dev:'R1',cmds:RIPCMDS,label:'router rip · network 10.0.0.0',text:'None of the routers has a route to the far subnets yet. Enable RIPv2 on R1 for network 10.0.0.0.'},
+           {dev:'R2',cmds:RIPCMDS,label:'router rip · network 10.0.0.0',text:'Now enable RIP on R2. Watch the RIP updates (teal) to 224.0.0.9 and the routes appear in each routing table.'},
+           {dev:'R3',cmds:RIPCMDS,label:'router rip · network 10.0.0.0',text:'Enable RIP on R3. Triggered updates spread the new routes quickly.'},
+           {dev:'R1',cmds:['enable','show ip route'],text:'R1 should now show R routes such as 10.3.0.0/24 [120/2]: administrative distance 120, metric 2 hops.'},
+           {dev:'PC1',cmds:['ping 10.3.0.10 -n 2'],text:'End-to-end reachability, with no static routes configured.'}],
+    outro:'RIP routers advertise what they know to their neighbours, add one hop per router, and use split horizon to avoid sending routes back where they came from.'}
+};
+const sel=$('#demoSel');Object.entries(DEMOS).forEach(([k,v])=>{const o=document.createElement('option');o.value=k;o.textContent=v.title;sel.appendChild(o)});
+const so=document.createElement('option');so.value='__sample';so.textContent='Reset to sample lab (two LANs)';sel.appendChild(so);
+sel.onchange=()=>{const k=sel.value;if(!k)return;if(k==='__sample'){clearAll();twoLans();narr.demo=null;sel.value='';save();toast('Sample lab loaded.');return}startDemo(k)};
+function startDemo(k){
+  const D=DEMOS[k];clearAll();D.build();sim.packets=[];
+  narr.demo=D;narr.step=0;narr.lines=[];narr.min=false;
+  sim.stepMode=D.step;$('#stepMode').checked=D.step;sim.running=true;updCtl();
+  topoDirty=panelDirty=narrDirty=true;save();
+}
+function runDemoStep(){
+  const D=narr.demo,st=D&&D.steps[narr.step];if(!st)return;const d=devByName(st.dev);if(!d)return toast(`${st.dev} isn't on the canvas anymore.`);
+  selId=d.id;setTab('device');renderDevicePane(true);
+  if(d.type!=='pc')d.term.mode='user';
+  narr.lines=[];
+  st.cmds.forEach(c=>runCmd(d,c));
+  narr.step++;narrDirty=true;afterUserCmd();
+}
+
+/* ---------- main loop ---------- */
+let last=performance.now(),panelTick=0;
+function frame(now){
+  const dt=Math.min(now-last,100);last=now;
+  if(sim.running){
+    const d=dt*sim.speed;sim.t+=d;
+    const due=sim.timers.filter(x=>x.at<=sim.t);if(due.length){sim.timers=sim.timers.filter(x=>x.at>sim.t);due.sort((a,b)=>a.at-b.at).forEach(x=>x.fn())}
+    ripTick();
+    const arrived=[];for(const p of sim.packets){p.p+=d/HOP_MS;if(p.p>=1)arrived.push(p)}
+    if(arrived.length){sim.packets=sim.packets.filter(p=>p.p<1);arrived.forEach(deliver);
+      if(sim.stepMode||sim.stepOnce){sim.running=false;sim.stepOnce=false;updCtl()}}
+    $('#clock').textContent='t '+(sim.t/1000).toFixed(1)+' s';
+  }
+  if(topoDirty)renderTopo();
+  renderPackets();
+  panelTick+=dt;
+  if((panelDirty||termDirty)&&panelTick>150){panelTick=0;panelDirty=false;if(tab==='device')renderDevicePane()}
+  if(narrDirty)renderNarr();
+  requestAnimationFrame(frame);
+}
+
+/* ---------- boot ---------- */
+let restored=false;
+try{const s=localStorage.getItem('packetyard.topo');if(s){const o=JSON.parse(s);if(o&&o.devices&&o.devices.length){load(o);restored=true}}}catch(e){}
+if(!restored){twoLans();save()}
+setTool('select');updCtl();renderDevicePane(true);renderInspector();
+requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>
