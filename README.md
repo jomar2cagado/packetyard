@@ -10,6 +10,8 @@ It's made for network training. Nothing to install and no server to run: open th
 
 ## Features
 
+- **Start screen** with three learning paths (Beginner, Intermediate, Experienced real-world setups), plus Continue and Start from scratch. Turn it off with the checkbox; tap the Packetyard name to reopen it.
+- **Works on phones and tablets:** pinch to zoom, drag to pan, and a button to jump between the network and the device console.
 - **Drag-and-drop topology** with 11 device types, each with a selectable make and model: PC, Laptop, Server, NAS, Proxy, Switch, Access point, Router, Firewall, SD-WAN edge and Internet/provider cloud.
 - **Real command line.** PCs and servers use Windows-style commands (`ipconfig`, `ping`, `tracert`, `nslookup`, `http`). Routers, firewalls and SD-WAN edges use an IOS-style CLI with modes.
 - **Ready-made scenarios:** a small company office, a medium enterprise with a DMZ, and HQ + branch over SD-WAN.
@@ -38,6 +40,8 @@ It's made for network training. Nothing to install and no server to run: open th
 | VLANs (802.1Q) | Access and trunk ports, VLAN tags on the wire, native VLAN, allowed-VLAN lists, per-VLAN MAC tables and flooding |
 | Inter-VLAN routing | Router-on-a-stick subinterfaces (`interface gi0/0.10`, `encapsulation dot1Q 10`), DHCP per VLAN |
 | OSPF | Hello, neighbor states (INIT, 2-WAY, EXSTART, EXCHANGE, LOADING, FULL), DBD and LSU exchange, link-state database, SPF (Dijkstra), costs, passive interfaces, dead timer, reconvergence after failures |
+| OSPF multi-area | Backbone area 0 and other areas, Area Border Routers, one link-state database per area, Type 1 Router and Type 3 Summary LSAs, inter-area (O IA) routes, `area <n> range` summarization, `show ip ospf border-routers` |
+| IPv6 | Global and link-local addresses (EUI-64), Neighbor Discovery (Neighbor Solicitation/Advertisement, solicited-node multicast), Router Solicitation/Advertisement, SLAAC, ICMPv6 ping and traceroute (hop limit), static IPv6 routes, dual stack beside IPv4, 40-byte IPv6 header in the inspector |
 | RIPv2 | Multicast updates, hop-count metric, split horizon, triggered updates, route timeout |
 | DHCP | Discover, Offer, Request, Ack; pools, excluded addresses, gateway and DNS options |
 | DNS | Zones with A, CNAME, MX and PTR records; NXDOMAIN; forwarders; `nslookup` and `Resolve-DnsName` |
@@ -65,6 +69,8 @@ It's made for network training. Nothing to install and no server to run: open th
 | Small company office | One router doing DHCP and NAT/PAT, a NAS, public DNS and websites on the Internet |
 | Medium enterprise with DMZ | Firewall with inside, outside and DMZ zones; core router; Sales, Engineering and Servers subnets; internal DNS; web proxy |
 | HQ and branch over SD-WAN | Two SD-WAN edges with MPLS and Internet transports, voice phones and an HQ app server |
+| OSPF multi-area | Backbone with two ABRs, area 1 and area 2, inter-area routes and summarization |
+| IPv6 dual-stack office | Two LANs and two routers running IPv4 and IPv6; PCs configure themselves with SLAAC |
 | Office VLANs with router-on-a-stick | Two switches, Sales and Engineering VLANs, a trunk, and inter-VLAN routing |
 | OSPF network with a backup path | Four routers in a ring with a slow serial backup link |
 | Two LANs and a router | The basic routed network |
@@ -77,7 +83,7 @@ It's made for network training. Nothing to install and no server to run: open th
 
 ## Guided demos
 
-Network automation (playbooks, dry run, drift) · VLANs, trunks and router-on-a-stick · OSPF neighbors, link-state and SPF · ARP · switch MAC learning · routing between subnets · traceroute and TTL · troubleshooting a missing route · RIPv2 · DHCP · how a web page loads (DNS, TCP, HTTP) · NAT/PAT · stateful firewall and DMZ · web proxy filtering and caching · SD-WAN app-aware routing and failover
+IPv6 SLAAC, Neighbor Discovery and ICMPv6 · OSPF multi-area with ABRs and summary LSAs · Network automation (playbooks, dry run, drift) · VLANs, trunks and router-on-a-stick · OSPF neighbors, link-state and SPF · ARP · switch MAC learning · routing between subnets · traceroute and TTL · troubleshooting a missing route · RIPv2 · DHCP · how a web page loads (DNS, TCP, HTTP) · NAT/PAT · stateful firewall and DMZ · web proxy filtering and caching · SD-WAN app-aware routing and failover
 
 ## Build-it-yourself labs
 
@@ -90,6 +96,8 @@ Network automation (playbooks, dry run, drift) · VLANs, trunks and router-on-a-
 | Filter the web with a proxy | Intermediate |
 | Separate departments with VLANs | Intermediate |
 | Build an OSPF network with a backup path | Advanced |
+| Design OSPF areas with ABRs and summarization | Advanced |
+| Add IPv6 to a working IPv4 network | Intermediate |
 | Publish a web server through the firewall | Advanced |
 | Keep voice calls up with SD-WAN | Advanced |
 | Control Spanning Tree | Intermediate |
@@ -152,6 +160,7 @@ Router interfaces start shut down, as on real routers, so remember `no shutdown`
 |---|---|
 | Server | `service http on\|off`, `service dns on\|off`, `site <title>`, `dns add <name> <ip>`, `dns del <name>`, `dns forward <ip>`, `show services` |
 | Proxy | `block <domain>`, `unblock <domain>`, `cache on\|off`, `clear cache`, `show blocklist`, `show cache` |
+| PC / server IPv6 | `ipv6 autoconfig` (SLAAC), `ipv6 2001:db8:1::10/64 [gateway]`, `ipv6 gateway <addr>`, `ipv6 off`, `ping` / `tracert` with an IPv6 address, `netsh interface ipv6 show neighbors`; `ipconfig` shows link-local, SLAAC and gateway |
 | Server (PowerShell) | `Install-WindowsFeature DHCP\|DNS\|Web-Server\|FS-FileServer`, `Add-DhcpServerv4Scope`, `Set-DhcpServerv4OptionValue`, `Add-DhcpServerv4ExclusionRange`, `Add-DhcpServerv4Reservation`, `Get-DhcpServerv4Lease`, `Add-DnsServerPrimaryZone`, `Add-DnsServerResourceRecordA/CName/MX/Ptr`, `Set-DnsServerForwarder`, `New-Website`, `New-SmbShare`, `Resolve-DnsName`, `Test-NetConnection` |
 
 ### FortiGate-style firewall (FortiOS CLI)
@@ -169,7 +178,8 @@ Pick a FortiGate model. Then use `config system interface`, `config firewall add
 | DHCP pool `(dhcp-config)#` | `network <net> <mask>`, `default-router <ip>`, `dns-server <ip>` |
 | VLAN (switches) | config: `vlan <id>` then `name <name>`, `no vlan <id>`, `interface range fa0/1 - 4`; interface: `switchport mode access\|trunk`, `switchport access vlan <id>`, `switchport trunk allowed vlan <list>\|all\|add\|remove`, `switchport trunk native vlan <id>`; `show vlan brief`, `show interfaces trunk` |
 | Router-on-a-stick | `interface gi0/0.10`, `encapsulation dot1Q 10`, `ip address …`; `no interface gi0/0.10` |
-| OSPF `(config-router)#` | `router ospf <pid>`, `network <ip> <wildcard> area <n>`, `router-id <id>`, `passive-interface <if>`; interface: `ip ospf cost <n>`; `show ip ospf neighbor`, `show ip ospf database`, `show ip ospf interface brief` |
+| OSPF `(config-router)#` | `router ospf <pid>`, `network <ip> <wildcard> area <n>`, `router-id <id>`, `passive-interface <if>`, `area <n> range <net> <mask>`; interface: `ip ospf cost <n>`; `show ip ospf neighbor`, `show ip ospf database`, `show ip ospf interface brief`, `show ip ospf border-routers` |
+| IPv6 (routers) | config: `ipv6 unicast-routing`, `ipv6 route <prefix/len> <next-hop>`, `ipv6 route ::/0 <if> <fe80::…>`; interface: `ipv6 address <addr/len>`, `ipv6 address <prefix>/64 eui-64`, `ipv6 enable`, `no ipv6 address`; `show ipv6 interface brief`, `show ipv6 route`, `show ipv6 neighbors`, `ping <ipv6>`, `traceroute <ipv6>` |
 | RIP `(config-router)#` | `version 2`, `network <classful-net>`, `no network …`, `no auto-summary` |
 | NAT (routers and firewalls) | interface: `ip nat inside\|outside`; config: `ip nat pat`, `ip nat static <inside-ip> <public-ip>`; `show ip nat translations` |
 | Firewall | interface: `zone <inside\|outside\|dmz>`, `security-level <0-100>`; config: `rule <permit\|deny> <ip\|tcp\|udp\|icmp> <src> <dst> [port]`, `no rule <n>`; `show rules`, `show conn`, `show zones` |
@@ -196,16 +206,18 @@ Then open http://localhost:8000 in your browser.
 
 ## Deploying on GitHub Pages
 
-1. Put `index.html` at the top level of the repository.
+1. Put `index.html`, `README.md`, `SECURITY.md` and `update-csp.py` at the top level of the repository.
 2. Go to **Settings → Pages → Build and deployment**.
 3. Choose **Deploy from a branch**, then **main** and **/(root)**, and click **Save**.
-4. The site appears at `https://YOUR-USERNAME.github.io/<repo-name>/`.
+4. Tick **Enforce HTTPS** on the same page.
+5. The site appears at `https://YOUR-USERNAME.github.io/<repo-name>/`.
 
 ## Known limitations
 
 - This is a simulator: protocols are modeled in JavaScript, not run on real network operating systems.
 - RIP updates are sent about every 12 seconds of sim time instead of every 30, to keep demos short.
-- OSPF models a single area with point-to-point style adjacencies (no DR/BDR election). Hello and dead timers are 5 s and 20 s of sim time.
+- OSPF uses point-to-point style adjacencies (no DR/BDR election), standard areas only (no stub/NSSA), and Hello/dead timers of 5 s and 20 s of sim time.
+- IPv6 is modelled on PCs, servers and routers (not firewalls or SD-WAN edges). There is no DHCPv6 or OSPFv3; use SLAAC and static IPv6 routes. Duplicate Address Detection is skipped.
 - VLAN routing uses router-on-a-stick; Layer 3 switch SVIs are not modelled.
 - TCP is simplified: one request and one response per connection, no windowing or congestion control.
 - SD-WAN tunnels are shown decrypted in the inspector so you can see the inner packet.
@@ -220,7 +232,8 @@ Then open http://localhost:8000 in your browser.
 - [x] VLANs and 802.1Q trunking
 - [x] Spanning Tree Protocol (STP)
 - [x] OSPF (single area)
-- [ ] OSPF multi-area and DR/BDR election
+- [x] OSPF multi-area (ABRs, summary LSAs, area ranges)
+- [ ] OSPF DR/BDR election on shared segments
 - [x] NAT / PAT
 - [x] Stateful firewall rules
 - [x] TCP handshake, DNS and HTTP
@@ -232,7 +245,13 @@ Then open http://localhost:8000 in your browser.
 - [x] Windows-style server roles with PowerShell
 - [x] FortiGate-style and ASA-style firewalls
 - [x] Device model selection
-- [ ] IPv6
+- [x] IPv6 (SLAAC, Neighbor Discovery, ICMPv6, static routes, dual stack)
+- [x] Security hardening (Content-Security-Policy, safe project import)
+- [ ] OSPFv3 and DHCPv6
+
+## Security
+
+Packetyard runs entirely in your browser and never sends data anywhere. The published page has a strict Content-Security-Policy that only allows its own script to run, and any project file you open is sanitized first. See [SECURITY.md](SECURITY.md) for details and recommended GitHub settings. If you edit the code in `index.html`, run `python3 update-csp.py` afterwards so the policy matches the new script.
 
 ## Disclaimer
 

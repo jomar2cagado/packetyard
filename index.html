@@ -3,6 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-BJvKIGFpxPffYCbj2jIU/iGMLmb/hWzBiCdgletid/Y='; style-src 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'none'; object-src 'none'; frame-src 'none'; worker-src 'none'; base-uri 'none'; form-action 'none'; manifest-src 'self'">
+<meta name="referrer" content="no-referrer">
+<meta name="description" content="Packetyard: a browser-based network lab for learning protocols.">
 <style>body{margin:0}img{max-width:100%}</style>
 <title>Packetyard</title>
 <meta name="claude:viewport-fit-sides" content="cover">
@@ -317,6 +320,41 @@ table.tbl{border-collapse:collapse;width:100%;font:12px var(--mono);font-variant
 }
 @media (max-width:560px){ .btn .lbl{display:none} .brand span{display:none} }
 html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+button.brand{border:0;background:none;padding:0;cursor:pointer;color:inherit;font:inherit;text-align:left}
+.welcome{position:fixed;inset:0;z-index:40;display:grid;place-items:center;padding:16px;padding-top:max(16px,env(safe-area-inset-top,0px));padding-bottom:max(16px,env(safe-area-inset-bottom,0px));background:color-mix(in srgb,var(--bg) 70%,transparent);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);overflow:auto}
+.wbox:focus{outline:none}
+.wbox{width:min(1040px,100%);max-height:calc(100dvh - 32px);overflow:auto;background:var(--panel);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);padding:22px 24px 18px;display:flex;flex-direction:column;gap:16px;animation:wIn .45s cubic-bezier(.2,.8,.2,1)}
+@keyframes wIn{from{opacity:0;transform:translateY(14px) scale(.985)}to{opacity:1;transform:none}}
+.whero{position:relative;text-align:center;display:flex;flex-direction:column;align-items:center;gap:6px;padding:4px 0 2px;border-radius:14px;background:radial-gradient(120% 90% at 50% 0%,var(--accent-soft),transparent 70%)}
+.wnet{width:min(560px,100%);height:auto}
+.wnet .wl path{stroke:var(--line);stroke-width:3;fill:none;stroke-linecap:round}
+.wnet .wn>*{fill:var(--canvas);stroke:var(--accent);stroke-width:2.5}
+.wnet .k1{fill:var(--dhcp)}.wnet .k2{fill:var(--icmp)}.wnet .k3{fill:var(--http)}.wnet .k4{fill:var(--arp)}
+.whero h1{margin:0;font-size:clamp(28px,6vw,40px);letter-spacing:-.03em;line-height:1}
+.wtag{margin:0;max-width:60ch;color:var(--muted);font-size:15px;text-wrap:balance}
+.wquick{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
+.wq{display:flex;gap:12px;align-items:center;text-align:left;border:1px solid var(--line);background:var(--canvas);border-radius:12px;padding:12px 14px;cursor:pointer;color:var(--ink);font:inherit;transition:border-color .15s,transform .15s}
+.wq:hover{border-color:var(--accent);transform:translateY(-1px)}
+.wq.main{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.wq svg{width:26px;height:26px;flex:none}
+.wq b{display:block;font-size:15px}.wq span{font-size:12.5px;opacity:.8}
+.wh2{margin:2px 0 0;font-size:12px;text-transform:uppercase;letter-spacing:.14em;color:var(--muted);font-weight:600}
+.wpaths{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
+.wpath{border:1px solid var(--line);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:8px;background:var(--canvas);animation:wIn .5s cubic-bezier(.2,.8,.2,1) both}
+.wpath:nth-child(2){animation-delay:.06s}.wpath:nth-child(3){animation-delay:.12s}
+.wpath header{display:flex;align-items:center;gap:8px}
+.wlvl{font:600 11px var(--ui);text-transform:uppercase;letter-spacing:.1em;padding:3px 9px;border-radius:999px;color:var(--panel)}
+.wlvl.b{background:var(--ok)}.wlvl.i{background:var(--icmp)}.wlvl.e{background:var(--fwev)}
+.wpath h3{margin:0;font-size:17px;text-transform:none;letter-spacing:-.01em;color:var(--ink)}
+.wpath p{margin:0;font-size:13px;color:var(--muted)}
+.wpath ul{list-style:none;margin:2px 0 0;padding:0;display:flex;flex-direction:column;gap:6px}
+.wpath li button{width:100%;display:flex;justify-content:space-between;gap:8px;align-items:center;text-align:left;border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:9px;padding:8px 10px;cursor:pointer;font:inherit;font-size:13.5px}
+.wpath li button:hover{border-color:var(--accent)}
+.wpath li em{font:500 10.5px var(--mono);font-style:normal;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:1px 7px;flex:none}
+.wfoot{display:flex;flex-wrap:wrap;gap:6px 16px;align-items:center;justify-content:space-between;border-top:1px solid var(--line);padding-top:12px}
+@media (max-width:760px){.wbox{padding:16px 14px 14px;border-radius:14px;max-height:none}.welcome{place-items:start center}.wnet{width:100%}}
+@media (prefers-reduced-motion:reduce){.wbox,.wpath{animation:none}.wq{transition:none}}
+.barscroll{display:contents}.btn .short{display:none}
 .zoomctl{position:absolute;top:8px;right:8px;display:flex;flex-direction:column;gap:4px;z-index:2}
 .zoomctl button{width:34px;height:34px;display:grid;place-items:center;border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:8px;cursor:pointer;font:600 17px/1 var(--ui);box-shadow:var(--shadow);padding:0}
 .zoomctl button:hover{border-color:var(--accent)}
@@ -326,9 +364,11 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 @media (max-width:760px){
   #app{padding-top:max(10px,env(safe-area-inset-top,0px));padding-bottom:calc(64px + env(safe-area-inset-bottom,0px))}
   #app{grid-template-columns:minmax(0,1fr)}#app>*{min-width:0}
-  .bar{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;padding-bottom:2px;margin-inline:-4px;padding-inline:4px}
-  .bar::-webkit-scrollbar,#palette::-webkit-scrollbar{display:none}
-  .bar>*{flex:none}.bar .grp{flex-wrap:nowrap}
+  .bar{flex-wrap:wrap;gap:8px}
+  .barscroll{display:flex;flex:1 1 100%;min-width:0;gap:8px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px;margin-inline:-4px;padding-inline:4px}
+  .barscroll::-webkit-scrollbar,#palette::-webkit-scrollbar{display:none}
+  .barscroll>*{flex:none}.barscroll .grp{flex-wrap:nowrap}
+  .mainact{margin-left:auto}.btn .long{display:none}.btn .short{display:inline}
   .palette{flex-wrap:wrap}
   #palette{flex:1 1 0;min-width:0;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;padding-block:2px}
   #palette>*{flex:none}
@@ -346,6 +386,7 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
   .cards{grid-template-columns:minmax(0,1fr)}
   .narr{padding:10px 12px}
 }
+@media (max-width:1020px){.toast{bottom:calc(72px + env(safe-area-inset-bottom,0px))}}
 @media (pointer:coarse){
   .btn{min-height:38px}.pbtn{min-height:36px;padding-inline:9px 13px}.tab{min-height:44px}.chip{padding:6px 12px}
   .sel{min-height:36px}
@@ -353,10 +394,14 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 </style>
 </head>
 <body>
-
 <div id="app">
   <header class="bar">
-    <div class="brand"><b>Packetyard</b><span>network lab</span></div>
+    <button class="brand" id="brandBtn" title="Start screen"><b>Packetyard</b><span>network lab</span></button>
+    <div class="grp mainact" aria-label="Project">
+      <button class="btn primary" id="libBtn"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="2" width="5" height="5" rx="1"/><rect x="9" y="2" width="5" height="5" rx="1"/><rect x="2" y="9" width="5" height="5" rx="1"/><rect x="9" y="9" width="5" height="5" rx="1"/></svg><span class="long">Scenarios, demos &amp; labs</span><span class="short">Library</span></button>
+      <button class="btn" id="fileBtn" title="New, save, download or open a project">Projects</button>
+    </div>
+    <div class="barscroll">
     <div class="grp" role="toolbar" aria-label="Tools">
       <button class="btn" data-tool="select" aria-pressed="true" title="Select and move (V)"><svg viewBox="0 0 16 16"><path d="M3 2l9 5-4 1.2L6.5 12z" fill="currentColor"/></svg><span class="lbl">Select</span></button>
       <button class="btn" data-tool="link" title="Connect two devices with a cable (L)"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="3.5" cy="12.5" r="1.8"/><circle cx="12.5" cy="3.5" r="1.8"/><path d="M5 11l6-6"/></svg><span class="lbl">Cable</span></button>
@@ -371,14 +416,13 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
       <span class="clock" id="clock">t 0.0 s</span>
     </div>
     <div class="grp">
-      <button class="btn primary" id="libBtn"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="2" width="5" height="5" rx="1"/><rect x="9" y="2" width="5" height="5" rx="1"/><rect x="2" y="9" width="5" height="5" rx="1"/><rect x="9" y="9" width="5" height="5" rx="1"/></svg>Scenarios, demos &amp; labs</button>
       <button class="btn" id="resetBtn" title="Clear packets, caches, tables, leases, connections and learned routes">Reset tables</button>
-      <button class="btn" id="fileBtn" title="New, save, download or open a project">Projects</button>
     </div>
     <div class="grp" aria-label="Display">
       <label class="chk" title="Colour theme">Theme
         <select class="sel" id="themeSel" aria-label="Colour theme"><option value="system">System</option><option value="light">Light</option><option value="dark">Dark</option><option value="comfort">Eye comfort</option></select></label>
       <label class="chk" title="Okabe–Ito palette that stays distinct with colour-vision deficiency, plus a letter on every packet"><input type="checkbox" id="cbMode"> Colour-blind safe</label>
+    </div>
     </div>
   </header>
   <div class="palette">
@@ -432,6 +476,30 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
     <details class="layer"><summary>Copy or paste as text</summary><div style="padding:10px;display:flex;flex-direction:column;gap:8px">
       <textarea id="jsonBox" spellcheck="false" aria-label="Project as text"></textarea>
       <div class="row"><button class="btn" id="copyBtn">Copy</button><button class="btn" id="loadBtn">Load pasted text</button></div></div></details>
+  </div>
+</div>
+<div class="welcome" id="welcome" hidden role="dialog" aria-modal="true" aria-labelledby="wTitle">
+  <div class="wbox" tabindex="-1">
+    <div class="whero">
+      <svg class="wnet" viewBox="0 0 640 170" aria-hidden="true">
+        <g class="wl"><path id="wp1" d="M70 120 L200 60"/><path id="wp2" d="M200 60 L330 100"/><path id="wp3" d="M330 100 L460 50"/><path id="wp4" d="M460 50 L580 115"/><path id="wp5" d="M330 100 L420 150"/><path id="wp6" d="M200 60 L250 150"/></g>
+        <g class="wn"><rect x="52" y="104" width="36" height="28" rx="6"/><circle cx="200" cy="60" r="19"/><rect x="309" y="86" width="42" height="28" rx="7"/><circle cx="460" cy="50" r="19"/><rect x="562" y="100" width="36" height="30" rx="6"/><rect x="404" y="138" width="32" height="24" rx="5"/><rect x="234" y="138" width="32" height="24" rx="5"/></g>
+        <g class="wpk">
+          <circle r="5" class="k1"><animateMotion dur="2.6s" repeatCount="indefinite" keyPoints="0;1" keyTimes="0;1"><mpath href="#wp1"/></animateMotion></circle>
+          <circle r="5" class="k2"><animateMotion dur="2.2s" begin="0.6s" repeatCount="indefinite"><mpath href="#wp2"/></animateMotion></circle>
+          <circle r="5" class="k3"><animateMotion dur="2.8s" begin="1.1s" repeatCount="indefinite"><mpath href="#wp3"/></animateMotion></circle>
+          <circle r="5" class="k4"><animateMotion dur="2.4s" begin="0.3s" repeatCount="indefinite"><mpath href="#wp4"/></animateMotion></circle>
+          <circle r="5" class="k1"><animateMotion dur="1.8s" begin="1.4s" repeatCount="indefinite"><mpath href="#wp5"/></animateMotion></circle>
+          <circle r="5" class="k3"><animateMotion dur="2s" begin="0.9s" repeatCount="indefinite"><mpath href="#wp6"/></animateMotion></circle>
+        </g>
+      </svg>
+      <h1 id="wTitle">Packetyard</h1>
+      <p class="wtag">Build a network, configure real devices, and watch every packet travel — with a plain-language explanation of each step.</p>
+    </div>
+    <div class="wquick" id="wQuick"></div>
+    <h2 class="wh2">Choose your path</h2>
+    <div class="wpaths" id="wPaths"></div>
+    <div class="wfoot"><label class="chk"><input type="checkbox" id="wShow"> Show this screen when the app opens</label><span class="note">Reopen it any time by tapping the Packetyard name.</span></div>
   </div>
 </div>
 <div class="toast" id="toast" hidden></div>
@@ -514,8 +582,8 @@ function ifOper(d,ifi){const i=d.ifaces[ifi];if(!i||!i.up)return false;if(i.pare
 const after=(ms,fn)=>sim.timers.push({at:sim.t+ms,fn});
 
 function runtime(d){
-  Object.assign(d,{arp:{},mact:{},pending:[],arpWait:{},session:null,ripRoutes:[],bindings:{},dhcpc:null,ripNext:0,tcp:{},dnsWait:{},dnsFwd:{},natT:[],conns:[],tunnels:{},sdNext:0,cache:{},patNext:1024,sdSeq:0});
-  d.routes=d.routes||[];d.gw=d.gw||'';d.dns=d.dns||'';d.proxy=d.proxy||'';
+  Object.assign(d,{arp:{},mact:{},pending:[],arpWait:{},session:null,ripRoutes:[],bindings:{},dhcpc:null,ripNext:0,tcp:{},dnsWait:{},dnsFwd:{},natT:[],conns:[],tunnels:{},sdNext:0,cache:{},patNext:1024,sdSeq:0,nd:{},ndWait:{},pend6:[]});
+  d.routes=d.routes||[];d.routes6=d.routes6||[];d.gw6=d.gw6||'';d.gw=d.gw||'';d.dns=d.dns||'';d.proxy=d.proxy||'';
   d.rip=d.rip||{on:false,nets:[]};d.dhcp=d.dhcp||{pools:[],excluded:[]};
   d.ospf=d.ospf||{on:false,pid:1,rid:'',nets:[],passive:[]};d.ospfRt=freshOspf();if(isBridge(d))d.vlans=d.vlans||{1:'default'};
   d.stp=d.stp||{on:true,prio:32768};d.stpRt={ports:{},helloNext:0,root:null,cost:0,rootPort:-1,isRoot:true};d.acls=d.acls||{};d.crypto=d.crypto||{keys:{},isakmp:null,ts:{},maps:{}};d.vpnRt={sas:{}};
@@ -555,12 +623,36 @@ function removeLink(l){S.links=S.links.filter(x=>x!==l);sim.packets=sim.packets.
 function removeDev(d){S.links.filter(l=>l.a.dev===d.id||l.b.dev===d.id).forEach(removeLink);S.devices=S.devices.filter(x=>x!==d);if(selId===d.id)selId=null;topoDirty=panelDirty=true;save()}
 
 /* ---------- persistence ---------- */
-const CFG=['id','type','name','x','y','gw','dns','proxy','routes','rip','dhcp','nat','fw','sd','svc','prx','dhcpClient','model','ssid','vlans','ospf','stp','acls','crypto','platform','fos','objs'];
-function serialize(){return {app:'packetyard',v:2,devices:S.devices.map(d=>{const o={};CFG.forEach(k=>o[k]=d[k]);o.x=Math.round(d.x);o.y=Math.round(d.y);o.ifaces=d.ifaces.map(i=>{const x={name:i.name,mac:i.mac,ip:i.ip,mask:i.mask,up:i.up,nat:i.nat,zone:i.zone,level:i.level,transport:i.transport};['mode','vlan','allowed','native','parent','encap','ospfCost','aclIn','aclOut','cryptoMap','stpCost','stpEdge','helper','role','allowaccess'].forEach(k=>{if(i[k]!=null&&i[k]!=='')x[k]=i[k]});return x});return o}),links:S.links.map(l=>({id:l.id,a:l.a,b:l.b,delay:l.delay,loss:l.loss,cut:l.cut,label:l.label,wifi:!!l.wifi,cable:l.cable}))}}
+const CFG=['id','type','name','x','y','gw','dns','proxy','routes','rip','dhcp','nat','fw','sd','svc','prx','dhcpClient','model','ssid','vlans','ospf','stp','acls','crypto','platform','fos','objs','routes6','gw6','gw6src','v6r'];
+function serialize(){return {app:'packetyard',v:2,devices:S.devices.map(d=>{const o={};CFG.forEach(k=>o[k]=d[k]);o.x=Math.round(d.x);o.y=Math.round(d.y);o.ifaces=d.ifaces.map(i=>{const x={name:i.name,mac:i.mac,ip:i.ip,mask:i.mask,up:i.up,nat:i.nat,zone:i.zone,level:i.level,transport:i.transport};['mode','vlan','allowed','native','parent','encap','ospfCost','aclIn','aclOut','cryptoMap','stpCost','stpEdge','helper','role','allowaccess','v6','v6auto','v6en'].forEach(k=>{if(i[k]!=null&&i[k]!=='')x[k]=i[k]});return x});return o}),links:S.links.map(l=>({id:l.id,a:l.a,b:l.b,delay:l.delay,loss:l.loss,cut:l.cut,label:l.label,wifi:!!l.wifi,cable:l.cable}))}}
+/* ---------- security: everything loaded from a file, pasted text or storage is untrusted ---------- */
+const BADKEYS=new Set(['__proto__','constructor','prototype']);
+const safeName=v=>String(v||'').replace(/[^A-Za-z0-9_.\-]/g,'').slice(0,20);
+function cleanStr(v){return String(v).slice(0,4000).replace(/[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f\u2028\u2029]/g,'').replace(/</g,'‹').replace(/>/g,'›').replace(/"/g,'”').replace(/'/g,'’').replace(/`/g,'ʼ')}
+function cleanVal(v,depth){if(depth>24)return null;
+  if(typeof v==='string')return cleanStr(v);if(typeof v==='number')return Number.isFinite(v)?v:0;if(typeof v==='boolean'||v===null)return v;
+  if(Array.isArray(v))return v.slice(0,5000).map(x=>cleanVal(x,depth+1));
+  if(typeof v==='object'){const o={};let n=0;for(const k of Object.keys(v)){if(BADKEYS.has(k)||++n>2000)continue;o[cleanStr(k).slice(0,200)]=cleanVal(v[k],depth+1)}return o}
+  return null}
+function sanitizeProject(raw){
+  if(!raw||typeof raw!=='object'||!Array.isArray(raw.devices))throw new Error('bad');
+  if(JSON.stringify(raw).length>8e6)throw new Error('too large');
+  const o=cleanVal(raw,0),ids=new Set(),devs=[];
+  (o.devices||[]).slice(0,400).forEach(d=>{if(!d||typeof d!=='object'||!TYPES[d.type]||!/^d\d{1,7}$/.test(d.id)||ids.has(d.id)||!Array.isArray(d.ifaces)||!d.ifaces.length)return;
+    d.name=safeName(d.name)||nextName(d.type);d.x=Math.max(0,Math.min(W,+d.x||0));d.y=Math.max(0,Math.min(H,+d.y||0));
+    d.ifaces=d.ifaces.slice(0,64).filter(i=>i&&typeof i==='object').map(i=>({...i,name:String(i.name||'eth').replace(/[^A-Za-z0-9/.\-]/g,'').slice(0,24)||'eth',mac:/^[0-9a-f]{2}(:[0-9a-f]{2}){5}$/.test(i.mac)?i.mac:newMac()}));
+    ['routes','routes6','gw','dns','gw6'].forEach(k=>{if(d[k]!=null&&(k.startsWith('routes')?!Array.isArray(d[k]):typeof d[k]!=='string'))delete d[k]});if(d.routes)d.routes=d.routes.filter(r=>r&&validIp(r.net)&&validIp(r.mask)&&validIp(r.nh));
+    ids.add(d.id);devs.push(d)});
+  const links=(Array.isArray(o.links)?o.links:[]).slice(0,2000).filter(l=>{if(!l||!/^[a-z]{1,3}\d{1,7}$/.test(String(l.id))||!l.a||!l.b)return false;
+    const A=devs.find(d=>d.id===l.a.dev),B=devs.find(d=>d.id===l.b.dev);return A&&B&&A!==B&&Number.isInteger(l.a.ifi)&&Number.isInteger(l.b.ifi)&&l.a.ifi>=0&&l.b.ifi>=0&&l.a.ifi<A.ifaces.length&&l.b.ifi<B.ifaces.length});
+  links.forEach(l=>{l.delay=Math.max(0.25,Math.min(10,+l.delay||1));l.loss=Math.max(0,Math.min(100,+l.loss||0));if(l.cable&&!CABLES[l.cable])delete l.cable});
+  return {...o,devices:devs,links}}
 function load(o){
-  if(!o||!Array.isArray(o.devices))throw new Error('bad');
+  o=sanitizeProject(o);
+  const prep=o.devices.map(d=>{try{return runtime(JSON.parse(JSON.stringify(d)))}catch(e){
+    return runtime({id:d.id,type:d.type,name:d.name,x:d.x,y:d.y,model:typeof d.model==='string'?d.model:'',ifaces:d.ifaces.map(i=>({name:i.name,mac:i.mac,ip:validIp(i.ip)?i.ip:'',mask:validMask(i.mask)?i.mask:'',up:!!i.up}))})}});
   clearAll();
-  S.devices=JSON.parse(JSON.stringify(o.devices)).map(d=>runtime(d));
+  S.devices=prep;
   S.links=JSON.parse(JSON.stringify(o.links||[])).map(l=>({delay:1,loss:0,cut:false,label:'',...l}));
   S.links.forEach(l=>{if(!l.cable){const A=S.devices.find(d=>d.id===l.a.dev),B=S.devices.find(d=>d.id===l.b.dev);l.cable=l.wifi?'wifi':(A&&B?autoCable(A,B,l.a.ifi,l.b.ifi):'straight')}});
   let mx=0;[...S.devices,...S.links].forEach(x=>{const n=+String(x.id).slice(1);if(n>mx)mx=n});S.nextId=mx+1;
@@ -571,13 +663,13 @@ function save(){store.set('packetyard.topo2',JSON.stringify(serialize()))}
 function clearAll(){S.devices=[];S.links=[];S.nextId=1;sim.packets=[];sim.timers=[];selId=null;selLink=null;inspected=null;linkFrom=null;needFit=true;events=[];RES={ping:[],http:[],voice:[],auto:[],blocked:[],smb:[]};renderEvents();topoDirty=panelDirty=narrDirty=true}
 function resetTables(){
   sim.packets=[];sim.timers=[];
-  S.devices.forEach(d=>{Object.assign(d,{arp:{},mact:{},pending:[],arpWait:{},session:null,ripRoutes:[],bindings:{},dhcpc:null,tcp:{},dnsWait:{},dnsFwd:{},natT:[],conns:[],tunnels:{},cache:{}});if(d.rip.on)d.ripNext=sim.t+500;if(d.type==='sdwan')d.sdNext=sim.t+200;d.ospfRt=freshOspf();d.vpnRt={sas:{}}});stpConverge();
+  S.devices.forEach(d=>{Object.assign(d,{arp:{},mact:{},pending:[],arpWait:{},session:null,ripRoutes:[],bindings:{},dhcpc:null,tcp:{},dnsWait:{},dnsFwd:{},natT:[],conns:[],tunnels:{},cache:{},nd:{},ndWait:{},pend6:[],v6rt:null});if(d.rip.on)d.ripNext=sim.t+500;if(d.type==='sdwan')d.sdNext=sim.t+200;d.ospfRt=freshOspf();d.vpnRt={sas:{}}});stpConverge();
   topoDirty=panelDirty=narrDirty=true;
 }
 
 /* ---------- logging ---------- */
 function log(d,text,o={}){
-  if(o.frame&&((o.frame.ip&&o.frame.ip.q)||o.frame.q))return;
+  if(o.frame&&((o.frame.ip&&o.frame.ip.q)||(o.frame.ip6&&o.frame.ip6.q)||o.frame.q))return;
   const e={t:sim.t,dev:d?d.name:'',text,frame:o.frame||null,cls:o.cls||'mute',explain:o.explain||null};
   events.push(e);if(events.length>800)events.shift();
   appendEvent(e);
@@ -602,7 +694,7 @@ function fsumIp(p){
   if(p.esp)return p.esp.vpn?`IPsec ESP (site-to-site VPN) ${p.src} → ${p.dst}, carrying ${fsumIp(p.esp.inner)}`:`IPsec ESP over ${p.esp.transport.toUpperCase()}: ${fsumIp(p.esp.inner)}`;
   return `${p.src} → ${p.dst}`;
 }
-function fsum(f){if(f.bpdu)return `STP BPDU: root ${bidText(f.bpdu.rootP,f.bpdu.rootM)}, cost ${f.bpdu.cost}, from ${bidText(f.bpdu.bP,f.bpdu.bM)}`;const t=f.tag?`[VLAN ${f.tag}] `:'';if(f.arp)return t+(f.arp.op===1?`ARP Who has ${f.arp.tpa}? Tell ${f.arp.spa}`:`ARP ${f.arp.spa} is at ${f.arp.sha}`);const p=f.ip;return t+fsumIp(p)+(p.icmp?` TTL ${p.ttl}`:'')}
+function fsum(f){if(f.bpdu)return `STP BPDU: root ${bidText(f.bpdu.rootP,f.bpdu.rootM)}, cost ${f.bpdu.cost}, from ${bidText(f.bpdu.bP,f.bpdu.bM)}`;const t=f.tag?`[VLAN ${f.tag}] `:'';if(f.arp)return t+(f.arp.op===1?`ARP Who has ${f.arp.tpa}? Tell ${f.arp.spa}`:`ARP ${f.arp.spa} is at ${f.arp.sha}`);if(f.ip6)return t+fsum6(f.ip6);const p=f.ip;return t+fsumIp(p)+(p.icmp?` TTL ${p.ttl}`:'')}
 function pcls(p){
   if(p.ospf)return 'ospf';
   if(p.icmp)return (p.icmp.type===3||p.icmp.type===11)?'err':'icmp';
@@ -610,7 +702,7 @@ function pcls(p){
   if(p.esp)return 'tun';
   const u=p.udp||{};if(u.isakmp)return 'ike';return u.dhcp?'dhcp':u.rip?'rip':u.dns?'dns':u.voice?'voice':u.probe?'probe':'mute';
 }
-const fcls=f=>f.bpdu?'stp':f.arp?'arp':pcls(f.ip);
+const fcls=f=>f.bpdu?'stp':f.arp?'arp':f.ip6?pcls6(f.ip6):pcls(f.ip);
 const PLETTER={stp:'',ike:'K',ospf:'O',arp:'A',icmp:'I',err:'!',dhcp:'D',rip:'R',tcp:'T',http:'H',dns:'N',voice:'V',tun:'S',probe:'',mute:''};
 
 /* ---------- link layer ---------- */
@@ -638,7 +730,7 @@ function routeLookup(d,dst){
     const viaIf=nh=>d.ifaces.findIndex((i,k)=>i.ip&&i.mask&&ifOper(d,k)&&inNet(nh,i.ip,i.mask));
     d.routes.forEach(r=>{if(inNet(dst,r.net,r.mask)){const k=viaIf(r.nh);if(k>=0)cand({ifi:k,nh:r.nh,len:mask2len(r.mask),net:r.net,kind:'S',ad:1})}});
     d.ripRoutes.forEach(r=>{if(inNet(dst,r.net,r.mask)&&ifOper(d,r.ifi))cand({ifi:r.ifi,nh:r.nh,len:mask2len(r.mask),net:r.net,kind:'R',ad:120,metric:r.metric})});
-    (d.ospfRt?d.ospfRt.routes:[]).forEach(r=>{if(r.ifi>=0&&inNet(dst,r.net,r.mask)&&ifOper(d,r.ifi))cand({ifi:r.ifi,nh:r.nh,len:mask2len(r.mask),net:r.net,kind:'O',ad:110,metric:r.cost})});
+    (d.ospfRt?d.ospfRt.routes:[]).forEach(r=>{if(r.ifi>=0&&inNet(dst,r.net,r.mask)&&ifOper(d,r.ifi))cand({ifi:r.ifi,nh:r.nh,len:mask2len(r.mask),net:r.net,kind:r.ia?'O IA':'O',ad:110,metric:r.cost})});
   }
   return best;
 }
@@ -670,10 +762,10 @@ function receive(d,ifi,f){
   if(isBridge(d))return swRx(d,ifi,f);
   if(f.tag&&isL3(d)){const sk=d.ifaces.findIndex(x=>x.parent===ifi&&x.encap===f.tag);if(sk<0||!d.ifaces[sk].up){log(d,`No subinterface for VLAN ${f.tag}`,{frame:f,cls:'err',explain:`${d.name} received a frame tagged for VLAN ${f.tag} on ${ifc.name}, but has no working subinterface with encapsulation dot1Q ${f.tag}, so it drops it.`});return}ifi=sk;ifc=d.ifaces[sk]}
   else if(f.tag&&isHost(d)){log(d,'Dropped a VLAN-tagged frame',{frame:f,cls:'err',explain:`${d.name} received a frame with an 802.1Q tag. PCs don't understand VLAN tags: this usually means the switch port is a trunk instead of an access port.`});return}
-  const forMe=f.dst===ifc.mac||f.dst===BCAST||((f.dst===RIPMAC||f.dst===OSPFMAC)&&isL3(d));
-  if(!forMe&&(f.dst.startsWith('01:00:5e')||f.dst.startsWith('01:80:c2')))return;
+  const forMe=f.dst===ifc.mac||f.dst===BCAST||((f.dst===RIPMAC||f.dst===OSPFMAC)&&isL3(d))||(!!f.ip6&&f.dst.startsWith('33:33'));
+  if(!forMe&&(f.dst.startsWith('01:00:5e')||f.dst.startsWith('01:80:c2')||f.dst.startsWith('33:33')))return;
   if(!forMe){log(d,`Discarded frame for ${f.dst}`,{frame:f,cls:'mute',explain:`${d.name} received a copy of a frame addressed to ${f.dst}. That isn't its MAC address, so its network card discards it.`});return}
-  if(f.arp)arpRx(d,ifi,f);else if(f.ip)ipRx(d,ifi,f);
+  if(f.arp)arpRx(d,ifi,f);else if(f.ip6)ip6Rx(d,ifi,f);else if(f.ip)ipRx(d,ifi,f);
 }
 function arpRx(d,ifi,f){
   const a=f.arp,ifc=d.ifaces[ifi];
@@ -810,31 +902,60 @@ function ospfIfs(d){if(!d.ospf||!d.ospf.on)return [];return d.ifaces.map((_,k)=>
 const isPassive=(d,k)=>d.ospf.passive.some(p=>p.toLowerCase()===d.ifaces[k].name.toLowerCase());
 function ospfCost(d,k){const i=d.ifaces[k];if(i.ospfCost)return i.ospfCost;const L=linkAt(d,k);if(!L)return 1;return {serial:64,wifi:10,coax:2}[L.cable]||1}
 function ospfSend(d,k,o,explain,quiet){const i=d.ifaces[k];sendFrame(d,k,{dst:OSPFMAC,src:i.mac,ip:{src:i.ip,dst:'224.0.0.5',ttl:1,ident:sim.ident++,q:!!quiet,ospf:{rid:ospfRid(d),area:ospfNet(d,k)?ospfNet(d,k).area:0,mask:i.mask,...o}}},explain)}
-function buildLsa(d){const R=d.ospfRt,links=[];
-  ospfIfs(d).forEach(k=>{const i=d.ifaces[k],c=ospfCost(d,k);Object.values(R.nbrs[k]||{}).forEach(n=>{if(n.state==='FULL')links.push({type:'router',nbr:n.rid,ip:i.ip,nip:n.ip,ifn:i.name,cost:c})});links.push({type:'stub',net:netOf(i.ip,i.mask),mask:i.mask,cost:c})});
-  return {rid:ospfRid(d),seq:++R.seq,links}}
+/* ---- OSPF multi-area: per-area Router LSAs (type 1) and ABR Summary LSAs (type 3) ---- */
+const lsaKey=l=>l.t==='summary'?`S|${l.area}|${l.rid}|${l.net}/${l.mask}`:`R|${l.area}|${l.rid}`;
+function ospfAreas(d){return [...new Set(ospfIfs(d).map(k=>ospfNet(d,k).area))].sort((a,b)=>a-b)}
+const isAbr=d=>{const A=ospfAreas(d);return A.length>1&&A.includes(0)};
+const areaLsas=(R,A)=>Object.values(R.lsdb).filter(l=>l.area===A);
+const lsaHdr=l=>({key:lsaKey(l),t:l.t||'router',rid:l.rid,seq:l.seq,n:l.t==='summary'?0:l.links.length,net:l.net,area:l.area});
+function buildLsa(d,A){const R=d.ospfRt,links=[];
+  ospfIfs(d).filter(k=>ospfNet(d,k).area===A).forEach(k=>{const i=d.ifaces[k],c=ospfCost(d,k);Object.values(R.nbrs[k]||{}).forEach(n=>{if(n.state==='FULL')links.push({type:'router',nbr:n.rid,ip:i.ip,nip:n.ip,ifn:i.name,cost:c})});links.push({type:'stub',net:netOf(i.ip,i.mask),mask:i.mask,cost:c})});
+  return {t:'router',area:A,rid:ospfRid(d),seq:++R.seq,abr:isAbr(d),links}}
 function ospfFlood(d,lsas,exceptRid,why){const R=d.ospfRt;
-  ospfIfs(d).forEach(k=>{if(isPassive(d,k))return;const full=Object.values(R.nbrs[k]||{}).filter(n=>n.state==='FULL'&&n.rid!==exceptRid);if(!full.length)return;
-    ospfSend(d,k,{type:4,lsas:clone(lsas)},why||`${d.name} floods a Link-State Update to ${full.map(n=>n.rid).join(', ')} so every router keeps an identical map of the network.`)})}
-function ospfOriginate(d,reason){const lsa=buildLsa(d);d.ospfRt.lsdb[lsa.rid]=lsa;ospfFlood(d,[lsa],null,`${reason||'Something changed'}, so ${d.name} creates a new Router LSA (sequence ${lsa.seq}) describing its links and their costs, and floods it to its FULL neighbors.`);ospfSpf(d)}
-function ospfSpf(d){
-  const R=d.ospfRt,L=R.lsdb,me=ospfRid(d);if(!L[me]){R.routes=[];return}
-  const dist={[me]:0},first={},done=new Set();
-  for(;;){let u=null;for(const r in dist)if(!done.has(r)&&(u===null||dist[r]<dist[u]))u=r;if(u===null)break;done.add(u);const lsa=L[u];if(!lsa)continue;
-    lsa.links.forEach(l=>{if(l.type!=='router')return;const v=l.nbr,back=L[v]&&L[v].links.some(x=>x.type==='router'&&x.nbr===u);if(!back)return;
+  ospfIfs(d).forEach(k=>{if(isPassive(d,k))return;const A=ospfNet(d,k).area,mine=lsas.filter(l=>l.area===A);if(!mine.length)return;const full=Object.values(R.nbrs[k]||{}).filter(n=>n.state==='FULL'&&n.rid!==exceptRid);if(!full.length)return;
+    ospfSend(d,k,{type:4,lsas:clone(mine)},why||`${d.name} floods a Link-State Update to ${full.map(n=>n.rid).join(', ')} in area ${A}. LSAs stay inside their own area.`)})}
+function ospfOriginate(d,reason){const R=d.ospfRt,me=ospfRid(d),areas=ospfAreas(d),out=[];
+  Object.values(R.lsdb).forEach(l=>{if(l.rid===me&&!areas.includes(l.area))delete R.lsdb[lsaKey(l)]});
+  areas.forEach(A=>{const lsa=buildLsa(d,A);R.lsdb[lsaKey(lsa)]=lsa;out.push(lsa)});
+  ospfFlood(d,out,null,`${reason||'Something changed'}, so ${d.name} creates a new Router LSA${areas.length>1?` for each of its areas (${areas.join(', ')})`:''} describing its links and costs, and floods it to its FULL neighbors.`);ospfSpf(d)}
+function areaSpf(d,A){const R=d.ospfRt,me=ospfRid(d),get=r=>R.lsdb[`R|${A}|${r}`];
+  const dist={[me]:0},first={},done=new Set();if(!get(me))return {dist:{},first:{}};
+  for(;;){let u=null;for(const r in dist)if(!done.has(r)&&(u===null||dist[r]<dist[u]))u=r;if(u===null)break;done.add(u);const lsa=get(u);if(!lsa)continue;
+    lsa.links.forEach(l=>{if(l.type!=='router')return;const v=l.nbr,lv=get(v),back=lv&&lv.links.some(x=>x.type==='router'&&x.nbr===u);if(!back)return;
       const c=dist[u]+l.cost;if(dist[v]===undefined||c<dist[v]){dist[v]=c;first[v]=u===me?{ifi:d.ifaces.findIndex(i=>i.name===l.ifn),nh:l.nip}:first[u]}})}
-  const best={};
-  for(const r in dist){if(r===me||!L[r]||!first[r])continue;L[r].links.forEach(l=>{if(l.type!=='stub')return;const key=l.net+'/'+l.mask,c=dist[r]+l.cost;if(!best[key]||c<best[key].cost)best[key]={net:l.net,mask:l.mask,cost:c,ifi:first[r].ifi,nh:first[r].nh,via:r}})}
+  return {dist,first}}
+function ospfSpf(d){
+  const R=d.ospfRt,me=ospfRid(d),areas=ospfAreas(d),abr=isAbr(d);if(!areas.length){R.routes=[];return}
+  const intra={},inter={},sp={};
+  areas.forEach(A=>{const {dist,first}=sp[A]=areaSpf(d,A);
+    for(const r in dist){const L=R.lsdb[`R|${A}|${r}`];if(r===me||!L||!first[r])continue;L.links.forEach(l=>{if(l.type!=='stub')return;const key=l.net+'/'+l.mask,c=dist[r]+l.cost;if(!intra[key]||c<intra[key].cost)intra[key]={net:l.net,mask:l.mask,cost:c,ifi:first[r].ifi,nh:first[r].nh,via:r,area:A}})}});
+  areas.forEach(A=>{if(abr&&A!==0)return;const {dist,first}=sp[A];
+    areaLsas(R,A).forEach(l=>{if(l.t!=='summary'||l.dead||l.rid===me||dist[l.rid]===undefined||!first[l.rid])return;const key=l.net+'/'+l.mask,c=dist[l.rid]+l.cost;if(!inter[key]||c<inter[key].cost)inter[key]={net:l.net,mask:l.mask,cost:c,ifi:first[l.rid].ifi,nh:first[l.rid].nh,via:l.rid,area:A,ia:true}})});
   const mine=new Set(d.ifaces.filter((i,k)=>i.ip&&ifOper(d,k)).map(i=>netOf(i.ip,i.mask)+'/'+i.mask));
-  const routes=Object.entries(best).filter(([k])=>!mine.has(k)).map(([,v])=>v).sort((a,b)=>ip2n(a.net)-ip2n(b.net));
-  const before=JSON.stringify(R.routes.map(r=>[r.net,r.nh,r.cost])),after=JSON.stringify(routes.map(r=>[r.net,r.nh,r.cost]));
+  const all={...inter,...intra};
+  const routes=Object.entries(all).filter(([k])=>!mine.has(k)).map(([,v])=>v).sort((a,b)=>ip2n(a.net)-ip2n(b.net));
+  const before=JSON.stringify(R.routes.map(r=>[r.net,r.nh,r.cost,!!r.ia])),after=JSON.stringify(routes.map(r=>[r.net,r.nh,r.cost,!!r.ia]));
   R.routes=routes;panelDirty=true;
-  if(before!==after)log(d,`OSPF SPF: ${routes.length} route${routes.length===1?'':'s'}`,{cls:'ospf',explain:`${d.name} runs the SPF (Dijkstra) algorithm on its link-state database and builds a shortest-path tree with itself at the root. It now has ${routes.length} OSPF route${routes.length===1?'':'s'}${routes.length?': '+routes.map(r=>`${r.net}/${mask2len(r.mask)} cost ${r.cost} via ${r.nh}`).join(', '):''}.`});
+  if(before!==after){const ia=routes.filter(r=>r.ia).length;log(d,`OSPF SPF: ${routes.length} route${routes.length===1?'':'s'}${ia?` (${ia} inter-area)`:''}`,{cls:'ospf',explain:`${d.name} runs SPF (Dijkstra) separately for each area it belongs to${areas.length>1?` (areas ${areas.join(', ')})`:` (area ${areas[0]})`}. Routes inside an area are "O"; routes to other areas, learned from an ABR's Summary LSAs, are "O IA" and cost the distance to the ABR plus the ABR's advertised cost. ${routes.length?'Routes: '+routes.map(r=>`${r.ia?'O IA ':'O '}${r.net}/${mask2len(r.mask)} cost ${r.cost} via ${r.nh}`).join(', '):'No routes yet.'}.`})}
+  if(abr)abrSummaries(d,areas,intra,inter);
 }
+function abrSummaries(d,areas,intra,inter){const R=d.ospfRt,me=ospfRid(d),ranges=d.ospf.ranges||[];
+  const conn=[];ospfIfs(d).forEach(k=>{const i=d.ifaces[k];conn.push({net:netOf(i.ip,i.mask),mask:i.mask,cost:ospfCost(d,k),area:ospfNet(d,k).area})});
+  const srcIntra=[...conn,...Object.values(intra)];const changed={};
+  areas.forEach(X=>{const want={};const inX=new Set(srcIntra.filter(r=>r.area===X).map(r=>r.net+'/'+r.mask));
+    const put=(net,mask,cost,rg)=>{const k=net+'/'+mask;if(inX.has(k))return;if(!want[k]||(rg?cost>want[k].cost:cost<want[k].cost))want[k]={net,mask,cost}};
+    srcIntra.forEach(r=>{if(r.area===X)return;const rg=ranges.find(g=>g.area===r.area&&inNet(r.net,g.net,g.mask)&&mask2len(r.mask)>=mask2len(g.mask));if(rg)put(rg.net,rg.mask,r.cost,true);else put(r.net,r.mask,r.cost)});
+    if(X!==0)Object.values(inter).forEach(r=>{if(r.area===0)put(r.net,r.mask,r.cost)});
+    const have=areaLsas(R,X).filter(l=>l.t==='summary'&&l.rid===me);
+    Object.values(want).forEach(w=>{const key=`S|${X}|${me}|${w.net}/${w.mask}`,cur=R.lsdb[key];if(!cur||cur.dead||cur.cost!==w.cost){R.lsdb[key]={t:'summary',area:X,rid:me,seq:++R.seq,net:w.net,mask:w.mask,cost:w.cost};(changed[X]=changed[X]||[]).push(R.lsdb[key])}});
+    have.forEach(l=>{if(!l.dead&&!want[l.net+'/'+l.mask]){const k=lsaKey(l);R.lsdb[k]={...l,seq:++R.seq,dead:true};(changed[X]=changed[X]||[]).push(R.lsdb[k])}})});
+  Object.entries(changed).forEach(([X,ls])=>{X=+X;const live=ls.filter(l=>!l.dead);
+    log(d,`ABR ${d.name}: ${live.length} Summary LSA${live.length===1?'':'s'} into area ${X}${ls.length>live.length?`, ${ls.length-live.length} withdrawn`:''}`,{cls:'ospf',explain:`${d.name} is an Area Border Router: it connects area 0 (the backbone) with ${areas.filter(a=>a).map(a=>'area '+a).join(', ')}. It does not copy one area's Router LSAs into another. Instead it advertises each network from the other areas as a Type 3 Summary LSA with a cost${live.length?': '+live.map(l=>`${l.net}/${mask2len(l.mask)} cost ${l.cost}`).join(', '):''}. ${(d.ospf.ranges||[]).length?'Networks covered by an "area range" are summarized into one prefix, so routers in other areas keep smaller tables.':''}`});
+    ospfFlood(d,ls,null,`${d.name} floods its Summary LSAs into area ${X}.`)})}
 function nbrState(d,k,n,st,explain){n.state=st;n.since=sim.t;panelDirty=true;log(d,`OSPF neighbor ${n.rid} on ${d.ifaces[k].name}: ${st}`,{cls:'ospf',explain})}
 function ospfStartExchange(d,k,n){const me=ospfRid(d);
   if(ip2n(me)>ip2n(n.rid)){nbrState(d,k,n,'EXSTART',`${d.name} has the higher router ID (${me} > ${n.rid}), so it becomes master for the database exchange and starts with a Database Description packet.`);
-    ospfSend(d,k,{type:2,reply:false,hdrs:Object.values(d.ospfRt.lsdb).map(l=>({rid:l.rid,seq:l.seq,n:l.links.length}))},`${d.name} sends a DBD: a summary (headers only) of every LSA in its database, so ${n.rid} can see what it is missing.`)}}
+    ospfSend(d,k,{type:2,reply:false,hdrs:areaLsas(d.ospfRt,ospfNet(d,k).area).map(lsaHdr)},`${d.name} sends a DBD: a summary (headers only) of every LSA in its database, so ${n.rid} can see what it is missing.`)}}
 function ospfRx(d,k,p,f){
   const o=p.ospf,R=d.ospfRt,me=ospfRid(d),ifn=d.ifaces[k].name,fr={...f,ip:{...f.ip,q:false}};
   if(!d.ospf.on||!ospfIfs(d).includes(k)){log(d,`Ignored OSPF ${OSPFT[o.type]} on ${ifn}`,{frame:fr,cls:'mute',explain:`${d.name} isn't running OSPF on ${ifn} (no matching network statement), so it ignores the packet.`});return}
@@ -852,16 +973,16 @@ function ospfRx(d,k,p,f){
   if(o.type===2){
     if(!o.reply&&(n.state==='2WAY'||n.state==='EXSTART'||n.state==='EXCHANGE')){
       nbrState(d,k,n,'EXCHANGE',`${d.name} received ${o.rid}'s database summary. State EXCHANGE: it answers with its own DBD and sends the full LSAs in a Link-State Update.`);
-      ospfSend(d,k,{type:2,reply:true,hdrs:Object.values(R.lsdb).map(l=>({rid:l.rid,seq:l.seq,n:l.links.length}))},`${d.name} replies with its own DBD summary.`);
-      ospfSend(d,k,{type:4,lsas:clone(Object.values(R.lsdb))},`${d.name} sends a Link-State Update with every LSA it knows, so ${o.rid} can fill the gaps.`)}
+      ospfSend(d,k,{type:2,reply:true,hdrs:areaLsas(R,net.area).map(lsaHdr)},`${d.name} replies with its own DBD summary.`);
+      ospfSend(d,k,{type:4,lsas:clone(areaLsas(R,net.area))},`${d.name} sends a Link-State Update with every area ${net.area} LSA it knows, so ${o.rid} can fill the gaps.`)}
     else if(o.reply&&n.state==='EXSTART'){
       nbrState(d,k,n,'LOADING',`${d.name} got ${o.rid}'s summary. State LOADING: it sends its own LSAs and waits for ${o.rid}'s.`);
-      ospfSend(d,k,{type:4,lsas:clone(Object.values(R.lsdb))},`${d.name} sends a Link-State Update with every LSA in its database.`)}
+      ospfSend(d,k,{type:4,lsas:clone(areaLsas(R,net.area))},`${d.name} sends a Link-State Update with every area ${net.area} LSA in its database.`)}
     return}
   if(o.type===4){
-    const newer=[];(o.lsas||[]).forEach(l=>{if(l.rid===me)return;const cur=R.lsdb[l.rid];if(!cur||l.seq>cur.seq){R.lsdb[l.rid]=clone(l);newer.push(l)}});
+    const newer=[];(o.lsas||[]).forEach(l=>{l={...l,t:l.t||'router',area:l.area??net.area};if(l.rid===me||l.area!==net.area)return;const key=lsaKey(l),cur=R.lsdb[key];if(!cur||l.seq>cur.seq){R.lsdb[key]=clone(l);newer.push(l)}});
     if(['2WAY','EXSTART','EXCHANGE','LOADING'].includes(n.state)){nbrState(d,k,n,'FULL',`${d.name} and ${o.rid} now have identical databases. State FULL: the adjacency is complete and routes can be calculated.`);ospfOriginate(d,`${d.name} has a new FULL neighbor (${o.rid})`)}
-    if(newer.length){log(d,`OSPF LSU from ${o.rid}: ${newer.length} new LSA${newer.length===1?'':'s'}`,{frame:fr,cls:'ospf',explain:`${d.name} installs ${newer.length} newer LSA${newer.length===1?'':'s'} (from ${newer.map(l=>l.rid).join(', ')}) and passes them on to its other neighbors.`});ospfFlood(d,newer,o.rid);ospfSpf(d)}
+    if(newer.length){log(d,`OSPF LSU from ${o.rid}: ${newer.length} new LSA${newer.length===1?'':'s'}`,{frame:fr,cls:'ospf',explain:`${d.name} installs ${newer.length} newer LSA${newer.length===1?'':'s'} (${newer.map(l=>l.t==='summary'?`Summary ${l.net}/${mask2len(l.mask)}${l.dead?' withdrawn':''} from ABR ${l.rid}`:`Router ${l.rid}`).join(', ')}) and passes them on to its other neighbors.`});ospfFlood(d,newer,o.rid);ospfSpf(d)}
   }
 }
 function ospfTick(){
@@ -872,7 +993,7 @@ function ospfTick(){
       const gone=!ifs.includes(k)||isPassive(d,k);
       if(gone||sim.t-n.last>DEAD_INT){delete N[n.rid];panelDirty=true;log(d,`OSPF neighbor ${n.rid} DOWN`,{cls:'ospf',explain:gone?`${d.ifaces[k].name} is down, so ${d.name} drops its neighbor ${n.rid} at once and recalculates.`:`${d.name} heard no Hello from ${n.rid} for the dead interval, so it declares the neighbor down.`})}
       else if(['2WAY','EXSTART','EXCHANGE','LOADING'].includes(n.state)&&sim.t-n.since>15000){n.since=sim.t;ospfStartExchange(d,k,n)}})});
-    const sig=JSON.stringify([ospfRid(d),ifs.map(k=>[d.ifaces[k].ip,ospfCost(d,k),isPassive(d,k)]),ifs.map(k=>Object.values(R.nbrs[k]||{}).filter(n=>n.state==='FULL').map(n=>n.rid))]);
+    const sig=JSON.stringify([ospfRid(d),ifs.map(k=>[d.ifaces[k].ip,ospfCost(d,k),isPassive(d,k),ospfNet(d,k).area]),d.ospf.ranges||[],ifs.map(k=>Object.values(R.nbrs[k]||{}).filter(n=>n.state==='FULL').map(n=>n.rid))]);
     if(sig!==R.sig){const first=!R.sig;R.sig=sig;ospfOriginate(d,first?`OSPF just started on ${d.name}`:`${d.name}'s OSPF interfaces or neighbors changed`)}
     if(sim.t>=R.helloNext){R.helloNext=sim.t+HELLO_INT;
       ifs.forEach(k=>{if(isPassive(d,k))return;const ns=Object.values(R.nbrs[k]||{});const quiet=ns.every(n=>n.state==='FULL');
@@ -880,15 +1001,15 @@ function ospfTick(){
   })}
 function ospfBytes(o){const b=[];
   if(o.type===1){b.push(...ipB(o.mask||'255.255.255.0'),...u16(HELLO_INT/1000),2,1,...u32(DEAD_INT/1000),0,0,0,0,0,0,0,0);(o.nbrs||[]).forEach(n=>b.push(...ipB(n)))}
-  else if(o.type===2){b.push(...u16(1500),2,o.reply?0:7,...u32(1));(o.hdrs||[]).forEach(h=>b.push(0,1,2,1,...ipB(h.rid),...ipB(h.rid),...u32((0x80000000+h.seq)>>>0),0,0,...u16(24+12*h.n)))}
-  else if(o.type===4){b.push(...u32((o.lsas||[]).length));(o.lsas||[]).forEach(l=>{b.push(0,1,2,1,...ipB(l.rid),...ipB(l.rid),...u32((0x80000000+l.seq)>>>0),0,0,...u16(24+12*l.links.length),0,0,...u16(l.links.length));l.links.forEach(x=>b.push(...ipB(x.type==='router'?x.nbr:x.net),...ipB(x.type==='router'?x.ip:x.mask),x.type==='router'?1:3,0,...u16(x.cost)))})}
+  else if(o.type===2){b.push(...u16(1500),2,o.reply?0:7,...u32(1));(o.hdrs||[]).forEach(h=>b.push(0,1,2,h.t==='summary'?3:1,...ipB(h.t==='summary'?h.net:h.rid),...ipB(h.rid),...u32((0x80000000+h.seq)>>>0),0,0,...u16(h.t==='summary'?28:24+12*h.n)))}
+  else if(o.type===4){b.push(...u32((o.lsas||[]).length));(o.lsas||[]).forEach(l=>{if(l.t==='summary'){b.push(l.dead?0x0e:0,l.dead?0x10:1,2,3,...ipB(l.net),...ipB(l.rid),...u32((0x80000000+l.seq)>>>0),0,0,...u16(28),...ipB(l.mask),0,...u16(0),l.cost&255);return}b.push(0,1,2,1,...ipB(l.rid),...ipB(l.rid),...u32((0x80000000+l.seq)>>>0),0,0,...u16(24+12*l.links.length),0,0,...u16(l.links.length));l.links.forEach(x=>b.push(...ipB(x.type==='router'?x.nbr:x.net),...ipB(x.type==='router'?x.ip:x.mask),x.type==='router'?1:3,0,...u16(x.cost)))})}
   return [2,o.type,...u16(24+b.length),...ipB(o.rid),...ipB(n2ip(o.area||0)),0,0,0,0,0,0,0,0,0,0,0,0,...b]}
 function dissectOspf(o,l4,L,add){const a={name:`OSPF ${OSPFT[o.type]}`,cls:'ospf',fields:[]};L.push(a);
   add(a,'Version / type',`2 / ${o.type} (${OSPFT[o.type]})`,l4.slice(0,2));add(a,'Length',String(l4.length),l4.slice(2,4));add(a,'Router ID',o.rid,l4.slice(4,8),'Unique name of the sending router');add(a,'Area ID',n2ip(o.area||0)+` (area ${o.area||0})`,l4.slice(8,12),'Neighbors must agree on the area');add(a,'Checksum / auth','not computed / none',l4.slice(12,24));
   const b=l4.slice(24);
   if(o.type===1){add(a,'Network mask',o.mask,b.slice(0,4));add(a,'Hello / options / priority',`${HELLO_INT/1000} s / E-bit / 1`,b.slice(4,8));add(a,'Dead interval',`${DEAD_INT/1000} s`,b.slice(8,12),'Neighbor is declared down if no Hello arrives within this time');add(a,'DR / BDR','0.0.0.0 / 0.0.0.0 (not elected in this lab)',b.slice(12,20));add(a,'Neighbors seen',(o.nbrs||[]).join(', ')||'(none yet)',b.slice(20),'Seeing yourself here means two-way communication')}
-  else if(o.type===2){add(a,'MTU / options / flags',`1500 / E-bit / ${o.reply?'slave':'I, M, MS (master)'}`,b.slice(0,4));add(a,'DD sequence','1',b.slice(4,8));add(a,'LSA headers',(o.hdrs||[]).map(h=>`Router LSA ${h.rid} seq ${h.seq}`).join(' · ')||'(empty database)',b.slice(8))}
-  else if(o.type===4){add(a,'Number of LSAs',String((o.lsas||[]).length),b.slice(0,4));add(a,'LSAs',(o.lsas||[]).map(x=>`Router ${x.rid} seq ${x.seq}: ${x.links.map(k=>k.type==='router'?`link to ${k.nbr} cost ${k.cost}`:`${k.net}/${mask2len(k.mask)} cost ${k.cost}`).join(', ')}`).join('\n'),b.slice(4))}
+  else if(o.type===2){add(a,'MTU / options / flags',`1500 / E-bit / ${o.reply?'slave':'I, M, MS (master)'}`,b.slice(0,4));add(a,'DD sequence','1',b.slice(4,8));add(a,'LSA headers',(o.hdrs||[]).map(h=>h.t==='summary'?`Summary LSA ${h.net} from ${h.rid} seq ${h.seq}`:`Router LSA ${h.rid} seq ${h.seq}`).join(' · ')||'(empty database)',b.slice(8))}
+  else if(o.type===4){add(a,'Number of LSAs',String((o.lsas||[]).length),b.slice(0,4));add(a,'LSAs',(o.lsas||[]).map(x=>x.t==='summary'?`Type 3 Summary ${x.net}/${mask2len(x.mask)} cost ${x.cost} from ABR ${x.rid} (area ${x.area}${x.dead?', MaxAge: withdrawn':''})`:`Type 1 Router ${x.rid}${x.abr?' (ABR)':''} area ${x.area??0} seq ${x.seq}: ${x.links.map(k=>k.type==='router'?`link to ${k.nbr} cost ${k.cost}`:`${k.net}/${mask2len(k.mask)} cost ${k.cost}`).join(', ')}`).join('\n'),b.slice(4))}
 }
 /* ---------- VLAN + OSPF topologies ---------- */
 function vlanOffice(o={}){
@@ -907,6 +1028,29 @@ function ospfSquare(o={}){
   rif(r3,0,'10.0.23.2/30');rif(r3,1,'10.3.0.1/24');rif(r3,2,'10.0.34.2/30');rif(r4,0,'10.0.14.2/30');rif(r4,1,'10.0.34.1/30');
   if(o.ospf)[r1,r2,r3,r4].forEach((r,k)=>{r.ospf={on:true,pid:1,rid:`${k+1}.${k+1}.${k+1}.${k+1}`,nets:[{net:'10.0.0.0',wild:'0.255.255.255',area:0}],passive:k===0?['Gi0/0']:k===2?['Gi0/1']:[]}});
 }
+function ospfMulti(o={}){
+  const pc3=mk('pc','PC3',100,330),pc1=mk('pc','PC1',100,620),r4=mk('router','R4',270,480),r1=mk('router','R1',440,270),r2=mk('router','R2',650,130),srv=mk('server','SRV',650,370),r3=mk('router','R3',860,270),r5=mk('router','R5',1030,480),pc2=mk('pc','PC2',1200,620);
+  ln(r4,0,r1,0);ln(r1,1,r2,0);ln(r2,1,r3,0);ln(r2,2,srv,0);ln(r3,1,r5,0);ln(pc1,0,r4,1);ln(pc3,0,r4,2);ln(pc2,0,r5,1);
+  rif(r1,0,'10.1.0.1/30');rif(r1,1,'10.0.12.1/30');rif(r2,0,'10.0.12.2/30');rif(r2,1,'10.0.23.1/30');rif(r2,2,'10.0.100.1/24');rif(r3,0,'10.0.23.2/30');rif(r3,1,'10.2.0.1/30');
+  rif(r4,0,'10.1.0.2/30');rif(r4,1,'10.1.10.1/24');rif(r4,2,'10.1.20.1/24');rif(r5,0,'10.2.0.2/30');rif(r5,1,'10.2.10.1/24');
+  pcip(pc1,'10.1.10.10/24','10.1.10.1');pcip(pc3,'10.1.20.10/24','10.1.20.1');pcip(pc2,'10.2.10.10/24','10.2.10.1');pcip(srv,'10.0.100.10/24','10.0.100.1');web(srv,'Head office intranet','Served from the backbone (area 0).');
+  if(o.ospf)Object.entries(MA_OSPF).forEach(([n,c])=>{const d=devByName(n);d.ospf={on:true,pid:1,rid:c.rid,nets:c.nets.map(([net,wild,area])=>({net,wild,area})),passive:c.passive.slice(),ranges:[]}});
+}
+const MA_OSPF={R1:{rid:'1.1.1.1',nets:[['10.1.0.0','0.0.255.255',1],['10.0.0.0','0.0.255.255',0]],passive:[]},R2:{rid:'2.2.2.2',nets:[['10.0.0.0','0.0.255.255',0]],passive:['Gi0/2']},R3:{rid:'3.3.3.3',nets:[['10.0.0.0','0.0.255.255',0],['10.2.0.0','0.0.255.255',2]],passive:[]},R4:{rid:'4.4.4.4',nets:[['10.1.0.0','0.0.255.255',1]],passive:['Gi0/1','Gi0/2']},R5:{rid:'5.5.5.5',nets:[['10.2.0.0','0.0.255.255',2]],passive:['Gi0/1']}};
+const maCmds=n=>{const c=MA_OSPF[n];return ['enable','configure terminal','router ospf 1',`router-id ${c.rid}`,...c.nets.map(([a,w,ar])=>`network ${a} ${w} area ${ar}`),...c.passive.map(x=>`passive-interface ${x.toLowerCase()}`),'end']};
+function enableMaAll(){Object.keys(MA_OSPF).forEach(n=>{const d=devByName(n);if(!d)return;d.term.mode='user';maCmds(n).forEach(c=>runCmd(d,c))})}
+function v6Office(o={}){
+  const pc1=mk('pc','PC1',110,190),pc2=mk('pc','PC2',110,560),sw1=mk('switch','SW1',320,370),r1=mk('router','R1',560,370),r2=mk('router','R2',800,370),sw2=mk('switch','SW2',1010,370),srv=mk('server','SRV',1200,190),pc3=mk('pc','PC3',1200,560);
+  ln(pc1,0,sw1,0);ln(pc2,0,sw1,1);ln(sw1,7,r1,0);ln(r1,1,r2,0);ln(r2,1,sw2,7);ln(srv,0,sw2,0);ln(pc3,0,sw2,1);
+  rif(r1,0,'192.168.1.1/24');rif(r1,1,'10.0.12.1/30');rif(r2,0,'10.0.12.2/30');rif(r2,1,'192.168.2.1/24');sr(r1,'192.168.2.0','255.255.255.0','10.0.12.2');sr(r2,'192.168.1.0','255.255.255.0','10.0.12.1');
+  pcip(pc1,'192.168.1.11/24','192.168.1.1');pcip(pc2,'192.168.1.12/24','192.168.1.1');pcip(pc3,'192.168.2.13/24','192.168.2.1');pcip(srv,'192.168.2.10/24','192.168.2.1');web(srv,'Dual-stack web server','Reachable over IPv4 and IPv6.');
+  srv.ifaces[0].v6=[{a:'2001:db8:2::10',len:64,src:'static'}];srv.gw6='2001:db8:2::1';srv.gw6src='static';srv.ifaces[0].v6auto=false;
+  if(o.v6){r1.ifaces[0].v6=[{a:'2001:db8:1::1',len:64,src:'static'}];r1.ifaces[1].v6=[{a:'2001:db8:12::1',len:64,src:'static'}];r2.ifaces[0].v6=[{a:'2001:db8:12::2',len:64,src:'static'}];r2.ifaces[1].v6=[{a:'2001:db8:2::1',len:64,src:'static'}];
+    r1.v6r=r2.v6r=true;r1.routes6=[{net:'2001:db8:2::',len:64,nh:'2001:db8:12::2',ifn:''}];r2.routes6=[{net:'2001:db8:1::',len:64,nh:'2001:db8:12::1',ifn:''}]}
+}
+const V6CMDS={R1:['enable','configure terminal','ipv6 unicast-routing','interface gi0/0','ipv6 address 2001:db8:1::1/64','interface gi0/1','ipv6 address 2001:db8:12::1/64','exit','ipv6 route 2001:db8:2::/64 2001:db8:12::2','end'],
+  R2:['enable','configure terminal','ipv6 unicast-routing','interface gi0/0','ipv6 address 2001:db8:12::2/64','interface gi0/1','ipv6 address 2001:db8:2::1/64','exit','ipv6 route 2001:db8:1::/64 2001:db8:12::1','end']};
+function enableV6All(){Object.entries(V6CMDS).forEach(([n,c])=>{const d=devByName(n);if(!d)return;d.term.mode='user';c.forEach(x=>runCmd(d,x))})}
 const ospfCmds=n=>['enable','configure terminal','router ospf 1',`router-id ${n}.${n}.${n}.${n}`,'network 10.0.0.0 0.255.255.255 area 0','end'];
 function enableOspfAll(){['R1','R2','R3','R4'].forEach((n,k)=>{const d=devByName(n);if(!d)return;d.term.mode='user';ospfCmds(k+1).forEach(c=>runCmd(d,c))})}
 
@@ -1421,8 +1565,176 @@ function fwCheck(d,inIf,outIf,p){
   return {ok:false,why:`no rule permits it, and traffic from zone ${zi} (security level ${li}) to zone ${zo} (level ${lo}) is denied by default (implicit deny)`};
 }
 
+/* ====================== IPv6 ====================== */
+function parse6(s){if(typeof s!=='string')return null;s=s.trim().toLowerCase().replace(/%.*$/,'');if(!/^[0-9a-f:]+$/.test(s)||s.length>39)return null;
+  const dbl=s.split('::');if(dbl.length>2)return null;const part=x=>x===''?[]:x.split(':');const h=part(dbl[0]),t=dbl.length===2?part(dbl[1]):[];
+  if([...h,...t].some(x=>!/^[0-9a-f]{1,4}$/.test(x)))return null;const n=h.length+t.length;if(dbl.length===1&&n!==8)return null;if(dbl.length===2&&n>7)return null;
+  return [...h.map(x=>parseInt(x,16)),...new Array(8-n).fill(0),...t.map(x=>parseInt(x,16))]}
+function fmt6(a){if(!a)return '';let bs=-1,bl=0;for(let i=0;i<8;){if(a[i]===0){let j=i;while(j<8&&a[j]===0)j++;if(j-i>bl&&j-i>1){bs=i;bl=j-i}i=j}else i++}
+  const hx=x=>x.toString(16);if(bs<0)return a.map(hx).join(':');return a.slice(0,bs).map(hx).join(':')+'::'+a.slice(bs+bl).map(hx).join(':')}
+const valid6=s=>!!parse6(s);
+const norm6=s=>fmt6(parse6(s));
+function pfx6(a,len){const x=parse6(a);if(!x)return null;return x.map((h,i)=>{const b=Math.max(0,Math.min(16,len-i*16));return b===16?h:b===0?0:h&(0xffff<<(16-b))&0xffff})}
+const net6=(a,len)=>fmt6(pfx6(a,len));
+function inNet6(a,net,len){const x=pfx6(a,len),y=pfx6(net,len);return !!x&&!!y&&x.every((h,i)=>h===y[i])}
+const isLL6=a=>{const x=parse6(a);return !!x&&(x[0]&0xffc0)===0xfe80};
+const isMc6=a=>{const x=parse6(a);return !!x&&(x[0]&0xff00)===0xff00};
+function eui64(mac){const b=mac.split(':').map(x=>parseInt(x,16));b[0]^=2;return [(b[0]<<8)|b[1],(b[2]<<8)|0xff,0xfe00|b[3],(b[4]<<8)|b[5]]}
+const ll6=i=>fmt6([0xfe80,0,0,0,...eui64(i.mac)]);
+function slaacAddr(prefix,mac){const p=pfx6(prefix,64);return fmt6([...p.slice(0,4),...eui64(mac)])}
+function snMc(a){const x=parse6(a);return fmt6([0xff02,0,0,0,0,1,0xff00|(x[6]&0xff),x[7]])}
+function mcMac(a){const x=parse6(a);return ['33','33',...[x[6]>>8,x[6]&255,x[7]>>8,x[7]&255].map(v=>v.toString(16).padStart(2,'0'))].join(':')}
+function parseCidr6(s){const m=String(s||'').match(/^([0-9a-fA-F:.]+)\/(\d{1,3})$/);if(!m||!valid6(m[1])||+m[2]>128)return null;return {a:norm6(m[1]),len:+m[2]}}
+const ip6B=a=>parse6(a).flatMap(h=>[h>>8,h&255]);
+/* per-interface state */
+const v6on=(d,i)=>(i.v6&&i.v6.length)||i.v6en||(isHost(d)&&i===d.ifaces[0]);
+function addrs6(d,k){const i=d.ifaces[k];if(!v6on(d,i))return [];return [{a:ll6(i),len:64,src:'link-local'},...(i.v6||[])]}
+function srcFor6(d,k,dst){const i=d.ifaces[k];if(isLL6(dst)||isMc6(dst))return ll6(i);const g=(i.v6||[]).find(x=>!isLL6(x.a));return g?g.a:ll6(i)}
+const ROUTER6=d=>d.type==='router';
+function lookup6(d,dst,hint){
+  if(isLL6(dst)||isMc6(dst)){const k=hint!=null?hint:isHost(d)?0:-1;return k>=0&&ifOper(d,k)?{ifi:k,nh:dst,len:128,kind:'L',net:dst}:null}
+  let best=null;const cand=r=>{if(!best||r.len>best.len||(r.len===best.len&&r.ad<best.ad))best=r};
+  d.ifaces.forEach((i,k)=>{if(!ifOper(d,k))return;(i.v6||[]).forEach(x=>{if(!isLL6(x.a)&&inNet6(dst,x.a,x.len))cand({ifi:k,nh:dst,len:x.len,net:net6(x.a,x.len),kind:'C',ad:0})})});
+  if(isHost(d)){if(!best&&d.gw6&&ifOper(d,0))best={ifi:0,nh:d.gw6,len:0,net:'::',kind:'G',ad:0}}
+  else if(ROUTER6(d))(d.routes6||[]).forEach(r=>{if(!inNet6(dst,r.net,r.len))return;let k=-1;
+    if(r.ifn)k=d.ifaces.findIndex(i=>i.name.toLowerCase()===r.ifn.toLowerCase());
+    else d.ifaces.forEach((i,j)=>{if(k<0&&ifOper(d,j)&&(i.v6||[]).some(x=>inNet6(r.nh,x.a,x.len)))k=j});
+    if(k>=0&&ifOper(d,k))cand({ifi:k,nh:r.nh||dst,len:r.len,net:r.net,kind:'S',ad:1})});
+  return best}
+function route6Desc(d,r){const n=d.ifaces[r.ifi].name;return r.kind==='C'?`${r.net}/${r.len} is directly connected on ${n}`:r.kind==='S'?(r.len===0?`the IPv6 default route via ${r.nh} (out ${n})`:`static route ${r.net}/${r.len} via ${r.nh} (out ${n})`):r.kind==='L'?`link-local, sent straight out ${n}`:`its default router ${r.nh}`}
+function send6(d,k,nh,pkt,explain){const ifc=d.ifaces[k];
+  if(isMc6(nh))return sendFrame(d,k,{dst:mcMac(nh),src:ifc.mac,ip6:pkt},explain);
+  const e=d.nd[nh];if(e&&e.ifi===k)return sendFrame(d,k,{dst:e.mac,src:ifc.mac,ip6:pkt},explain?`${explain} ${nh} is in the neighbor cache (${e.mac}).`:'');
+  d.pend6.push({nh,ifi:k,pkt,explain});
+  if(!d.ndWait[nh]){d.ndWait[nh]=true;const sn=snMc(nh);
+    sendFrame(d,k,{dst:mcMac(sn),src:ifc.mac,ip6:{src:srcFor6(d,k,nh),dst:sn,hl:255,icmp6:{type:135,code:0,target:nh,sll:ifc.mac}}},`${explain||`${d.name} has an IPv6 packet for ${pkt.dst}.`} It doesn't know the MAC of ${nh} yet. IPv6 has no ARP and no broadcast: instead it sends a <b>Neighbor Solicitation</b> (ICMPv6 type 135) to the <b>solicited-node multicast</b> address ${sn}, built from the last 24 bits of the target. Only devices with a matching address listen on that group (MAC ${mcMac(sn)}).`);
+    after(ARP_TIMEOUT,()=>{if(!d.ndWait[nh])return;delete d.ndWait[nh];const lost=d.pend6.filter(p=>p.nh===nh);d.pend6=d.pend6.filter(p=>p.nh!==nh);
+      log(d,`Neighbor discovery for ${nh} failed`,{cls:'err',explain:`Nobody answered ${d.name}'s Neighbor Solicitation for ${nh}, so ${lost.length} queued packet${lost.length===1?' is':'s are'} dropped.`});lost.forEach(p=>v6LocalFail(d,p.pkt,'Destination host unreachable.'))})}}
+function flush6(d,a){delete d.ndWait[a];const e=d.nd[a];if(!e)return;const q=d.pend6.filter(p=>p.nh===a);d.pend6=d.pend6.filter(p=>p.nh!==a);
+  q.forEach(p=>sendFrame(d,p.ifi,{dst:e.mac,src:d.ifaces[p.ifi].mac,ip6:p.pkt},`Neighbor Discovery resolved ${a} to ${e.mac}, so ${d.name} sends the waiting packet.`))}
+function out6(d,pkt,hint,why){const r=lookup6(d,pkt.dst,hint);if(!r)return null;if(!pkt.src)pkt.src=srcFor6(d,r.ifi,pkt.dst);send6(d,r.ifi,r.nh,pkt,why?why(r):'');return r}
+const icmp6Compat=p=>{const t=p.icmp6;return {src:p.src,dst:p.dst,ttl:p.hl,icmp:t.type===129?{type:0,code:0,id:t.id,seq:t.seq}:t.type===1?{type:3,code:t.code===1?13:0,orig:t.orig&&{icmp:t.orig.icmp6}}:{type:11,code:0,orig:t.orig&&{icmp:t.orig.icmp6}}}};
+function v6LocalFail(d,pkt,msg){if(pkt.icmp6&&pkt.icmp6.type===128)sessionLocalFail(d,{src:pkt.src,icmp:{id:pkt.icmp6.id,seq:pkt.icmp6.seq}},msg)}
+function isLocal6(d,k,a){if(a==='ff02::1')return true;if(a==='ff02::2')return ROUTER6(d)&&!!d.v6r;
+  const mine=d.ifaces.flatMap((_,j)=>addrs6(d,j).filter(x=>j===k||!isLL6(x.a)).map(x=>x.a));if(mine.includes(a))return true;
+  return isMc6(a)&&addrs6(d,k).some(x=>snMc(x.a)===a)}
+function ip6Rx(d,k,f){const p=f.ip6,ifc=d.ifaces[k];
+  if(!(isHost(d)||ROUTER6(d))){if(!isBridge(d))log(d,'IPv6 packet ignored',{frame:f,cls:'mute',explain:`IPv6 is modelled on PCs, servers and routers in this lab. ${d.name} drops the packet.`});return}
+  if(!v6on(d,ifc)){if(!isMc6(p.dst))log(d,`IPv6 not enabled on ${ifc.name}`,{frame:f,cls:'mute',explain:`${ifc.name} has no IPv6 address, so ${d.name} ignores IPv6 on it. Configure one with: ipv6 address 2001:db8:1::1/64`});return}
+  const ic=p.icmp6;
+  if(isLocal6(d,k,p.dst)){if(!ic)return;
+    if(ic.type===135){if(!addrs6(d,k).some(x=>x.a===ic.target))return;
+      if(p.src!=='::'){d.nd[p.src]={mac:ic.sll||f.src,ifi:k,t:sim.t,state:'STALE'};panelDirty=true}
+      sendFrame(d,k,{dst:ic.sll||f.src,src:ifc.mac,ip6:{src:ic.target,dst:p.src,hl:255,icmp6:{type:136,code:0,target:ic.target,flags:ROUTER6(d)?'R,S,O':'S,O',tll:ifc.mac}}},`${d.name} owns ${ic.target}, so it answers with a unicast <b>Neighbor Advertisement</b> (ICMPv6 type 136): "${ic.target} is at ${ifc.mac}". It also caches ${p.src} → ${ic.sll||f.src} from the solicitation.`);
+      flush6(d,p.src);return}
+    if(ic.type===136){d.nd[ic.target]={mac:ic.tll||f.src,ifi:k,t:sim.t,state:'REACH',router:/R/.test(ic.flags||'')};panelDirty=true;
+      log(d,`Neighbor cache: ${ic.target} → ${ic.tll||f.src}`,{frame:f,cls:'arp',explain:`${d.name} stores ${ic.target} → ${ic.tll||f.src} in its IPv6 neighbor cache (the IPv6 version of the ARP cache).`});flush6(d,ic.target);return}
+    if(ic.type===133){if(ROUTER6(d)&&d.v6r&&raPrefixes(d,k).length){d.nd[p.src]=p.src!=='::'&&ic.sll?{mac:ic.sll,ifi:k,t:sim.t,state:'STALE'}:d.nd[p.src];sendRA(d,k,`${d.name} received a Router Solicitation from ${p.src}, so it answers right away with a Router Advertisement instead of waiting for the next periodic one.`)}return}
+    if(ic.type===134){if(!isHost(d)||d.ifaces[0].v6auto===false||k!==0)return;
+      d.nd[p.src]={mac:ic.sll||f.src,ifi:k,t:sim.t,state:'STALE',router:true};const i=d.ifaces[0];i.v6=(i.v6||[]);const got=[];
+      (ic.prefixes||[]).forEach(x=>{if(x.len!==64||!x.auto)return;const a=slaacAddr(x.prefix,i.mac);i.v6=i.v6.filter(y=>!(y.src==='slaac'&&inNet6(y.a,x.prefix,64)&&y.a!==a));if(!i.v6.some(y=>y.a===a)){i.v6.push({a,len:64,src:'slaac'});got.push(a)}});
+      const newGw=d.gw6!==p.src;if(!d.gw6src||d.gw6src==='ra'){d.gw6=p.src;d.gw6src='ra'}panelDirty=true;
+      if(got.length||newGw){RES.slaac=RES.slaac||[];RES.slaac.push({dev:d.name,addrs:got.slice(),gw:p.src});
+        log(d,`SLAAC: ${got.length?got.join(', '):'address unchanged'} · default router ${p.src}`,{frame:f,cls:'dhcp',explain:`${d.name} received a <b>Router Advertisement</b> from ${p.src}. It carries the prefix ${(ic.prefixes||[]).map(x=>x.prefix+'/'+x.len).join(', ')} with the "autonomous" flag, so ${d.name} builds its own address with <b>SLAAC</b>: the /64 prefix plus an interface ID made from its MAC (EUI-64: ${i.mac} → split in half, insert ff:fe, flip the 7th bit)${got.length?` = <b>${got.join(', ')}</b>`:''}. No DHCP server needed. The router's <b>link-local</b> address ${p.src} becomes the default gateway.`})}
+      if(d.session&&d.session.kind==='rs'){d.session=null;tprint(d,`Router Advertisement from ${p.src}: prefix ${(ic.prefixes||[]).map(x=>x.prefix+'/'+x.len).join(', ')||'(none)'}\n   IPv6 Address (SLAAC) . . : ${(i.v6||[]).filter(x=>x.src==='slaac').map(x=>x.a).join(', ')||'(none: no /64 autonomous prefix)'}\n   Default Gateway  . . . . : ${d.gw6}`)}return}
+    if(ic.type===128){const rep={dst:p.src,hl:isHost(d)?128:64,icmp6:{type:129,code:0,id:ic.id,seq:ic.seq}};rep.src=p.dst.startsWith('ff')?srcFor6(d,k,p.src):p.dst;
+      const r=out6(d,rep,k,r=>`The ICMPv6 Echo Request reached ${d.name}, so it answers ${p.src} with an Echo Reply (type 129). Path back: ${route6Desc(d,r)}.`);
+      if(!r)log(d,`No IPv6 route back to ${p.src}`,{frame:f,cls:'err',explain:`${d.name} has no IPv6 route back to ${p.src}${isHost(d)?' (no default router: it has not received a Router Advertisement and none is set)':''}, so the reply can't be sent.`});return}
+    if(ic.type===129||ic.type===1||ic.type===3){if(!sessionRx(d,icmp6Compat(p),f))log(d,`ICMPv6 ${ICMP6N[ic.type]} from ${p.src}`,{frame:f,cls:'mute'})}
+    return}
+  if(isMc6(p.dst))return;
+  if(isHost(d)){log(d,`Dropped IPv6 packet for ${p.dst}`,{frame:f,cls:'mute',explain:`${d.name} is a host, so it drops IPv6 packets for addresses that aren't its own.`});return}
+  if(!d.v6r){log(d,'IPv6 routing is off',{frame:f,cls:'err',explain:`${d.name} received an IPv6 packet for ${p.dst} but does not forward IPv6 until you enable it with <b>ipv6 unicast-routing</b>. IPv4 and IPv6 routing are switched on separately.`});return}
+  if(p.hl<=1){if(!(ic&&ic.type<128))icmp6Err(d,k,p,3,0,`The hop limit reached 0 at ${d.name}, so it discards the packet and sends ICMPv6 Time Exceeded (type 3) to ${p.src}. IPv6 renamed TTL to "hop limit"; it works the same way.`);return}
+  const r=lookup6(d,p.dst);
+  if(!r){if(!(ic&&ic.type<128))icmp6Err(d,k,p,1,0,`${d.name} has no IPv6 route to ${p.dst}. It sends ICMPv6 Destination Unreachable (type 1, code 0: no route) to ${p.src}.`);else log(d,`No IPv6 route to ${p.dst}`,{frame:f,cls:'err'});return}
+  if(isLL6(p.src)){log(d,'Link-local source not forwarded',{frame:f,cls:'err',explain:`${p.src} is a link-local address (fe80::/10). Link-local addresses are only valid on one link, so routers never forward packets that use them.`});return}
+  send6(d,r.ifi,r.nh,{...p,hl:p.hl-1},p.q?'':`${d.name} routes an IPv6 packet for ${p.dst}. Best match: ${route6Desc(d,r)}. It lowers the hop limit from ${p.hl} to ${p.hl-1}. There is no header checksum to update and routers never fragment IPv6 packets, which makes forwarding simpler than IPv4. No NAT: both ends keep their global addresses.`)}
+function icmp6Err(d,k,orig,type,code,explain){const src=srcFor6(d,k,orig.src);const e={src,dst:orig.src,hl:64,icmp6:{type,code,orig}};if(!out6(d,e,k,()=>explain))log(d,`Can't return ICMPv6 error to ${orig.src}`,{cls:'err'})}
+const ICMP6N={1:'Destination Unreachable',3:'Time Exceeded',128:'Echo Request',129:'Echo Reply',133:'Router Solicitation',134:'Router Advertisement',135:'Neighbor Solicitation',136:'Neighbor Advertisement'};
+function raPrefixes(d,k){const i=d.ifaces[k];return (i.v6||[]).filter(x=>!isLL6(x.a)).map(x=>({prefix:net6(x.a,x.len),len:x.len,auto:x.len===64}))}
+function sendRA(d,k,why,quiet){const i=d.ifaces[k],pf=raPrefixes(d,k);
+  sendFrame(d,k,{dst:mcMac('ff02::1'),src:i.mac,ip6:{src:ll6(i),dst:'ff02::1',hl:255,q:!!quiet,icmp6:{type:134,code:0,hopLimit:64,life:1800,flags:'',prefixes:pf,sll:i.mac}}},why||`${d.name} sends a <b>Router Advertisement</b> (ICMPv6 type 134) to ff02::1, the all-nodes multicast group, from its link-local address ${ll6(i)}. It announces the prefix ${pf.map(x=>x.prefix+'/'+x.len).join(', ')} and offers itself as default router. Hosts use it to configure themselves (SLAAC).`)}
+function v6Tick(){S.devices.forEach(d=>{if(!ROUTER6(d)||!d.v6r)return;d.v6rt=d.v6rt||{next:0,n:{}};if(sim.t<d.v6rt.next)return;d.v6rt.next=sim.t+10000;
+  d.ifaces.forEach((i,k)=>{if(!ifOper(d,k)||!raPrefixes(d,k).length)return;const n=d.v6rt.n[k]=(d.v6rt.n[k]||0)+1;sendRA(d,k,null,n>2)})})}
+function startRS(d){if(d.session)return tprint(d,'Another task is still running. Press Ctrl+C to stop it.');const i=d.ifaces[0];if(!ifOper(d,0))return tprint(d,'Media disconnected.');
+  i.v6auto=true;if(d.gw6src==='ra')d.gw6='';d.gw6src='ra';d.session={kind:'rs'};tprint(d,'Sending a Router Solicitation to ff02::2 (all routers)...');
+  sendFrame(d,0,{dst:mcMac('ff02::2'),src:i.mac,ip6:{src:ll6(i),dst:'ff02::2',hl:255,icmp6:{type:133,code:0,sll:i.mac}}},`${d.name} wants to configure IPv6 automatically. It sends a <b>Router Solicitation</b> (ICMPv6 type 133) to ff02::2, the all-routers multicast group, asking any router on the link to send a Router Advertisement now. It uses its link-local address ${ll6(i)} as the source; every IPv6 interface has one automatically.`);
+  after(4000,()=>{if(d.session&&d.session.kind==='rs'){d.session=null;tprint(d,'No Router Advertisement received. Is a router on this link running "ipv6 unicast-routing" with an IPv6 address on this interface?')}})}
+function probe6(d,s){const r=lookup6(d,s.dst);
+  if(!r){s.tok=null;if(s.kind==='ping'){if(s.style==='win')tprint(d,'PING: transmit failed. General failure.');else tappend(d,'.')}else tprint(d,`${String(s.seq).padStart(3)}     *        Transmit error: no route.`);
+    log(d,`No IPv6 route to ${s.dst}`,{cls:'err',explain:`${d.name} has no IPv6 route to ${s.dst}${isHost(d)?(d.gw6?'':': it has no default router. Run "ipv6 autoconfig" to ask for a Router Advertisement, or set one with "ipv6 gateway"'):''}.`});
+    if(s.kind==='trace')return finishSession(d);return after(400,()=>nextProbe(d))}
+  const tok=s.tok;const pkt={src:srcFor6(d,r.ifi,s.dst),dst:s.dst,hl:s.kind==='trace'?s.seq:(isHost(d)?128:64),icmp6:{type:128,code:0,id:s.id,seq:s.seq}};
+  send6(d,r.ifi,r.nh,pkt,`${s.kind==='trace'?`${d.name} sends IPv6 traceroute probe ${s.seq} with hop limit ${s.seq}.`:`${d.name} sends ICMPv6 Echo Request #${s.seq} (type 128) from ${pkt.src} to ${s.dst}.`} Next hop: ${route6Desc(d,r)}.`);
+  after(PING_TIMEOUT,()=>{if(d.session===s&&s.tok===tok){s.tok=null;if(s.kind==='ping'){if(s.style==='win')tprint(d,'Request timed out.');else tappend(d,'.')}else tprint(d,`${String(s.seq).padStart(3)}     *        Request timed out.`);log(d,`Probe ${s.seq} to ${s.dst} timed out`,{cls:'err'});after(400,()=>nextProbe(d))}})}
+function icmp6Bytes(ic){const b=[ic.type,ic.code||0,0,0];
+  if(ic.type===128||ic.type===129)b.push(...u16(ic.id),...u16(ic.seq),...PAYLOAD);
+  else if(ic.type===133)b.push(0,0,0,0,1,1,...macB(ic.sll));
+  else if(ic.type===134){b.push(ic.hopLimit||64,0,...u16(ic.life||1800),0,0,0,0,0,0,0,0,1,1,...macB(ic.sll));(ic.prefixes||[]).forEach(x=>b.push(3,4,x.len,x.auto?0xc0:0x80,...u32(2592000),...u32(604800),0,0,0,0,...ip6B(x.prefix)))}
+  else if(ic.type===135)b.push(0,0,0,0,...ip6B(ic.target),1,1,...macB(ic.sll));
+  else if(ic.type===136)b.push(((/R/.test(ic.flags)?0x80:0)|(/S/.test(ic.flags)?0x40:0)|(/O/.test(ic.flags)?0x20:0)),0,0,0,...ip6B(ic.target),2,1,...macB(ic.tll));
+  else{b.push(0,0,0,0);if(ic.orig)b.push(...ip6Bytes(ic.orig).slice(0,48))}
+  return b}
+function ip6Hdr(p,plen){return [0x60,0,0,0,...u16(plen),58,p.hl,...ip6B(p.src),...ip6B(p.dst)]}
+function ip6Bytes(p){const l=icmp6Bytes(p.icmp6);return [...ip6Hdr(p,l.length),...l]}
+function fsum6(p){const t=p.icmp6;if(!t)return `IPv6 ${p.src} → ${p.dst}`;
+  if(t.type===135)return `ICMPv6 Neighbor Solicitation: who has ${t.target}?`;if(t.type===136)return `ICMPv6 Neighbor Advertisement: ${t.target} is at ${t.tll}`;
+  if(t.type===133)return `ICMPv6 Router Solicitation from ${p.src}`;if(t.type===134)return `ICMPv6 Router Advertisement: prefix ${(t.prefixes||[]).map(x=>x.prefix+'/'+x.len).join(', ')}`;
+  return `ICMPv6 ${ICMP6N[t.type]} ${p.src} → ${p.dst} HL ${p.hl}`}
+function pcls6(p){const t=(p.icmp6||{}).type;return t===135||t===136?'arp':t===133||t===134?'dhcp':t===1||t===3?'err':'icmp'}
+function dissectIp6(p,L,add){const l=icmp6Bytes(p.icmp6),h=ip6Hdr(p,l.length),a={name:'Internet Protocol v6',cls:'l3',fields:[]};L.push(a);
+  add(a,'Version / traffic class / flow label','6 / 0x00 / 0x00000',h.slice(0,4),'Fixed 40-byte header: no options, no checksum, no fragmentation by routers');add(a,'Payload length',String(l.length),h.slice(4,6));add(a,'Next header','58 (ICMPv6)',[h[6]]);
+  add(a,'Hop limit',String(p.hl),[h[7]],'Like the IPv4 TTL: each router lowers it by 1');add(a,'Source',p.src+(isLL6(p.src)?' (link-local)':''),h.slice(8,24));add(a,'Destination',p.dst+(p.dst==='ff02::1'?' (all nodes)':p.dst==='ff02::2'?' (all routers)':/^ff02::1:ff/.test(p.dst)?' (solicited-node multicast)':''),h.slice(24,40));
+  const t=p.icmp6,m={name:`ICMPv6 ${ICMP6N[t.type]}`,cls:pcls6(p)==='arp'?'arp':pcls6(p)==='dhcp'?'dhcp':'l4',fields:[]};L.push(m);
+  add(m,'Type',`${t.type} (${ICMP6N[t.type]})`,[l[0]]);add(m,'Code',String(t.code||0),[l[1]]);add(m,'Checksum','covers a pseudo-header with both addresses',l.slice(2,4));const b=l.slice(4);
+  if(t.type===128||t.type===129){add(m,'Identifier / sequence',`${t.id} / ${t.seq}`,b.slice(0,4));add(m,'Data','32 bytes',b.slice(4))}
+  else if(t.type===133)add(m,'Reserved + source link-layer option',t.sll,b,'Tells routers this host\'s MAC');
+  else if(t.type===134){add(m,'Hop limit / flags / router lifetime',`${t.hopLimit||64} / M=0 O=0 / ${t.life||1800} s`,b.slice(0,4),'M=0: no DHCPv6 for addresses, use SLAAC');add(m,'Reachable / retrans timers','0 / 0',b.slice(4,12));add(m,'Source link-layer option',t.sll,b.slice(12,20));
+    add(m,'Prefix information',(t.prefixes||[]).map(x=>`${x.prefix}/${x.len} · ${x.auto?'L+A (on-link, autonomous: use SLAAC)':'L (on-link only)'} · valid 30 d · preferred 7 d`).join('\n')||'(none)',b.slice(20),'Hosts build their address from this prefix')}
+  else if(t.type===135){add(m,'Reserved','0',b.slice(0,4));add(m,'Target address',t.target,b.slice(4,20),'The address whose MAC is wanted');add(m,'Source link-layer option',t.sll,b.slice(20))}
+  else if(t.type===136){add(m,'Flags',`${t.flags} (${/R/.test(t.flags)?'Router, ':''}Solicited, Override)`,b.slice(0,4));add(m,'Target address',t.target,b.slice(4,20));add(m,'Target link-layer option',t.tll,b.slice(20),'The answer: the MAC for the target')}
+  else{add(m,'Unused','0',b.slice(0,4));add(m,'Original packet',t.orig?fsum6(t.orig):'',b.slice(4))}}
+/* PC / router commands */
+function host6Cmd(d,t){const i=d.ifaces[0],a1=(t[1]||'').toLowerCase();
+  if(a1==='autoconfig'||a1==='auto')return startRS(d);
+  if(a1==='off'){i.v6=[];d.gw6='';d.gw6src='';i.v6auto=false;return tprint(d,'IPv6 global addresses removed; autoconfiguration off. The link-local address stays.')}
+  if(a1==='gateway'){if(!valid6(t[2]))return tprint(d,'Usage: ipv6 gateway fe80::1   (or a global address in your prefix)');d.gw6=norm6(t[2]);d.gw6src='static';return tprint(d,`IPv6 default gateway ${d.gw6}`)}
+  const c=parseCidr6(t[1]);if(!c)return tprint(d,'Usage:\n  ipv6 2001:db8:1::10/64 [gateway]   static IPv6 address\n  ipv6 autoconfig                    SLAAC: ask the router (Router Solicitation)\n  ipv6 gateway <address>             set the default gateway\n  ipv6 off');
+  if(isLL6(c.a)||isMc6(c.a))return tprint(d,'Use a global unicast address such as 2001:db8:1::10/64.');
+  i.v6=(i.v6||[]).filter(x=>x.src!=='static');i.v6.push({a:c.a,len:c.len,src:'static'});i.v6auto=false;d.nd={};
+  if(t[2]){if(!valid6(t[2]))return tprint(d,`Invalid gateway: ${t[2]}`);d.gw6=norm6(t[2]);d.gw6src='static'}
+  return tprint(d,`IPv6 ${c.a}/${c.len}${t[2]?'  gateway '+d.gw6:''}`)}
+function ipconfig6(d){const i=d.ifaces[0];const L=[`   Link-local IPv6 Address  : ${ll6(i)}%1`];(i.v6||[]).forEach(x=>L.push(`   IPv6 Address . . . . . . : ${x.a}/${x.len}${x.src==='slaac'?'  (SLAAC)':''}`));L.push(`   IPv6 Default Gateway . . : ${d.gw6?d.gw6+(isLL6(d.gw6)?'%1':''):'(none)'}`);return L.join('\n')}
+function cfg6(d,toks){const w=toks.map(x=>x.toLowerCase()),no=w[0]==='no',v=no?w.slice(1):w;
+  if(v[1]&&'unicast-routing'.startsWith(v[1])&&v.length===2){d.v6r=!no;d.v6rt={next:sim.t+600,n:{}};return no?undefined:tprint(d,'IPv6 routing enabled. Interfaces with an IPv6 address now send Router Advertisements.')}
+  if(v[1]==='route'){const c=parseCidr6(v[2]);if(!c)return tprint(d,'% Use: ipv6 route 2001:db8:2::/64 2001:db8:12::2   or   ipv6 route ::/0 gi0/1 fe80::2');
+    let ifn='',nh=v[3];if(v[4]){const k=parseIf(d,[toks[no?4:3]],false);if(k<0)return tprint(d,'% Invalid interface');ifn=d.ifaces[k].name;nh=v[4]}
+    if(!valid6(nh))return tprint(d,'% Invalid next hop');nh=norm6(nh);if(isLL6(nh)&&!ifn)return tprint(d,'% A link-local next hop needs an interface: ipv6 route <prefix> gi0/1 fe80::2');
+    const net=net6(c.a,c.len);d.routes6=(d.routes6||[]).filter(r=>!(r.net===net&&r.len===c.len&&r.nh===nh));if(!no)d.routes6.push({net,len:c.len,nh,ifn});panelDirty=true;return}
+  return tprint(d,'% IPv6 commands: ipv6 unicast-routing · ipv6 route <prefix/len> <next-hop>')}
+function if6(d,i,toks){const w=toks.map(x=>x.toLowerCase()),no=w[0]==='no',v=no?w.slice(1):w;
+  if(v[1]==='enable'){i.v6en=!no;return}
+  if(v[1]==='address'){if(no&&!v[2]){i.v6=[];i.v6en=false;d.nd={};return}
+    if(v[2]==='autoconfig')return tprint(d,'% In this lab routers use static IPv6 addresses. Try: ipv6 address 2001:db8:1::1/64');
+    const c=parseCidr6(v[2]);if(!c)return tprint(d,'% Use: ipv6 address 2001:db8:1::1/64   or   ipv6 address 2001:db8:1::/64 eui-64');
+    let a=c.a;if(v[3]==='eui-64'){if(c.len!==64)return tprint(d,'% EUI-64 needs a /64 prefix');a=slaacAddr(c.a,i.mac)}else if(v[3]==='link-local')return tprint(d,`% Link-local is automatic here: ${ll6(i)} (made from the MAC with EUI-64).`);
+    if(isLL6(a)||isMc6(a))return tprint(d,'% Use a global unicast address, e.g. 2001:db8:1::1/64');
+    i.v6=(i.v6||[]).filter(x=>x.a!==a);if(no){panelDirty=true;return}
+    if(d.ifaces.some((o,k)=>o!==i&&(o.v6||[]).some(x=>inNet6(a,x.a,Math.min(x.len,c.len)))))tprint(d,`% ${net6(a,c.len)}/${c.len} overlaps with another interface`);
+    i.v6.push({a,len:c.len,src:v[3]==='eui-64'?'eui-64':'static'});panelDirty=true;if(v[3]==='eui-64')tprint(d,`Address built with EUI-64 from MAC ${i.mac}: ${a}/${c.len}`);return}
+  return tprint(d,'% Interface IPv6 commands: ipv6 address <addr/len> [eui-64] · ipv6 enable · no ipv6 address')}
+function show6(d,toks){const w=toks.map(x=>x.toLowerCase()).join(' ');
+  if(/^int(e(r(f(a(c(e)?)?)?)?)?)?\s+br/.test(w)){d.ifaces.forEach((i,k)=>{tprint(d,`${longIf(i.name).padEnd(23)}[${i.up?(ifOper(d,k)?'up/up':'down/down'):'administratively down/down'}]`);const A=addrs6(d,k);if(!A.length)tprint(d,'    unassigned');A.forEach(x=>tprint(d,`    ${x.a}${x.src==='link-local'?'':'/'+x.len}`))});return}
+  if(/^ro/.test(w)){tprint(d,`IPv6 Routing Table - default - ${(d.routes6||[]).length+d.ifaces.reduce((s,i,k)=>s+(ifOper(d,k)?(i.v6||[]).length*2:0),0)} entries\nCodes: C - Connected, L - Local, S - Static\n`);
+    d.ifaces.forEach((i,k)=>{if(!ifOper(d,k))return;(i.v6||[]).forEach(x=>{tprint(d,`C   ${net6(x.a,x.len)}/${x.len} [0/0]\n     via ${longIf(i.name)}, directly connected`);tprint(d,`L   ${x.a}/128 [0/0]\n     via ${longIf(i.name)}, receive`)})});
+    (d.routes6||[]).forEach(r=>tprint(d,`S   ${r.net}/${r.len} [1/0]\n     via ${r.nh}${r.ifn?', '+longIf(r.ifn):''}`));tprint(d,'L   FF00::/8 [0/0]\n     via Null0, receive');if(!d.v6r)tprint(d,'\n(ipv6 unicast-routing is off: this router will not forward IPv6 packets)');return}
+  if(/^nei/.test(w)){const e=Object.entries(d.nd);tprint(d,'IPv6 Address                              Age Link-layer Addr State Interface');if(!e.length)tprint(d,'(empty: entries appear after Neighbor Solicitation / Advertisement)');e.forEach(([a,x])=>tprint(d,`${a.padEnd(42)}${String(Math.round((sim.t-x.t)/60000)).padStart(3)} ${x.mac.padEnd(15)}${(x.state||'REACH').padEnd(6)}${longIf(d.ifaces[x.ifi].name)}`));return}
+  return tprint(d,'% show ipv6 interface brief · show ipv6 route · show ipv6 neighbors')}
+
 /* ---------- ping / traceroute ---------- */
 function startPing(d,dst,count,style){
+  if(valid6(dst)){if(d.session)return tprint(d,'Another task is still running. Press Ctrl+C to stop it.');dst=norm6(dst);d.session={kind:'ping',dst,count,seq:0,ok:0,id:1+rnd(65000),style,tok:null,v6:true};if(style==='win')tprint(d,`\nPinging ${dst} with 32 bytes of data:`);else{tprint(d,'Type escape sequence to abort.');tprint(d,`Sending ${count}, 100-byte ICMP Echos to ${dst}, timeout is 2 seconds:`);tprint(d,'')}return nextProbe(d)}
   if(!validIp(dst))return tprint(d,style==='win'?`Ping request could not find host ${dst}. Use an IP address.`:'% Unrecognized host or address.');
   if(d.session)return tprint(d,'Another task is still running. Press Ctrl+C to stop it.');
   d.session={kind:'ping',dst,count,seq:0,ok:0,id:1+rnd(65000),style,tok:null};
@@ -1431,6 +1743,7 @@ function startPing(d,dst,count,style){
   nextProbe(d);
 }
 function startTrace(d,dst,style){
+  if(valid6(dst)){if(d.session)return tprint(d,'Another task is still running. Press Ctrl+C to stop it.');dst=norm6(dst);d.session={kind:'trace',dst,count:15,seq:0,id:1+rnd(65000),style,tok:null,v6:true};if(style==='win')tprint(d,`\nTracing route to ${dst} over a maximum of 15 hops:\n`);else{tprint(d,'Type escape sequence to abort.');tprint(d,`Tracing the route to ${dst}`)}return nextProbe(d)}
   if(!validIp(dst))return tprint(d,`Unable to resolve target system name ${dst}.`);
   if(d.session)return tprint(d,'Another task is still running. Press Ctrl+C to stop it.');
   d.session={kind:'trace',dst,count:15,seq:0,id:1+rnd(65000),style,tok:null};
@@ -1442,6 +1755,7 @@ function nextProbe(d){
   const s=d.session;if(!s||(s.kind!=='ping'&&s.kind!=='trace'))return;
   if(s.seq>=s.count)return finishSession(d);
   s.seq++;const tok=s.tok=Math.random();s.sentAt=sim.t;
+  if(s.v6)return probe6(d,s);
   const r=routeLookup(d,s.dst);
   if(!r||!d.ifaces[r.ifi].ip){
     s.tok=null;
@@ -1871,6 +2185,11 @@ const HOSTHELP=['Commands:',
   '  http <url>                        load a web page (DNS + TCP + HTTP)',
   '  voice <ip>                        place a short test voice call',
   '  arp -a  |  arp -d                 show or clear the ARP cache',
+  'IPv6:',
+  '  ipv6 autoconfig                   SLAAC: Router Solicitation, then build an address from the RA prefix',
+  '  ipv6 2001:db8:1::10/64 [gateway]  static IPv6 address  ·  ipv6 gateway <addr>  ·  ipv6 off',
+  '  ping / tracert <ipv6-address>     ICMPv6 echo, e.g. ping 2001:db8:2::10',
+  '  netsh interface ipv6 show neighbors   IPv6 neighbor cache',
   '  cls                               clear the screen'];
 function hostCmd(d,line){
   const t=line.trim().split(/\s+/).filter(Boolean);if(!t.length)return;
@@ -1884,9 +2203,11 @@ function hostCmd(d,line){
     if(d.type==='proxy')L.push('Proxy:','  mode block | allow','  allow <domain>  |  disallow <domain>','  block <domain>  |  unblock <domain>','  cache on|off  |  clear cache','  show blocklist  |  show cache');
     L.push('Press Ctrl+C to stop a running task.');return tprint(d,L.join('\n'));
   }
+  if(c==='ipv6')return host6Cmd(d,t);
   if(c==='ipconfig'){
     if(t[1]==='/renew')return startDhcp(d);
-    return tprint(d,`\nEthernet adapter eth0:\n   Physical Address . . . . : ${i.mac}\n   DHCP Enabled . . . . . . : ${d.dhcpClient?'Yes':'No'}\n   IPv4 Address . . . . . . : ${i.ip||'(none)'}\n   Subnet Mask  . . . . . . : ${i.mask||'(none)'}\n   Default Gateway  . . . . : ${d.gw||'(none)'}\n   DNS Server . . . . . . . : ${d.dns||'(none)'}\n   DNS Suffix . . . . . . . : ${d.domain||'(none)'}${d.type==='pc'?`\n   Web proxy  . . . . . . . : ${d.proxy||'(none)'}`:''}\n   Link . . . . . . . . . . : ${ifOper(d,0)?'up':'down'}`);
+    if(t[1]==='/renew6')return startRS(d);
+    return tprint(d,`\nEthernet adapter eth0:\n   Physical Address . . . . : ${i.mac}\n   DHCP Enabled . . . . . . : ${d.dhcpClient?'Yes':'No'}\n   IPv4 Address . . . . . . : ${i.ip||'(none)'}\n   Subnet Mask  . . . . . . : ${i.mask||'(none)'}\n   Default Gateway  . . . . : ${d.gw||'(none)'}\n   DNS Server . . . . . . . : ${d.dns||'(none)'}\n   DNS Suffix . . . . . . . : ${d.domain||'(none)'}${d.type==='pc'?`\n   Web proxy  . . . . . . . : ${d.proxy||'(none)'}`:''}\n${ipconfig6(d)}\n   Link . . . . . . . . . . : ${ifOper(d,0)?'up':'down'}`);
   }
   if(c==='ip'){
     if(a1==='dhcp')return startDhcp(d);
@@ -1910,6 +2231,7 @@ function hostCmd(d,line){
     const rows=Object.entries(d.arp);if(!rows.length)return tprint(d,'No ARP entries found.');
     return tprint(d,`\nInterface: ${i.ip||'0.0.0.0'} --- eth0\n  Internet Address      Physical Address      Type\n`+rows.map(([ip,e])=>`  ${ip.padEnd(22)}${e.mac.padEnd(22)}dynamic`).join('\n'));
   }
+  if(c==='netsh'&&/ipv6/i.test(line)&&/neigh/i.test(line)){const e=Object.entries(d.nd);return tprint(d,'\nInterface 1: eth0\n\nInternet Address                              Physical Address   Type\n'+(e.length?e.map(([a,x])=>`${a.padEnd(46)}${x.mac.replace(/:/g,'-').padEnd(19)}${x.router?'Router':'Reachable'}`).join('\n'):'(no entries)'))}
   if(c==='cls'||(c==='clear'&&!t[1])){d.term.lines=[];return}
   if(d.type==='pc'&&c==='proxy'){
     if(!t[1])return tprint(d,`Web proxy: ${d.proxy||'none'}`);
@@ -1959,16 +2281,16 @@ function parseRange(d,rest){const s=rest.join('').toLowerCase(),m=s.match(/^([a-
   const out=[];for(let n=+m[3];n<=+m[4];n++){const k=d.ifaces.findIndex(i=>i.name.toLowerCase()===(isSw?'fa':'gi')+m[2]+'/'+n);if(k<0)return null;out.push(k)}return out.length?out:null}
 const IOSHELP={
   user:['enable                              enter privileged mode','ping <ip>','traceroute <ip>'],
-  priv:['configure terminal                  enter configuration mode','show ip interface brief','show ip route','show arp','show ip dhcp binding','show ip nat translations','show ip ospf neighbor','show ip ospf database','show ip ospf interface brief','show access-lists','show crypto isakmp sa','show crypto ipsec sa','show crypto map','clear crypto sa','show running-config','ping <ip>  |  traceroute <ip>','clear arp-cache','disable'],
-  config:['hostname <name>','interface <gi0/0>','ip route <network> <mask> <next-hop>','no ip route <network> <mask> <next-hop>','ip dhcp pool <name>','ip dhcp excluded-address <low> [high]','ip nat pat  |  no ip nat pat','ip nat static <inside-ip> <public-ip>','router rip  |  no router rip','router ospf <process-id>  |  no router ospf <process-id>','access-list <1-99|100-199> permit|deny …','ip access-list standard|extended <name>','crypto isakmp policy 10','crypto isakmp key <key> address <peer-ip>','crypto ipsec transform-set <name> esp-aes 256 esp-sha256-hmac','crypto map <name> <seq> ipsec-isakmp','do <command>                        run a privileged command','exit  |  end'],
-  if:['ip address <ip> <mask>','no ip address','ip nat inside  |  ip nat outside  |  no ip nat','encapsulation dot1Q <vlan>      on a subinterface (interface gi0/0.10)','ip ospf cost <1-65535>','ip access-group <acl> in | out','crypto map <name>','ip helper-address <dhcp-server-ip>   (DHCP relay)','shutdown  |  no shutdown','exit  |  end'],
+  priv:['configure terminal                  enter configuration mode','show ip interface brief','show ip route','show arp','show ip dhcp binding','show ip nat translations','show ip ospf neighbor','show ip ospf database','show ip ospf border-routers','show ipv6 interface brief  |  show ipv6 route  |  show ipv6 neighbors','ping <ipv6-address>','show ip ospf interface brief','show access-lists','show crypto isakmp sa','show crypto ipsec sa','show crypto map','clear crypto sa','show running-config','ping <ip>  |  traceroute <ip>','clear arp-cache','disable'],
+  config:['hostname <name>','interface <gi0/0>','ip route <network> <mask> <next-hop>','no ip route <network> <mask> <next-hop>','ip dhcp pool <name>','ip dhcp excluded-address <low> [high]','ip nat pat  |  no ip nat pat','ip nat static <inside-ip> <public-ip>','router rip  |  no router rip','router ospf <process-id>  |  no router ospf <process-id>','ipv6 unicast-routing                forward IPv6 and send Router Advertisements','ipv6 route <prefix/len> <next-hop>  e.g. ipv6 route 2001:db8:2::/64 2001:db8:12::2','access-list <1-99|100-199> permit|deny …','ip access-list standard|extended <name>','crypto isakmp policy 10','crypto isakmp key <key> address <peer-ip>','crypto ipsec transform-set <name> esp-aes 256 esp-sha256-hmac','crypto map <name> <seq> ipsec-isakmp','do <command>                        run a privileged command','exit  |  end'],
+  if:['ip address <ip> <mask>','no ip address','ipv6 address <addr/len> [eui-64]   e.g. ipv6 address 2001:db8:1::1/64','no ipv6 address','ip nat inside  |  ip nat outside  |  no ip nat','encapsulation dot1Q <vlan>      on a subinterface (interface gi0/0.10)','ip ospf cost <1-65535>','ip access-group <acl> in | out','crypto map <name>','ip helper-address <dhcp-server-ip>   (DHCP relay)','shutdown  |  no shutdown','exit  |  end'],
   dhcp:['network <network> <mask>','default-router <ip>','dns-server <ip>','exit  |  end'],
   vlan:['name <vlan-name>','exit  |  end'],
   acl:['permit|deny <ip|tcp|udp|icmp|ospf|esp> <src> <dst> [eq <port>]   (extended)','permit|deny <src>   (standard)','   src/dst: any | host 10.0.0.5 | 10.0.0.0 0.0.0.255','remark <text>','no <line-number>   e.g. no 20','exit  |  end'],
   isakmp:['encryption aes 256','hash sha256','authentication pre-share','group 14','exit'],
   ts:['mode tunnel','exit'],
   cmap:['set peer <ip>','set transform-set <name>','match address <acl>','exit'],
-  ospf:['network <ip> <wildcard> area <n>   e.g. network 10.0.0.0 0.255.255.255 area 0','router-id <a.b.c.d>','passive-interface <gi0/0>','no network …  |  no passive-interface …','exit  |  end'],
+  ospf:['network <ip> <wildcard> area <n>   e.g. network 10.0.0.0 0.255.255.255 area 0','router-id <a.b.c.d>','passive-interface <gi0/0>','area <n> range <net> <mask>   summarize an area on an ABR','no network …  |  no passive-interface …','exit  |  end'],
   rip:['version 2','network <classful network>      e.g. network 10.0.0.0','no network <network>','no auto-summary','exit  |  end']
 };
 const EXTRA={
@@ -1983,13 +2305,14 @@ function linkMsg(d,ifi){const i=d.ifaces[ifi],L=longIf(i.name);
   if(d.rip.on)d.ripNext=sim.t+400;const l=linkAt(d,ifi);if(l){const p=peer(l,d,ifi);if(p.d.rip.on)p.d.ripNext=sim.t+400}
 }
 function iosRunning(d){const isR=isL3(d),ty=d.type;
-      const L=['!',`hostname ${d.name}`,'!'];
+      const L=['!',`hostname ${d.name}`,'!'];if(d.type==='router'&&d.v6r)L.push('ipv6 unicast-routing','!');
       if(isR){d.dhcp.excluded.forEach(([x,y])=>L.push(`ip dhcp excluded-address ${x}${y&&y!==x?' '+y:''}`));
         d.dhcp.pools.forEach(p=>{L.push(`ip dhcp pool ${p.name}`);if(p.net)L.push(` network ${p.net} ${p.mask}`);if(p.gw)L.push(` default-router ${p.gw}`);if(p.dns)L.push(` dns-server ${p.dns}`);L.push('!')})}
       if(d.type==='switch'&&d.stp){if(!d.stp.on)L.push('no spanning-tree vlan 1');else if(d.stp.prio!==32768)L.push(`spanning-tree vlan 1 priority ${d.stp.prio}`)}
       if(isBridge(d))Object.keys(d.vlans||{}).map(Number).filter(v=>v!==1).sort((x,y)=>x-y).forEach(v=>L.push(`vlan ${v}`,` name ${d.vlans[v]}`,'!'));
-      d.ifaces.forEach(i=>{L.push(`interface ${longIf(i.name)}`);if(i.parent!=null&&i.encap)L.push(` encapsulation dot1Q ${i.encap}`);if(isBridge(d)){if(isTrunk(i)){L.push(' switchport mode trunk');if(i.native&&i.native!==1)L.push(` switchport trunk native vlan ${i.native}`);if(i.allowed&&i.allowed!=='all')L.push(` switchport trunk allowed vlan ${i.allowed.join(',')}`)}else{if(i.mode==='access')L.push(' switchport mode access');if(accessVlan(i)!==1)L.push(` switchport access vlan ${accessVlan(i)}`)}}if(isR)L.push(i.ip?` ip address ${i.ip} ${i.mask}`:' no ip address');if(i.ospfCost)L.push(` ip ospf cost ${i.ospfCost}`);if(i.nat)L.push(` ip nat ${i.nat}`);if(ty==='firewall'&&i.zone)L.push(` zone ${i.zone}`,` security-level ${i.level??0}`);if(i.transport)L.push(` sdwan transport ${i.transport}`);if(i.aclIn)L.push(` ip access-group ${i.aclIn} in`);if(i.aclOut)L.push(` ip access-group ${i.aclOut} out`);if(i.cryptoMap)L.push(` crypto map ${i.cryptoMap}`);(i.helper||[]).forEach(h=>L.push(` ip helper-address ${h}`));if(i.stpCost)L.push(` spanning-tree cost ${i.stpCost}`);if(i.stpEdge)L.push(' spanning-tree portfast');if(!i.up)L.push(' shutdown');L.push('!')});
-      if(d.ospf&&d.ospf.on){L.push(`router ospf ${d.ospf.pid}`);if(d.ospf.rid)L.push(` router-id ${d.ospf.rid}`);d.ospf.passive.forEach(x=>L.push(` passive-interface ${longIf(x)}`));d.ospf.nets.forEach(n=>L.push(` network ${n.net} ${n.wild} area ${n.area}`));L.push('!')}
+      d.ifaces.forEach(i=>{L.push(`interface ${longIf(i.name)}`);if(i.parent!=null&&i.encap)L.push(` encapsulation dot1Q ${i.encap}`);if(isBridge(d)){if(isTrunk(i)){L.push(' switchport mode trunk');if(i.native&&i.native!==1)L.push(` switchport trunk native vlan ${i.native}`);if(i.allowed&&i.allowed!=='all')L.push(` switchport trunk allowed vlan ${i.allowed.join(',')}`)}else{if(i.mode==='access')L.push(' switchport mode access');if(accessVlan(i)!==1)L.push(` switchport access vlan ${accessVlan(i)}`)}}if(isR)L.push(i.ip?` ip address ${i.ip} ${i.mask}`:' no ip address');if(i.v6en&&!(i.v6||[]).length)L.push(' ipv6 enable');(i.v6||[]).forEach(x=>L.push(` ipv6 address ${x.a}/${x.len}`));if(i.ospfCost)L.push(` ip ospf cost ${i.ospfCost}`);if(i.nat)L.push(` ip nat ${i.nat}`);if(ty==='firewall'&&i.zone)L.push(` zone ${i.zone}`,` security-level ${i.level??0}`);if(i.transport)L.push(` sdwan transport ${i.transport}`);if(i.aclIn)L.push(` ip access-group ${i.aclIn} in`);if(i.aclOut)L.push(` ip access-group ${i.aclOut} out`);if(i.cryptoMap)L.push(` crypto map ${i.cryptoMap}`);(i.helper||[]).forEach(h=>L.push(` ip helper-address ${h}`));if(i.stpCost)L.push(` spanning-tree cost ${i.stpCost}`);if(i.stpEdge)L.push(' spanning-tree portfast');if(!i.up)L.push(' shutdown');L.push('!')});
+      if(d.ospf&&d.ospf.on){L.push(`router ospf ${d.ospf.pid}`);if(d.ospf.rid)L.push(` router-id ${d.ospf.rid}`);d.ospf.passive.forEach(x=>L.push(` passive-interface ${longIf(x)}`));d.ospf.nets.forEach(n=>L.push(` network ${n.net} ${n.wild} area ${n.area}`));(d.ospf.ranges||[]).forEach(g=>L.push(` area ${g.area} range ${g.net} ${g.mask}`));L.push('!')}
+      (d.routes6||[]).forEach(r=>L.push(`ipv6 route ${r.net}/${r.len} ${r.ifn?longIf(r.ifn)+' ':''}${r.nh}`));
       if(d.rip.on){L.push('router rip',' version 2');d.rip.nets.forEach(n=>L.push(` network ${n}`));L.push(' no auto-summary','!')}
       Object.entries(d.acls||{}).forEach(([n,A])=>{if(/^\d+$/.test(n))A.rules.forEach(r=>L.push(`access-list ${n} ${aclRuleTxt(A.type,r)}`));else{L.push(`ip access-list ${A.type} ${n}`);A.rules.forEach(r=>L.push(` ${aclRuleTxt(A.type,r)}`));L.push('!')}});
       if(d.crypto){const c=d.crypto;if(c.isakmp)L.push('crypto isakmp policy 10',` encryption ${c.isakmp.enc}`,` hash ${c.isakmp.hash}`,` authentication ${c.isakmp.auth}`,` group ${c.isakmp.group}`,'!');Object.entries(c.keys).forEach(([ip,k])=>L.push(`crypto isakmp key ${k} address ${ip}`));Object.entries(c.ts).forEach(([n,t])=>L.push(`crypto ipsec transform-set ${n} ${t}`,' mode tunnel','!'));Object.entries(c.maps).forEach(([n,arr])=>arr.slice().sort((x,y)=>x.seq-y.seq).forEach(e=>{L.push(`crypto map ${n} ${e.seq} ipsec-isakmp`);if(e.peer)L.push(` set peer ${e.peer}`);if(e.ts)L.push(` set transform-set ${e.ts}`);if(e.acl)L.push(` match address ${e.acl}`);L.push('!')}))}
@@ -2005,7 +2328,7 @@ function iosCmd(d,line){
   const toks=line.trim().split(/\s+/).filter(Boolean);if(!toks.length)return;
   if(toks[0]==='?'||toks[toks.length-1]==='?'){
     let h=(IOSHELP[T.mode]||[]).slice();
-    if(!isR)h=h.filter(x=>!/ip route|dhcp|rip|ip address|traceroute|show arp|show ip route|clear arp|nat|ospf|encapsulation|access-|crypto/.test(x));
+    if(!isR)h=h.filter(x=>!/ip route|dhcp|rip|ip address|traceroute|show arp|show ip route|clear arp|nat|ospf|encapsulation|access-|crypto|ipv6/.test(x));else if(d.type!=='router')h=h.filter(x=>!/ipv6/.test(x));
     if(EXTRA[ty]&&EXTRA[ty][T.mode])h=h.concat(EXTRA[ty][T.mode]);
     return tprint(d,h.map(x=>'  '+x).join('\n'));
   }
@@ -2014,6 +2337,7 @@ function iosCmd(d,line){
   const bad=()=>tprint(d,`${' '.repeat(promptOf(d).length)}^\n% Invalid input detected at '^' marker. Type ? for help.`);
   if(/^end$/i.test(toks[0])&&!['user','priv'].includes(T.mode)){T.mode='priv';return}
   const show=()=>{
+    if(d.type==='router'&&toks.length>=2&&toks[0].length>=2&&'show'.startsWith(toks[0].toLowerCase())&&toks[1].toLowerCase()==='ipv6'){show6(d,toks.slice(2));return true}
     if(M('show ip interface brief')){
       tprint(d,'Interface              IP-Address      OK? Method Status                Protocol');
       d.ifaces.forEach((i,k)=>tprint(d,`${longIf(i.name).padEnd(23)}${(i.ip||'unassigned').padEnd(16)}YES ${(i.ip?'manual':'unset').padEnd(7)}${(i.up?(ifOper(d,k)?'up':'down'):'administratively down').padEnd(22)}${ifOper(d,k)?'up':'down'}`));return true}
@@ -2023,7 +2347,7 @@ function iosCmd(d,line){
       const rows=[];
       d.ifaces.forEach((i,k)=>{if(i.ip&&i.mask&&ifOper(d,k)){rows.push([ip2n(netOf(i.ip,i.mask)),`C        ${netOf(i.ip,i.mask)}/${mask2len(i.mask)} is directly connected, ${longIf(i.name)}`]);rows.push([ip2n(i.ip)+.5,`L        ${i.ip}/32 is directly connected, ${longIf(i.name)}`])}});
       d.routes.forEach(r=>{const ok=d.ifaces.some((i,k)=>i.ip&&ifOper(d,k)&&inNet(r.nh,i.ip,i.mask));if(ok)rows.push([ip2n(r.net),`S${r.net==='0.0.0.0'?'*':' '}       ${r.net}/${mask2len(r.mask)} [1/0] via ${r.nh}`])});
-      d.ospfRt.routes.forEach(r=>{if(r.ifi>=0&&!d.routes.some(s=>s.net===r.net&&s.mask===r.mask))rows.push([ip2n(r.net),`O        ${r.net}/${mask2len(r.mask)} [110/${r.cost}] via ${r.nh}, ${longIf(d.ifaces[r.ifi].name)}`])});
+      d.ospfRt.routes.forEach(r=>{if(r.ifi>=0&&!d.routes.some(s=>s.net===r.net&&s.mask===r.mask))rows.push([ip2n(r.net),`${(r.ia?'O IA':'O').padEnd(9)}${r.net}/${mask2len(r.mask)} [110/${r.cost}] via ${r.nh}, ${longIf(d.ifaces[r.ifi].name)}`])});
       d.ripRoutes.forEach(r=>{if(!d.routes.some(s=>s.net===r.net&&s.mask===r.mask))rows.push([ip2n(r.net),`R        ${r.net}/${mask2len(r.mask)} [120/${r.metric}] via ${r.nh}, 00:00:${String(Math.min(59,Math.round((sim.t-r.t)/1000))).padStart(2,'0')}, ${longIf(d.ifaces[r.ifi].name)}`])});
       rows.sort((x,y)=>x[0]-y[0]).forEach(r=>L.push(r[1]));
       if(!rows.length)L.push('(no routes: configure interface addresses and bring them up)');
@@ -2087,15 +2411,21 @@ function iosCmd(d,line){
     if(isR&&(M('show ip ospf neighbor')||M('show ip ospf neighbors'))){tprint(d,'Neighbor ID     Pri   State           Dead Time   Address         Interface');let any=false;
       Object.entries(d.ospfRt.nbrs).forEach(([k,N])=>Object.values(N).forEach(n=>{any=true;tprint(d,`${n.rid.padEnd(16)}  1   ${(n.state+'/  -').padEnd(16)}00:00:${String(Math.max(0,Math.round((DEAD_INT-(sim.t-n.last))/1000))).padStart(2,'0')}    ${n.ip.padEnd(16)}${longIf(d.ifaces[k].name)}`)}));
       if(!any)tprint(d,d.ospf.on?'(no neighbors yet: wait for Hellos, or check network statements and areas)':'(OSPF is not running: configure router ospf 1)');return true}
-    if(isR&&M('show ip ospf database')){tprint(d,`\n            OSPF Router with ID (${d.ospf.on?ospfRid(d):'none'}) (Process ID ${d.ospf.pid})\n\n                Router Link States (Area 0)\n\nLink ID         ADV Router      Age   Seq#        Link count`);
-      Object.values(d.ospfRt.lsdb).sort((x,y)=>ip2n(x.rid)-ip2n(y.rid)).forEach(l=>tprint(d,`${l.rid.padEnd(16)}${l.rid.padEnd(16)}${'1'.padEnd(6)}0x${(0x80000000+l.seq).toString(16)}  ${l.links.length}`));
-      if(!Object.keys(d.ospfRt.lsdb).length)tprint(d,'(empty)');return true}
+    if(isR&&M('show ip ospf database')){const R_=d.ospfRt,areas=[...new Set(Object.values(R_.lsdb).map(l=>l.area??0))].sort((x,y)=>x-y);tprint(d,`\n            OSPF Router with ID (${d.ospf.on?ospfRid(d):'none'}) (Process ID ${d.ospf.pid})`);
+      areas.forEach(A=>{const ls=areaLsas(R_,A);tprint(d,`\n                Router Link States (Area ${A})\n\nLink ID         ADV Router      Age   Seq#        Link count`);
+        ls.filter(l=>l.t!=='summary').sort((x,y)=>ip2n(x.rid)-ip2n(y.rid)).forEach(l=>tprint(d,`${l.rid.padEnd(16)}${l.rid.padEnd(16)}${'1'.padEnd(6)}0x${(0x80000000+l.seq).toString(16)}  ${l.links.length}${l.abr?'   (ABR)':''}`));
+        const sm=ls.filter(l=>l.t==='summary'&&!l.dead);if(sm.length){tprint(d,`\n                Summary Net Link States (Area ${A})\n\nLink ID         ADV Router      Age   Seq#        Metric`);sm.sort((x,y)=>ip2n(x.net)-ip2n(y.net)).forEach(l=>tprint(d,`${l.net.padEnd(16)}${l.rid.padEnd(16)}${'1'.padEnd(6)}0x${(0x80000000+l.seq).toString(16)}  ${l.cost}   (/${mask2len(l.mask)})`))}});
+      if(!areas.length)tprint(d,'(empty)');return true}
+    if(isR&&M('show ip ospf border-routers')){tprint(d,`\n            OSPF Router with ID (${d.ospf.on?ospfRid(d):'none'}) (Process ID ${d.ospf.pid})\n\n            Base Topology (MTID 0)\n\n            Internal Router Routing Table\nCodes: i - Intra-area route, I - Inter-area route\n`);let any=false;
+      ospfAreas(d).forEach(A=>{const {dist,first}=areaSpf(d,A);Object.keys(dist).forEach(r=>{const l=d.ospfRt.lsdb[`R|${A}|${r}`];if(r===ospfRid(d)||!l||!l.abr||!first[r])return;any=true;tprint(d,`i ${r} [${dist[r]}] via ${first[r].nh}, ${longIf(d.ifaces[first[r].ifi].name)}, ABR, Area ${A}`)})});
+      if(!any)tprint(d,'(no Area Border Routers reachable)');return true}
     if(isR&&M('show ip ospf interface brief')){tprint(d,'Interface    PID   Area   IP Address/Mask    Cost  State  Nbrs F/C');ospfIfs(d).forEach(k=>{const i=d.ifaces[k],N=Object.values(d.ospfRt.nbrs[k]||{});tprint(d,`${i.name.padEnd(13)}${String(d.ospf.pid).padEnd(6)}${String(ospfNet(d,k).area).padEnd(7)}${(i.ip+'/'+mask2len(i.mask)).padEnd(19)}${String(ospfCost(d,k)).padEnd(6)}${(isPassive(d,k)?'PASV':'P2P').padEnd(7)}${N.filter(n=>n.state==='FULL').length}/${N.length}`)});if(!ospfIfs(d).length)tprint(d,'(no OSPF interfaces)');return true}
     if(M('show running-config')||M('show run')){tprint(d,['Building configuration...','','Current configuration:',...runningConfig(d)].join('\n'));return true}
     return false;
   };
   const cfg=()=>{
-    if(a=M('hostname <n>')){d.name=a[0].slice(0,20);return true}
+    if(d.type==='router'&&(toks[0].toLowerCase()==='ipv6'||(toks[0].toLowerCase()==='no'&&(toks[1]||'').toLowerCase()==='ipv6'))){cfg6(d,toks);return true}
+    if(a=M('hostname <n>')){const v=safeName(a[0]);if(!v){tprint(d,'% Use letters, digits, - _ or . in host names');return true}d.name=v;return true}
     if(toks.length>=2&&'interface'.startsWith(toks[0].toLowerCase())&&toks[0].length>=3){
       if(toks[1].toLowerCase()==='range'){const r=parseRange(d,toks.slice(2));if(!r){tprint(d,'% Use: interface range fa0/1 - 4');return true}T.mode='if';T.sub=r;return true}
       if(/^vlan/i.test(toks[1])){tprint(d,'% VLAN interfaces (SVIs) are not modelled in this lab. Route between VLANs with router-on-a-stick: interface gi0/0.10 on a router.');return true}
@@ -2165,6 +2495,9 @@ function iosCmd(d,line){
       if(toks[0].toLowerCase().startsWith('sh')){tprint(d,'Use enable first to run show commands in this lab.');return}
       return bad();
     case 'priv':
+      if(a=M('ping ipv6 <ip>'))return startPing(d,a[0],5,'ios');
+      if(a=M('traceroute ipv6 <ip>'))return startTrace(d,a[0],'ios');
+      if(d.type==='router'&&M('clear ipv6 neighbors')){d.nd={};return}
       if(M('configure terminal')){T.mode='config';return tprint(d,'Enter configuration commands, one per line.  End with end.')}
       if(M('disable')||M('exit')){T.mode='user';return}
       if(a=M('ping <ip>'))return startPing(d,a[0],5,'ios');
@@ -2184,6 +2517,7 @@ function iosCmd(d,line){
     case 'if':{
       const subs=Array.isArray(T.sub)?T.sub:[T.sub],i=d.ifaces[subs[0]];
       if(M('exit')){T.mode='config';return}
+      if(d.type==='router'&&(toks[0].toLowerCase()==='ipv6'||(toks[0].toLowerCase()==='no'&&(toks[1]||'').toLowerCase()==='ipv6'))){subs.forEach(k=>if6(d,d.ifaces[k],toks));return}
       if(isR&&(a=M('ip address <ip> <m>'))){
         if(!validIp(a[0])||!validMask(a[1]))return tprint(d,'% Invalid address or mask');
         const bc=n2ip((ip2n(netOf(a[0],a[1]))+2**(32-mask2len(a[1]))-1)>>>0);
@@ -2266,11 +2600,13 @@ function iosCmd(d,line){
       if(cfg())return;return bad();
     case 'ospf':{
       if(M('exit')){T.mode='config';return}
-      if(a=M('network <ip> <w> area <n>')){if(!validIp(a[0])||!validIp(a[1]))return tprint(d,'% Use: network 10.0.0.0 0.255.255.255 area 0');const area=+a[2];if(!(area>=0))return tprint(d,'% The area must be a number, e.g. area 0');if(d.ospf.nets.some(n=>n.area!==area))tprint(d,'Note: this lab models a single area. Use the same area everywhere.');if(!d.ospf.nets.some(n=>n.net===a[0]&&n.wild===a[1]))d.ospf.nets.push({net:a[0],wild:a[1],area});return}
+      if(a=M('network <ip> <w> area <n>')){if(!validIp(a[0])||!validIp(a[1]))return tprint(d,'% Use: network 10.0.0.0 0.255.255.255 area 0');const area=+a[2];if(!(area>=0))return tprint(d,'% The area must be a number, e.g. area 0');if(!d.ospf.nets.some(n=>n.net===a[0]&&n.wild===a[1]))d.ospf.nets.push({net:a[0],wild:a[1],area});return}
       if(a=M('no network <ip> <w> area <n>')){d.ospf.nets=d.ospf.nets.filter(n=>!(n.net===a[0]&&n.wild===a[1]));return}
       if(a=M('router-id <ip>')){if(!validIp(a[0]))return tprint(d,'% Invalid router ID');if(d.ospf.rid!==a[0]){d.ospf.rid=a[0];d.ospfRt=freshOspf();d.ospfRt.helloNext=sim.t+300}return}
       if(toks.length>=2&&'passive-interface'.startsWith(toks[0].toLowerCase())&&toks[0].length>=4){const k=parseIf(d,toks.slice(1),false);if(k<0)return tprint(d,'% Invalid interface');const nm=d.ifaces[k].name;if(!d.ospf.passive.includes(nm))d.ospf.passive.push(nm);return}
       if(toks.length>=3&&/^no$/i.test(toks[0])&&'passive-interface'.startsWith(toks[1].toLowerCase())){const k=parseIf(d,toks.slice(2),false);if(k>=0){const nm=d.ifaces[k].name;d.ospf.passive=d.ospf.passive.filter(x=>x!==nm)}return}
+      if(a=M('area <n> range <ip> <mask>')){const area=+a[0];if(!(area>=0)||!validIp(a[1])||!validMask(a[2]))return tprint(d,'% Use: area 1 range 10.1.0.0 255.255.0.0');d.ospf.ranges=(d.ospf.ranges||[]).filter(g=>!(g.area===area&&g.net===a[1]));d.ospf.ranges.push({area,net:netOf(a[1],a[2]),mask:a[2]});if(!isAbr(d))tprint(d,'Note: area ranges only take effect on an Area Border Router (a router with area 0 and another area).');return}
+      if(a=M('no area <n> range <ip> <mask>')){d.ospf.ranges=(d.ospf.ranges||[]).filter(g=>!(g.area===+a[0]&&g.net===a[1]));return}
       if(M('log-adjacency-changes'))return;
       if(cfg())return;return bad();}
     case 'rip':
@@ -2327,20 +2663,20 @@ function dissect(f){
   const L=[],bytes=[];
   const add=(ly,name,val,arr,note)=>{ly.fields.push({name,val,s:bytes.length,l:arr.length,note});bytes.push(...arr)};
   const eth={name:'Ethernet II',cls:'l2',fields:[]};L.push(eth);
-  add(eth,'Destination',f.dst+(f.dst===BCAST?' (broadcast)':f.dst===RIPMAC?' (IPv4 multicast 224.0.0.9)':f.dst===OSPFMAC?' (IPv4 multicast 224.0.0.5, all OSPF routers)':''),macB(f.dst),'Rewritten at every router hop');
+  add(eth,'Destination',f.dst+(f.dst===BCAST?' (broadcast)':f.dst===RIPMAC?' (IPv4 multicast 224.0.0.9)':f.dst===OSPFMAC?' (IPv4 multicast 224.0.0.5, all OSPF routers)':f.dst.startsWith('33:33')?' (IPv6 multicast: 33:33 + last 32 bits of the group)':''),macB(f.dst),'Rewritten at every router hop');
   add(eth,'Source',f.src,macB(f.src));
   if(f.tag)add(eth,'802.1Q VLAN tag',`TPID 0x8100 · priority 0 · VLAN ${f.tag}`,[0x81,0,...u16(f.tag&0xfff)],'Added on trunk links so the next switch or router knows which VLAN the frame belongs to');
   if(f.bpdu){add(eth,'Length','38 (IEEE 802.3 frame with LLC, not EtherType)',u16(38));const b=f.bpdu,bb=bpduBytes(b),l={name:'Spanning Tree BPDU',cls:'stp',fields:[]};L.push(l);
     add(l,'LLC','DSAP 0x42 / SSAP 0x42 (Spanning Tree) / UI',bb.slice(0,3));add(l,'Protocol / version / type','0 / 0 (STP) / 0 (Configuration BPDU)',bb.slice(3,7));add(l,'Flags','0x00',[bb[7]]);
     add(l,'Root bridge ID',bidText(b.rootP,b.rootM),bb.slice(8,16),'Priority + MAC of the switch everyone agrees is the root. Lowest wins.');add(l,'Root path cost',String(b.cost),bb.slice(16,20),'Cost from the sender to the root');
     add(l,'Sender bridge ID',bidText(b.bP,b.bM),bb.slice(20,28));add(l,'Port ID',`128.${b.port+1}`,bb.slice(28,30));add(l,'Message age / max age','0 s / 20 s',bb.slice(30,34));add(l,'Hello / forward delay','2 s / 15 s on real switches (faster in this lab)',bb.slice(34,38));}
-  else add(eth,'EtherType',f.arp?'0x0806 (ARP)':'0x0800 (IPv4)',u16(f.arp?0x0806:0x0800));
+  else add(eth,'EtherType',f.arp?'0x0806 (ARP)':f.ip6?'0x86DD (IPv6)':'0x0800 (IPv4)',u16(f.arp?0x0806:f.ip6?0x86dd:0x0800));
   if(f.bpdu){}
   else if(f.arp){const a=f.arp,l={name:`ARP ${a.op===1?'request':'reply'}`,cls:'arp',fields:[]};L.push(l);
     add(l,'Hardware type','1 (Ethernet)',[0,1]);add(l,'Protocol type','0x0800 (IPv4)',[8,0]);add(l,'Hardware size','6',[6]);add(l,'Protocol size','4',[4]);
     add(l,'Opcode',a.op===1?'1 (request)':'2 (reply)',u16(a.op));add(l,'Sender MAC',a.sha,macB(a.sha));add(l,'Sender IP',a.spa,ipB(a.spa));
     add(l,'Target MAC',a.tha+(a.op===1?' (unknown, being asked)':''),macB(a.tha));add(l,'Target IP',a.tpa,ipB(a.tpa));
-  }else dissectIp(f.ip,L,add,'');
+  }else if(f.ip6)dissectIp6(f.ip6,L,add);else dissectIp(f.ip,L,add,'');
   if(bytes.length<60){const pad={name:'Ethernet padding',cls:'pad',fields:[]};L.push(pad);add(pad,'Padding',`${60-bytes.length} bytes, because Ethernet frames are at least 60 bytes`,new Array(60-bytes.length).fill(0))}
   return {L,bytes};
 }
@@ -2458,7 +2794,7 @@ function renderDevicePane(force){
       <div class="evtools" role="tablist" aria-label="Device view">${VIEWS(d).map(([k,t])=>`<button class="chip" data-dv="${k}" aria-pressed="false">${t}</button>`).join('')}</div>
       <div id="dview"></div>`;
     lastPaneKey=d.id;termDirty=true;
-    $('#devName').addEventListener('change',e=>{const v=e.target.value.trim().slice(0,20);if(v){d.name=v;topoDirty=true;termDirty=true;save()}});
+    $('#devName').addEventListener('change',e=>{const v=safeName(e.target.value.trim());e.target.value=v||d.name;if(v){d.name=v;topoDirty=true;termDirty=true;save()}});
     $('#devModel').addEventListener('change',e=>{d.model=e.target.value.trim().slice(0,40);topoDirty=true;if(d.type==='firewall'&&platformFor(d.model)!==d.platform){setPlatform(d,platformFor(d.model));toast(d.platform==='fortios'?'CLI switched to FortiGate style (FortiOS). Ports are now port1–port4.':'CLI switched to Cisco ASA style. Ports are now Gi0/0–Gi0/3.');renderDevicePane(true)}save();if(d.view==='physical'||d.view==='learn')buildView(d)});
     const ss=$('#devSsid');if(ss)ss.addEventListener('change',e=>{d.ssid=e.target.value.trim().slice(0,24)||'Office-WiFi';topoDirty=true;save()});
     $$('[data-dv]').forEach(b=>b.onclick=()=>{d.view=b.dataset.dv;buildView(d)});
@@ -2529,6 +2865,12 @@ function renderTables(d){
     const r=[`<span class="st ${ifOper(d,k)?'up':'dn'}"></span>${esc(i.name)}`];if(d.type!=='switch')r.push(i.ip?`${i.ip}/${mask2len(i.mask)}`:'—');r.push(p?esc(p.d.name+' '+p.d.ifaces[p.ifi].name):'—');r.push(i.up?(ifOper(d,k)?'up':'down'):'shut');if(isL3(d))r.push(extra||'');return r}).filter(Boolean);
   const ih=['Port'];if(d.type!=='switch')ih.push('Address');ih.push('Connected to','State');if(isL3(d))ih.push('Role');
   h+=`<div class="sec"><h3>Interfaces</h3>${tbl(ih,ifRows,'No cables yet')}</div>`;
+  if((isHost(d)||d.type==='router')&&(d.v6r||(d.routes6||[]).length||Object.keys(d.nd||{}).length||d.ifaces.some(i=>(i.v6||[]).length||i.v6en))){
+    const r6=d.ifaces.map((i,k)=>{const A=addrs6(d,k);if(!A.length)return null;return [esc(i.name),A.map(x=>esc(x.a)+(x.src==='link-local'?' <span class="note">link-local</span>':`/${x.len}`+(x.src==='slaac'?' <span class="note">SLAAC</span>':''))).join('<br>')]}).filter(Boolean);
+    h+=`<div class="sec"><h3>IPv6${d.type==='router'?(d.v6r?' · routing on':' · routing off'):''}</h3>${tbl(['Port','IPv6 addresses'],r6,'No IPv6 addresses')}${isHost(d)?`<p class="note">Default router: ${esc(d.gw6||'none')}${d.gw6src==='ra'&&d.gw6?' (learned from a Router Advertisement)':''}</p>`:''}</div>`;
+    const nd=Object.entries(d.nd||{});if(nd.length)h+=`<div class="sec"><h3>IPv6 neighbor cache</h3>${tbl(['IPv6 address','MAC','Port'],nd.map(([a,x])=>[esc(a),x.mac,esc(d.ifaces[x.ifi].name)]),'')}</div>`;
+    if(d.type==='router'){const rr=[];d.ifaces.forEach((i,k)=>{if(ifOper(d,k))(i.v6||[]).forEach(x=>rr.push(['C',`${net6(x.a,x.len)}/${x.len}`,'connected',esc(i.name)]))});(d.routes6||[]).forEach(r=>{const x=lookup6(d,r.net==='::'?'2001:db8:ffff::1':r.net);rr.push(['S',`${r.net}/${r.len}`,'via '+esc(r.nh),x&&x.kind==='S'?esc(d.ifaces[x.ifi].name):'—'])});if(rr.length)h+=`<div class="sec"><h3>IPv6 routing table</h3>${tbl(['','Prefix','Next hop','Out'],rr,'')}</div>`}
+  }
   if(isHost(d)){h+=`<div class="sec"><h3>Settings</h3>${tbl(d.type==='pc'?['Gateway','DNS','Proxy']:['Gateway','DNS'],[d.type==='pc'?[d.gw||'—',d.dns||'—',d.proxy||'—']:[d.gw||'—',d.dns||'—']],'')}</div>`;
     const conns=Object.values(d.tcp);if(conns.length)h+=`<div class="sec"><h3>TCP connections</h3>${tbl(['Local','Remote','State'],conns.map(c=>[`${c.lip}:${c.lport}`,`${c.rip}:${c.rport}`,c.state]),'')}</div>`;
     if(d.type==='proxy'){const e=Object.entries(d.cache);h+=`<div class="sec"><h3>Cache</h3>${tbl(['URL','Status','Hits'],e.map(([u,x])=>[esc(u),x.res.status,x.hits]),'Empty. Pages are cached after the first fetch.')}</div>`}}
@@ -2550,7 +2892,7 @@ function renderTables(d){
   if(isL3(d)){
     const rows=[];d.ifaces.forEach((i,k)=>{if(i.ip&&ifOper(d,k))rows.push(['C',`${netOf(i.ip,i.mask)}/${mask2len(i.mask)}`,'connected',i.name])});
     d.routes.forEach(r=>{const k=d.ifaces.findIndex((i,j)=>i.ip&&ifOper(d,j)&&inNet(r.nh,i.ip,i.mask));rows.push(['S',`${r.net}/${mask2len(r.mask)}`,`via ${r.nh}`,k>=0?d.ifaces[k].name:'(unreachable)'])});
-    d.ospfRt.routes.forEach(r=>{if(r.ifi>=0)rows.push(['O',`${r.net}/${mask2len(r.mask)}`,`via ${r.nh} [110/${r.cost}]`,d.ifaces[r.ifi].name])});
+    d.ospfRt.routes.forEach(r=>{if(r.ifi>=0)rows.push([r.ia?'O IA':'O',`${r.net}/${mask2len(r.mask)}`,`via ${r.nh} [110/${r.cost}]`,d.ifaces[r.ifi].name])});
     d.ripRoutes.forEach(r=>rows.push(['R',`${r.net}/${mask2len(r.mask)}`,`via ${r.nh} [120/${r.metric}]`,d.ifaces[r.ifi].name]));
     if(d.type==='sdwan')d.sd.peers.forEach(p=>rows.push(['SD',`${p.net}/${mask2len(p.mask)}`,`tunnel to ${esc(p.name)}`,'overlay']));
     h+=`<div class="sec"><h3>Routing table</h3>${tbl(['','Network','Next hop','Out'],rows,'No routes. Give an interface an address and bring it up.')}</div>`;
@@ -2635,23 +2977,25 @@ $('#speed').oninput=e=>setSpeed(+e.target.value);
 $('#resetBtn').onclick=()=>{resetTables();toast('Cleared packets, caches, tables, leases, connections and learned routes.')};
 
 /* ---------- tools & pointer ---------- */
+const TOUCH=!!(window.matchMedia&&matchMedia('(pointer:coarse)').matches);const tapWords=x=>TOUCH?x.replace(/\bClick\b/g,'Tap').replace(/\bclick\b/g,'tap').replace(/Drag devices to move them/,'Drag devices to move them, pinch to zoom, drag empty space to pan'):x;
 const HINTS={select:'Drag devices to move them. Click a device to open its console, a cable to change it, a packet to inspect it.',link:'Click a device, then another, to connect them. Pick the cable type in the menu next to Cable; Auto chooses the usual one.',delete:'Click a device or a cable to remove it.'};
 $('#palette').innerHTML=Object.entries(TYPES).map(([k,v])=>`<button class="pbtn" data-add="${k}" title="Add ${v.name}"><i style="background:var(${TCOL[k]})"></i>${v.name}</button>`).join('');
-function setTool(t){tool=t;linkFrom=null;$$('[data-tool]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.tool===t));$$('[data-add]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.add===t));$('#hint').textContent=HINTS[t]||`Click the canvas to place a ${TYPES[t].name}.`;svg.classList.toggle('mode-delete',t==='delete');topoDirty=true;const ms=$('#modelSel');if(TYPES[t]){ms.hidden=false;ms.innerHTML=(CATALOG[t]||[]).map(m=>`<option>${esc(m)}</option>`).join('');const last=store.get('packetyard.model.'+t);if(last&&(CATALOG[t]||[]).includes(last))ms.value=last;$('#hint').textContent=`Pick a model, then click the canvas to place a ${TYPES[t].name}.`}else ms.hidden=true}
+function setTool(t){tool=t;linkFrom=null;$$('[data-tool]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.tool===t));$$('[data-add]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.add===t));$('#hint').textContent=tapWords(HINTS[t]||`Click the canvas to place a ${TYPES[t].name}.`);svg.classList.toggle('mode-delete',t==='delete');topoDirty=true;const ms=$('#modelSel');if(TYPES[t]){ms.hidden=false;ms.innerHTML=(CATALOG[t]||[]).map(m=>`<option>${esc(m)}</option>`).join('');const last=store.get('packetyard.model.'+t);if(last&&(CATALOG[t]||[]).includes(last))ms.value=last;$('#hint').textContent=tapWords(`Pick a model, then click the canvas to place a ${TYPES[t].name}.`)}else ms.hidden=true}
 $$('[data-tool]').forEach(b=>b.onclick=()=>setTool(b.dataset.tool));
 $('#cableSel').onchange=e=>{cableChoice=e.target.value;setTool('link')};
 $$('[data-add]').forEach(b=>b.onclick=()=>setTool(b.dataset.add));
 function svgPt(e){const p=svg.createSVGPoint();p.x=e.clientX;p.y=e.clientY;return p.matrixTransform(svg.getScreenCTM().inverse())}
 let drag=null;
 /* ---------- zoom and pan ---------- */
-const VB={x:0,y:0,w:W,h:H},ptrs=new Map();let pan=null,pinch=null,needFit=true;
+const VB={x:0,y:0,w:W,h:H},ptrs=new Map();let pan=null,pinch=null,needFit=true,autoFit=true;
 function setVB(){VB.w=Math.max(220,Math.min(W*2.2,VB.w));VB.h=VB.w*H/W;VB.x=Math.max(-VB.w*0.6,Math.min(W-VB.w*0.4,VB.x));VB.y=Math.max(-VB.h*0.6,Math.min(H-VB.h*0.4,VB.y));svg.setAttribute('viewBox',`${VB.x.toFixed(1)} ${VB.y.toFixed(1)} ${VB.w.toFixed(1)} ${VB.h.toFixed(1)}`)}
-function zoomAt(cx,cy,f){const nw=Math.max(220,Math.min(W*2.2,VB.w*f));const k=nw/VB.w;VB.x=cx-(cx-VB.x)*k;VB.y=cy-(cy-VB.y)*k;VB.w=nw;setVB()}
+function zoomAt(cx,cy,f){autoFit=false;const nw=Math.max(220,Math.min(W*2.2,VB.w*f));const k=nw/VB.w;VB.x=cx-(cx-VB.x)*k;VB.y=cy-(cy-VB.y)*k;VB.w=nw;setVB()}
 function zoomBy(f){zoomAt(VB.x+VB.w/2,VB.y+VB.h/2,f)}
-function fitView(){if(!S.devices.length){Object.assign(VB,{x:0,y:0,w:W,h:H});return setVB()}
+function fitView(){autoFit=true;if(!S.devices.length){const w=innerWidth<=760?820:W;Object.assign(VB,{w,h:w*H/W,x:(W-w)/2,y:(H-w*H/W)/2});return setVB()}
   let x0=Math.min(...S.devices.map(d=>d.x))-70,x1=Math.max(...S.devices.map(d=>d.x))+70,y0=Math.min(...S.devices.map(d=>d.y))-55,y1=Math.max(...S.devices.map(d=>d.y))+65;
-  let w=Math.max(x1-x0,(y1-y0)*W/H,260);if(innerWidth>1020)w=Math.max(w,W*0.8);
+  const rc=svg.getBoundingClientRect(),asp=rc.width&&rc.height?rc.width/rc.height:W/H,k=H/W;let w=Math.max((x1-x0)/Math.max(1,k*asp),(y1-y0)/Math.max(k,1/asp),innerWidth<=760?560:700);if(innerWidth>1020)w=Math.max(w,W*0.8);
   VB.w=w;VB.h=w*H/W;VB.x=(x0+x1)/2-w/2;VB.y=(y0+y1)/2-VB.h/2;setVB()}
+if('ResizeObserver' in window){let rz=0;new ResizeObserver(()=>{if(!autoFit||!S.devices.length)return;cancelAnimationFrame(rz);rz=requestAnimationFrame(fitView)}).observe(svg)}
 $('#zIn').onclick=()=>zoomBy(1/1.35);$('#zOut').onclick=()=>zoomBy(1.35);$('#zFit').onclick=fitView;
 svg.addEventListener('wheel',e=>{if(!(e.ctrlKey||e.metaKey||innerWidth>1020))return;e.preventDefault();const pt=svgPt(e);zoomAt(pt.x,pt.y,Math.exp(e.deltaY*(e.ctrlKey?0.01:0.0015)))},{passive:false});
 function pinchState(){const [a,b]=[...ptrs.values()];return {d:Math.hypot(a.x-b.x,a.y-b.y)||1,mx:(a.x+b.x)/2,my:(a.y+b.y)/2}}
@@ -2659,8 +3003,8 @@ svg.addEventListener('pointerdown',e=>{ptrs.set(e.pointerId,{x:e.clientX,y:e.cli
   if(ptrs.size===2){if(drag&&drag.moved)save();drag=null;pan=null;const st=pinchState();pinch={...st,vb:{...VB},wm:svgPt({clientX:st.mx,clientY:st.my})};try{svg.setPointerCapture(e.pointerId)}catch(_){}e.stopImmediatePropagation();return}
   if(ptrs.size>2){e.stopImmediatePropagation();return}},true);
 svg.addEventListener('pointermove',e=>{if(!ptrs.has(e.pointerId))return;ptrs.set(e.pointerId,{x:e.clientX,y:e.clientY});
-  if(pinch&&ptrs.size>=2){const st=pinchState();const k=pinch.d/st.d;VB.w=pinch.vb.w*k;VB.h=VB.w*H/W;VB.x=pinch.vb.x;VB.y=pinch.vb.y;setVB();const now=svgPt({clientX:st.mx,clientY:st.my});VB.x+=pinch.wm.x-now.x;VB.y+=pinch.wm.y-now.y;setVB();e.stopImmediatePropagation();return}
-  if(pan){const now=svgPt(e);if(Math.abs(e.clientX-pan.sx)+Math.abs(e.clientY-pan.sy)>4)pan.moved=true;if(pan.moved){VB.x+=pan.w.x-now.x;VB.y+=pan.w.y-now.y;setVB()}}},true);
+  if(pinch&&ptrs.size>=2){autoFit=false;const st=pinchState();const k=pinch.d/st.d;VB.w=pinch.vb.w*k;VB.h=VB.w*H/W;VB.x=pinch.vb.x;VB.y=pinch.vb.y;setVB();const now=svgPt({clientX:st.mx,clientY:st.my});VB.x+=pinch.wm.x-now.x;VB.y+=pinch.wm.y-now.y;setVB();e.stopImmediatePropagation();return}
+  if(pan){const now=svgPt(e);if(Math.abs(e.clientX-pan.sx)+Math.abs(e.clientY-pan.sy)>4)pan.moved=true;if(pan.moved){autoFit=false;VB.x+=pan.w.x-now.x;VB.y+=pan.w.y-now.y;setVB()}}},true);
 function ptrEnd(e){ptrs.delete(e.pointerId);if(pinch&&ptrs.size<2){pinch=null;pan=null;e.stopImmediatePropagation();return}
   if(pan&&e.type==='pointerup'){const p=pan;pan=null;if(!p.moved){selId=null;selLink=null;topoDirty=true;renderDevicePane()}}else if(e.type==='pointercancel')pan=null}
 svg.addEventListener('pointerup',ptrEnd,true);svg.addEventListener('pointercancel',ptrEnd,true);
@@ -2673,7 +3017,7 @@ svg.addEventListener('pointerdown',e=>{
     else if(li){selLink=li.dataset.link;selId=null;topoDirty=true;setTab('device');renderDevicePane(true)}
     else{pan={w:pt,sx:e.clientX,sy:e.clientY,moved:false};try{svg.setPointerCapture(e.pointerId)}catch(_){}}
     return}
-  if(TYPES[tool]){if(!d){const nd=addDev(tool,Math.round(pt.x),Math.round(pt.y));const mv=$('#modelSel').value;store.set('packetyard.model.'+tool,mv);if(mv&&!/^Generic/.test(mv))nd.model=mv;if(nd.type==='firewall'&&platformFor(mv)==='fortios')setPlatform(nd,'fortios');save();selId=nd.id;selLink=null;setTool('select');renderDevicePane()}return}
+  if(TYPES[tool]){if(!d){autoFit=false;const nd=addDev(tool,Math.round(pt.x),Math.round(pt.y));const mv=$('#modelSel').value;store.set('packetyard.model.'+tool,mv);if(mv&&!/^Generic/.test(mv))nd.model=mv;if(nd.type==='firewall'&&platformFor(mv)==='fortios')setPlatform(nd,'fortios');save();selId=nd.id;selLink=null;setTool('select');renderDevicePane()}return}
   if(tool==='link'){if(!d)return;if(!linkFrom){linkFrom=d.id;topoDirty=true;return}
     if(linkFrom===d.id){linkFrom=null;topoDirty=true;return}
     const a=dev(linkFrom);if(S.links.some(l=>(l.a.dev===a.id&&l.b.dev===d.id)||(l.b.dev===a.id&&l.a.dev===d.id))){toast('These two devices are already connected.');linkFrom=null;topoDirty=true;return}
@@ -2711,6 +3055,29 @@ jumpBtn.onclick=()=>{const t=jumpBtn.dataset.to==='stage'?$('#svg'):$('.panel');
 if('IntersectionObserver' in window){new IntersectionObserver(es=>{es.forEach(x=>{if(x.target.id==='svg')stageVis=x.isIntersecting;else panelVis=x.intersectionRatio>0.25});updJump()},{threshold:[0,0.25]}).observe($('#svg'));
   new IntersectionObserver(es=>{es.forEach(x=>panelVis=x.intersectionRatio>0.25||x.intersectionRect.height>innerHeight*0.4);updJump()},{threshold:[0,0.25,0.5]}).observe($('.panel'))}
 addEventListener('resize',updJump);
+/* ---------- welcome / start screen ---------- */
+const WPATHS=[
+  {lvl:'b',tag:'Beginner',title:'New to networking',desc:'See how a network really works, one packet at a time, then build your first LAN.',items:[['demo','arp'],['demo','mac'],['demo','dhcp'],['demo','webload'],['lab','lan'],['lab','route']]},
+  {lvl:'i',tag:'Intermediate',title:'Know the basics',desc:'Configure the services and switching every office runs on, with goals that check your work.',items:[['demo','vlan'],['lab','services'],['lab','nat'],['lab','vlan'],['lab','acl'],['lab','stp'],['lab','ipv6'],['lab','winsrv']]},
+  {lvl:'e',tag:'Experienced',title:'Real-world setups',desc:'Explore complete company networks, then change, break and fix them like on the job.',items:[['scenario','enterprise'],['scenario','forti'],['scenario','sdwan'],['scenario','vpn'],['scenario','ospfma'],['scenario','winsrv'],['lab','firewall'],['demo','automation']]}];
+const KINDN={demo:'Demo',lab:'Lab',scenario:'Real setup'};
+function itemOf(kind,k){return (kind==='demo'?DEMOS:kind==='lab'?LABS:SCENARIOS)[k]}
+function openWelcome(){const w=$('#welcome'),cur=store.get('packetyard.current')||'';const n=S.devices.length;
+  const ic={go:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>',plus:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M12 8v8M8 12h8"/></svg>',grid:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>'};
+  $('#wQuick').innerHTML=(n?`<button class="wq main" data-w="continue">${ic.go}<div><b>Continue</b><span>${cur?esc(cur)+' · ':''}${n} device${n===1?'':'s'} on the canvas</span></div></button>`:'')+
+    `<button class="wq${n?'':' main'}" data-w="scratch">${ic.plus}<div><b>Start from scratch</b><span>Empty canvas: add devices, cable them, configure</span></div></button>`+
+    `<button class="wq" data-w="library">${ic.grid}<div><b>Browse everything</b><span>${Object.keys(SCENARIOS).length} setups · ${Object.keys(DEMOS).length} demos · ${Object.keys(LABS).length} labs</span></div></button>`;
+  $('#wPaths').innerHTML=WPATHS.map(P=>`<section class="wpath"><header><span class="wlvl ${P.lvl}">${P.tag}</span></header><h3>${P.title}</h3><p>${P.desc}</p><ul>${P.items.filter(([kd,k])=>itemOf(kd,k)).map(([kd,k])=>`<li><button data-wk="${kd}" data-wi="${k}"><span>${esc(itemOf(kd,k).title)}</span><em>${KINDN[kd]}</em></button></li>`).join('')}</ul></section>`).join('');
+  $('#wShow').checked=store.get('packetyard.welcome')!=='off';
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches)w.querySelectorAll('animateMotion').forEach(a=>a.remove());
+  w.hidden=false;setTimeout(()=>{const f=w.querySelector('.wbox');if(f)f.focus({preventScroll:true})},50)}
+function closeWelcome(){$('#welcome').hidden=true}
+$('#welcome').addEventListener('click',e=>{const b=e.target.closest('[data-w],[data-wk]');if(!b){if(e.target.id==='welcome')closeWelcome();return}
+  if(b.dataset.wk){closeWelcome();startItem(b.dataset.wk,b.dataset.wi);return}
+  const a=b.dataset.w;closeWelcome();if(a==='scratch')$('#newBtn').onclick();else if(a==='library')$('#libBtn').click()});
+$('#wShow').onchange=e=>store.set('packetyard.welcome',e.target.checked?'on':'off');
+$('#brandBtn').onclick=openWelcome;
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('#welcome').hidden)closeWelcome()});
 let toastT;function toast(m){const t=$('#toast');t.textContent=m;t.hidden=false;clearTimeout(toastT);toastT=setTimeout(()=>t.hidden=true,3800)}
 
 /* ---------- topology builders ---------- */
@@ -2841,6 +3208,12 @@ const SCENARIOS={
   ospf:{title:'OSPF network with a backup path',tag:'OSPF',build:()=>ospfSquare({ospf:true}),desc:'Four routers in a ring run <b>OSPF</b> in area 0. R1 reaches R3 through R2 over Gigabit links instead of the slow <b>serial</b> link to R4 (cost 64). Every router floods its links to the others and runs <b>SPF</b> to pick the cheapest path. Give it about 15 seconds to reach FULL adjacencies.',
     tries:[{dev:'R1',cmds:['enable','show ip ospf neighbor'],cmd:'show ip ospf neighbor',text:'Neighbors and their state (FULL when ready)'},{dev:'R1',cmds:['enable','show ip ospf database'],cmd:'show ip ospf database',text:'The link-state database: one Router LSA per router'},{dev:'R1',cmds:['enable','show ip route'],cmd:'show ip route',text:'O routes with [110/cost]'},{dev:'PC1',cmd:'tracert 10.3.0.10',text:'The path goes through R2 (cheapest)'},{text:'Cut the R1–R2 cable and watch OSPF reconverge',act:()=>setCut(linkBetween('R1','R2'),true)},{dev:'R1',cmds:['enable','configure terminal','interface gi0/1','ip ospf cost 100','end'],cmd:'ip ospf cost 100',text:'Or raise the cost of R1 Gi0/1 so the R4 path wins'},{text:'Reconnect every cable',act:()=>S.links.forEach(l=>{if(l.cut)setCut(l,false)})}]},
   vlanbare:{title:'Two switches before VLANs',tag:'VLANs',build:()=>vlanOffice({bare:true}),desc:'Sales and Engineering PCs share one flat network (VLAN 1) and R1 isn\'t set up yet. Split them into VLANs, trunk the uplinks and route between them, by hand or with the VLAN automation playbook.',tries:[{text:'Open the VLAN automation playbook',act:()=>openAuto('vlan')}]},
+  ospfma:{title:'OSPF multi-area: backbone and two areas',tag:'OSPF',build:()=>ospfMulti({ospf:true}),desc:'Five routers split into <b>three OSPF areas</b>. R2 and the server SRV sit in the <b>backbone, area 0</b>. R1 is an <b>Area Border Router (ABR)</b> between area 0 and <b>area 1</b> (R4 with PC1 and PC3); R3 is the ABR to <b>area 2</b> (R5 with PC2). Router LSAs stay inside their own area; ABRs send <b>Summary LSAs</b>, which become <b>O IA</b> routes. Give it about 20 seconds to converge.',
+    tries:[{dev:'R1',cmds:['enable','show ip ospf interface brief'],cmd:'show ip ospf interface brief',text:'R1 has interfaces in area 0 and area 1, so it is an ABR'},{dev:'R1',cmds:['enable','show ip ospf database'],cmd:'show ip ospf database',text:'One database per area, with Router and Summary LSAs'},{dev:'R4',cmds:['enable','show ip route'],cmd:'show ip route',text:'R4 sees the other areas as O IA routes'},{dev:'R4',cmds:['enable','show ip ospf border-routers'],cmd:'show ip ospf border-routers',text:'R4 reaches other areas through ABR 1.1.1.1'},{dev:'PC1',cmd:'tracert 10.2.10.10',text:'Area 1 → area 0 → area 2'},{dev:'R1',cmds:['enable','configure terminal','router ospf 1','area 1 range 10.1.0.0 255.255.0.0','end'],cmd:'area 1 range 10.1.0.0 255.255.0.0',text:'Summarize area 1 into one /16 prefix'},{dev:'R5',cmds:['enable','show ip route'],cmd:'show ip route',text:'R5 now sees one 10.1.0.0/16 route instead of four'}]},
+  ospfmabare:{title:'Five routers before OSPF areas',tag:'OSPF',build:()=>ospfMulti(),desc:'The multi-area network with addresses but no routing. Configure OSPF with area 0 in the middle, area 1 on the left and area 2 on the right.',tries:[{dev:'PC1',cmd:'ping 10.2.10.10',text:'See that it fails first'}]},
+  ipv6:{title:'IPv6 dual-stack office',tag:'IPv6',build:()=>v6Office({v6:true}),desc:'Two LANs joined by two routers, running <b>IPv4 and IPv6 side by side</b> (dual stack). The routers announce the prefixes 2001:db8:1::/64 and 2001:db8:2::/64 with <b>Router Advertisements</b>; PCs build their own IPv6 address with <b>SLAAC</b>. Neighbor Discovery (ICMPv6) replaces ARP, and multicast replaces broadcast.',
+    tries:[{dev:'PC1',cmd:'ipv6 autoconfig',text:'Router Solicitation → Router Advertisement → SLAAC address'},{dev:'PC1',cmd:'ipconfig',text:'Link-local, SLAAC and IPv4 addresses side by side'},{dev:'PC1',cmd:'ping 2001:db8:2::10',text:'ICMPv6 ping, with Neighbor Solicitation first'},{dev:'PC1',cmd:'tracert 2001:db8:2::10',text:'Hop limit instead of TTL'},{dev:'R1',cmds:['enable','show ipv6 neighbors'],cmd:'show ipv6 neighbors',text:'The IPv6 neighbor cache (no ARP)'},{dev:'R1',cmds:['enable','show ipv6 route'],cmd:'show ipv6 route',text:'Connected, local and static IPv6 routes'},{dev:'PC2',cmd:'ping 192.168.2.10',text:'IPv4 still works on the same network'}]},
+  ipv6bare:{title:'Dual-stack office before IPv6',tag:'IPv6',build:()=>v6Office(),desc:'IPv4 works everywhere; IPv6 is not configured on the routers yet. The server already has 2001:db8:2::10.',tries:[{dev:'PC1',cmd:'ipv6 autoconfig',text:'No router answers yet'}]},
   ospfbare:{title:'Four routers before OSPF',tag:'OSPF',build:()=>ospfSquare(),desc:'Addresses are set but no routing protocol runs, so the PCs can\'t reach each other. Turn on OSPF by hand or with the OSPF automation playbook.',tries:[{dev:'PC1',cmd:'ping 10.3.0.10',text:'See that it fails first'},{text:'Open the OSPF automation playbook',act:()=>openAuto('ospf')}]},
   rollout:{title:'Three routers, routing not set up',tag:'automation',build:()=>chain(false),desc:'Three routers in a row with addresses but no routing protocol. A good target for an automation rollout: configure every router with one playbook, then verify.',tries:[{text:'Open the RIP rollout playbook in the Automate tab',act:()=>openAuto('rip')}]},
   brokenroute:{title:'Three routers, one route missing',tag:'automation',build:()=>chain(true,true),desc:'Static routing with one route missing on R2. Use a playbook to audit, fix and verify.',tries:[{text:'Open the audit-and-fix playbook',act:()=>openAuto('fix')},{dev:'PC1',cmd:'ping 10.3.0.10',text:'See the problem first'}]},
@@ -2957,6 +3330,25 @@ const DEMOS={
       {dev:'R1',cmds:['enable','show ip route'],text:'R1 has one connected route per subinterface, as if it had a separate cable in each VLAN.'},
       {dev:'SW1',cmds:['enable','show interfaces trunk'],text:'The trunk ports and the VLANs they carry. The native VLAN (1) travels untagged.'}],
     outro:'VLANs split one switched network into separate ones; trunks carry many VLANs over one link with 802.1Q tags; a router (or Layer 3 switch) routes between them.'},
+  ipv6:{title:'IPv6: SLAAC, Neighbor Discovery and ICMPv6',group:'Layer 3',step:false,build:()=>v6Office(),
+    steps:[{act:enableV6All,label:'Enable IPv6 on R1 and R2',text:'Both routers get <b>ipv6 unicast-routing</b>, a global address on each interface (2001:db8:…/64) and a static IPv6 route to the other LAN. Every IPv6 interface also gets a <b>link-local</b> address (fe80::) automatically. The routers start sending <b>Router Advertisements</b> to ff02::1 (all nodes).'},
+      {dev:'PC1',cmds:['ipv6 autoconfig'],text:'PC1 sends a <b>Router Solicitation</b> to ff02::2 (all routers). R1 answers with a Router Advertisement carrying the prefix 2001:db8:1::/64. PC1 combines that prefix with an interface ID made from its MAC (EUI-64) — <b>SLAAC</b>, no DHCP server needed.'},
+      {dev:'PC1',cmds:['ipconfig'],text:'PC1 now has three kinds of address: IPv4, an IPv6 link-local (fe80::) used only on this link, and a global 2001:db8:1:: address. Its default gateway is R1\'s <b>link-local</b> address.'},
+      {dev:'PC3',cmds:['ipv6 autoconfig'],text:'PC3 does the same on the other LAN and gets an address in 2001:db8:2::/64 from R2.'},
+      {dev:'PC1',cmds:['ping 2001:db8:2::10 -n 2'],text:'Before sending, PC1 needs R1\'s MAC. IPv6 has no ARP and no broadcast: it sends a <b>Neighbor Solicitation</b> to a <b>solicited-node multicast</b> group (ff02::1:ffxx:xxxx), and R1 answers with a <b>Neighbor Advertisement</b>. Then ICMPv6 Echo Requests flow. Click a packet to see the 40-byte IPv6 header.'},
+      {dev:'R1',cmds:['enable','show ipv6 neighbors'],text:'The neighbor cache is IPv6\'s ARP table. Entries were learned from Neighbor Solicitations and Advertisements.'},
+      {dev:'PC1',cmds:['tracert 2001:db8:2::10'],text:'Traceroute works with the <b>hop limit</b> (IPv6\'s TTL). Routers send ICMPv6 Time Exceeded. No NAT anywhere: every device has a globally unique address.'},
+      {dev:'PC2',cmds:['ping 192.168.2.10 -n 2'],text:'IPv4 keeps working beside IPv6: this is <b>dual stack</b>, the most common way networks move to IPv6.'}],
+    outro:'IPv6 replaces ARP with Neighbor Discovery, broadcast with multicast, and DHCP (often) with SLAAC from Router Advertisements. Routers need "ipv6 unicast-routing" and IPv6 routes, separate from IPv4.'},
+  ospfma:{title:'OSPF multi-area: ABRs, Summary LSAs and O IA routes',group:'Layer 3',step:false,build:()=>ospfMulti(),
+    steps:[{act:enableMaAll,label:'Enable OSPF with three areas',text:'Five routers: R2 is the <b>backbone (area 0)</b>, R4 is in <b>area 1</b>, R5 in <b>area 2</b>. R1 and R3 have one foot in area 0 and one in another area, which makes them <b>Area Border Routers (ABRs)</b>. Hellos carry the area ID, and neighbors only form when both sides agree on it.'},
+      {dev:'R1',cmds:['enable','show ip ospf neighbor'],text:'After about 15 seconds R1 has two FULL neighbors: R4 (in area 1) and R2 (in area 0). Run this step again if a neighbor still shows INIT or EXCHANGE.'},
+      {dev:'R1',cmds:['enable','show ip ospf database'],text:'An ABR keeps a <b>separate database for each area</b>. Area 0 holds the Router LSAs of R1, R2 and R3; area 1 holds R1 and R4. Router LSAs never cross an area boundary. Instead the ABR advertises the other areas\' networks as <b>Type 3 Summary LSAs</b>.'},
+      {dev:'R4',cmds:['enable','show ip route'],text:'R4 only knows the topology of area 1. Networks in other areas appear as <b>O IA</b> (inter-area) routes, all pointing at the ABR R1. Their cost is the cost to reach R1 plus the cost R1 advertised.'},
+      {dev:'PC1',cmds:['tracert 10.2.10.10'],text:'Inter-area traffic always crosses the backbone: area 1 → R1 → R2 (area 0) → R3 → area 2.'},
+      {dev:'R1',cmds:['enable','configure terminal','router ospf 1','area 1 range 10.1.0.0 255.255.0.0','end'],text:'<b>Route summarization</b> on the ABR: instead of four separate area 1 networks, R1 advertises one 10.1.0.0/16 Summary LSA and withdraws the old ones. A link flapping inside area 1 no longer forces SPF runs everywhere else.'},
+      {dev:'R5',cmds:['enable','show ip route'],text:'R5 in area 2 now has a single O IA route 10.1.0.0/16 for the whole of area 1. Smaller tables and fewer updates: that is why big OSPF networks use areas. (If the /24 routes are still listed, wait a few seconds and run this step again.)'}],
+    outro:'Areas keep the link-state database small: full topology inside an area, summaries between areas, and every inter-area path goes through the backbone (area 0).'},
   ospf:{title:'OSPF: neighbors, link-state database and SPF',group:'Layer 3',step:false,build:()=>ospfSquare(),
     steps:[{act:enableOspfAll,label:'Enable OSPF on R1–R4',text:'Four routers in a ring, no routing yet. We enable OSPF area 0 on all of them. Watch the olive OSPF packets: <b>Hello</b> (INIT, then 2-WAY), <b>DBD</b> summaries, then <b>LSU</b> updates, until each pair is <b>FULL</b>.'},
       {dev:'R1',cmds:['enable','show ip ospf neighbor'],text:'After 10–15 seconds R1 has two neighbors in state FULL: R2 and R4. Run this step again if some still show INIT or EXCHANGE.'},
@@ -3104,6 +3496,22 @@ const LABS={
       {text:'Cut the R1–R2 cable, and PC1 still reaches PC2',check:()=>RES.ping.some(r=>r.from==='PC1'&&r.to==='10.3.0.10'&&r.cut)}],
     hints:['On each router: <code>router ospf 1</code>, then <code>network 10.0.0.0 0.255.255.255 area 0</code>. The wildcard 0.255.255.255 matches every 10.x address.','Give routers clear IDs: <code>router-id 1.1.1.1</code> on R1, 2.2.2.2 on R2, and so on. Wait about 15 seconds, then run <code>show ip ospf neighbor</code>.','Click the R1–R2 cable and press Cut cable. Wait a few seconds for OSPF to reconverge, then ping again.'],
     solution:[{dev:'R1',cmds:ospfCmds(1)},{dev:'R2',cmds:ospfCmds(2)},{dev:'R3',cmds:ospfCmds(3)},{dev:'R4',cmds:ospfCmds(4)},{text:'Wait about 15 s for FULL adjacencies.'},{dev:'PC1',cmds:['ping 10.3.0.10']},{text:'Cut the R1–R2 cable and wait a few seconds.'},{dev:'PC1',cmds:['ping 10.3.0.10']}]},
+  ipv6:{title:'Add IPv6 to a working IPv4 network',level:'Intermediate',build:()=>v6Office(),
+    intro:'The office runs IPv4. Add IPv6 alongside it (dual stack): LAN 1 is 2001:db8:1::/64, the R1–R2 link 2001:db8:12::/64 and LAN 2 2001:db8:2::/64. The server already has 2001:db8:2::10. PCs must configure themselves with SLAAC, not by hand.',
+    goals:[{text:'R1 and R2 route IPv6 and have an IPv6 address on both interfaces',check:()=>['R1','R2'].every(n=>{const d=devByName(n);return d&&d.v6r&&[0,1].every(k=>(d.ifaces[k].v6||[]).some(x=>!isLL6(x.a)))})},
+      {text:'PC1 gets a 2001:db8:1::/64 address by SLAAC',check:()=>{const d=devByName('PC1');return d&&(d.ifaces[0].v6||[]).some(x=>x.src==='slaac'&&inNet6(x.a,'2001:db8:1::',64))&&!!d.gw6}},
+      {text:'PC1 pings the server at 2001:db8:2::10',check:()=>RES.ping.some(r=>r.from==='PC1'&&r.to==='2001:db8:2::10')},
+      {text:'PC3 gets a SLAAC address and pings PC1 over IPv6',check:()=>{const a=devByName('PC1'),c=devByName('PC3');const g=a&&(a.ifaces[0].v6||[]).find(x=>!isLL6(x.a));return c&&(c.ifaces[0].v6||[]).some(x=>x.src==='slaac')&&!!g&&RES.ping.some(r=>r.from==='PC3'&&r.to===g.a)}}],
+    hints:['On each router: <code>ipv6 unicast-routing</code>, then on each interface <code>ipv6 address 2001:db8:1::1/64</code> (use the right prefix per link).','Each router needs a route to the far LAN: on R1 <code>ipv6 route 2001:db8:2::/64 2001:db8:12::2</code>, and the reverse on R2.','On the PCs run <code>ipv6 autoconfig</code> (or press "Get IPv6 automatically" in IP Configuration), then <code>ipconfig</code> to read the address. Use that address for the PC3 → PC1 ping.'],
+    solution:[{dev:'R1',cmds:V6CMDS.R1},{dev:'R2',cmds:V6CMDS.R2},{dev:'PC1',cmds:['ipv6 autoconfig']},{dev:'PC3',cmds:['ipv6 autoconfig']},{dev:'PC1',cmds:['ping 2001:db8:2::10 -n 2']},{text:'On PC3, ping the SLAAC address shown by ipconfig on PC1.',act:()=>{const a=devByName('PC1'),g=(a.ifaces[0].v6||[]).find(x=>!isLL6(x.a));if(g)runCmd(devByName('PC3'),`ping ${g.a} -n 2`)}}]},
+  ospfma:{title:'Design OSPF areas with ABRs and summarization',level:'Advanced',build:()=>ospfMulti(),
+    intro:'Five routers have addresses but no routing. Put R2 and the 10.0.x links in the backbone (area 0), R4 and the 10.1.x networks in area 1, and R5 and the 10.2.x networks in area 2. R1 and R3 become Area Border Routers. Then summarize area 1 so the rest of the network sees a single prefix.',
+    goals:[{text:'R1 is an ABR for areas 0 and 1, and R3 for areas 0 and 2',check:()=>{const a=devByName('R1'),b=devByName('R3');return a&&b&&a.ospf.on&&b.ospf.on&&ospfAreas(a).join()==='0,1'&&ospfAreas(b).join()==='0,2'}},
+      {text:'R4 learns 10.2.10.0/24 as an inter-area (O IA) route',check:()=>{const d=devByName('R4');return d&&d.ospfRt.routes.some(r=>r.net==='10.2.10.0'&&r.ia)}},
+      {text:'PC1 (area 1) pings PC2 (area 2)',check:()=>RES.ping.some(r=>r.from==='PC1'&&r.to==='10.2.10.10')},
+      {text:'R5 sees area 1 as one summary route 10.1.0.0/16',check:()=>{const d=devByName('R5');return d&&d.ospfRt.routes.some(r=>r.net==='10.1.0.0'&&r.mask==='255.255.0.0'&&r.ia)&&!d.ospfRt.routes.some(r=>r.net==='10.1.10.0')}}],
+    hints:['On R1: <code>router ospf 1</code>, <code>network 10.1.0.0 0.0.255.255 area 1</code> and <code>network 10.0.0.0 0.0.255.255 area 0</code>. R3 is the same with 10.2.0.0 in area 2.','R2 only needs <code>network 10.0.0.0 0.0.255.255 area 0</code>; R4 uses area 1 and R5 area 2. Give each router its own <code>router-id</code>. Both ends of a link must be in the same area.','Summarize on the ABR: in <code>router ospf 1</code> on R1 type <code>area 1 range 10.1.0.0 255.255.0.0</code>, then check <code>show ip route</code> on R5.'],
+    solution:[...['R1','R2','R3','R4','R5'].map(n=>({dev:n,cmds:maCmds(n)})),{text:'Wait about 20 s for FULL adjacencies and Summary LSAs.'},{dev:'PC1',cmds:['ping 10.2.10.10']},{dev:'R1',cmds:['enable','configure terminal','router ospf 1','area 1 range 10.1.0.0 255.255.0.0','end']}]},
   automation:{title:'Automate a routing rollout',level:'Automation',build:()=>chain(false),
     intro:'Three routers have addresses but no routing. Configure RIP on all of them <b>with one playbook</b> in the <b>Automate</b> tab (no typing in the router consoles), verify with ping, then prove the playbook is idempotent.',
     goals:[{text:'A playbook run changes R1, R2 and R3 and turns on RIP',check:()=>RES.auto.some(r=>r.mode==='run'&&['R1','R2','R3'].every(n=>r.changed.has(n)))&&['R1','R2','R3'].every(n=>{const d=devByName(n);return d&&d.rip.on})},
@@ -3900,11 +4308,15 @@ function openApp(d,k){const w=$('#win'),b=$('#winB');if(!w)return;d.app=k;w.hidd
   if(k==='cmd'){b.innerHTML=termHTML();wireTerm(d);termDirty=true;renderTerm(d);setTimeout(()=>{const t=$('#tin');if(t)t.focus()},0);return}
   if(k==='ipcfg'){const i=d.ifaces[0];b.innerHTML=`<div class="form"><label class="chkl"><input type="radio" name="ipm" value="dhcp" ${d.dhcpClient?'checked':''}> DHCP</label><label class="chkl"><input type="radio" name="ipm" value="static" ${d.dhcpClient?'':'checked'}> Static</label></div>
       <div class="form"><label>IPv4 address<input id="dIp" value="${esc(i.ip)}"></label><label>Subnet mask<input id="dMask" value="${esc(i.mask||'255.255.255.0')}"></label><label>Default gateway<input id="dGw" value="${esc(d.gw)}"></label><label>DNS server<input id="dDns" value="${esc(d.dns)}"></label>${d.type==='pc'||d.type==='laptop'?`<label>Web proxy<input id="dPrx" value="${esc(d.proxy)}" placeholder="optional, ip:8080"></label>`:''}</div>
-      <div class="nbtns"><button class="btn primary" id="dApply">Apply</button><span class="note" id="dMsg">MAC ${esc(i.mac)} · link ${ifOper(d,0)?'up':'down'}</span></div>`;
+      <div class="form"><label>IPv6 address/prefix<input id="d6" value="${esc(((i.v6||[]).find(x=>x.src==='static')||{a:''}).a?((i.v6||[]).find(x=>x.src==='static').a+'/'+(i.v6||[]).find(x=>x.src==='static').len):'')}" placeholder="auto, or 2001:db8:1::10/64"></label><label>IPv6 gateway<input id="d6gw" value="${esc(d.gw6src==='static'?d.gw6:'')}" placeholder="from Router Advertisement"></label></div>
+      <p class="note">IPv6 link-local: ${esc(ll6(i))}${(i.v6||[]).filter(x=>x.src==='slaac').map(x=>' · SLAAC: '+esc(x.a)).join('')}</p>
+      <div class="nbtns"><button class="btn primary" id="dApply">Apply</button><button class="btn" id="d6auto">Get IPv6 automatically</button><span class="note" id="dMsg">MAC ${esc(i.mac)} · link ${ifOper(d,0)?'up':'down'}</span></div>`;
+    $('#d6auto').onclick=()=>{if(d.session)return toast(`${d.name} is busy. Wait a moment.`);runCmd(d,'ipv6 autoconfig');afterUserCmd();$('#dMsg').textContent='Asking the router for a Router Advertisement…'};
     const sync=()=>{const dh=b.querySelector('input[name=ipm]:checked').value==='dhcp';['dIp','dMask','dGw','dDns'].forEach(id=>$('#'+id).disabled=dh)};sync();b.querySelectorAll('input[name=ipm]').forEach(r=>r.onchange=sync);
     $('#dApply').onclick=()=>{const dh=b.querySelector('input[name=ipm]:checked').value==='dhcp';
       if(dh)runCmd(d,'ip dhcp');else{const ip=$('#dIp').value.trim();if(!validIp(ip))return $('#dMsg').textContent='Enter a valid IPv4 address.';runCmd(d,`ip ${ip} ${$('#dMask').value.trim()||'255.255.255.0'} ${$('#dGw').value.trim()}`.trim());const dn=$('#dDns').value.trim();runCmd(d,`dns ${dn||'off'}`)}
       const px=$('#dPrx');if(px&&px.value.trim()!==d.proxy)runCmd(d,`proxy ${px.value.trim()||'off'}`);
+      const v6=$('#d6').value.trim(),g6=$('#d6gw').value.trim();if(v6){if(!parseCidr6(v6))return $('#dMsg').textContent='Enter IPv6 as address/prefix, e.g. 2001:db8:1::10/64.';runCmd(d,`ipv6 ${v6} ${g6}`.trim())}else if(g6){if(!valid6(g6))return $('#dMsg').textContent='Enter a valid IPv6 gateway.';runCmd(d,`ipv6 gateway ${g6}`)}
       $('#dMsg').textContent=dh?'Requesting an address from DHCP…':'Settings applied.';afterUserCmd()};return}
   if(k==='web'){b.innerHTML=`<div class="urlbar"><input id="wUrl" value="${esc(d.lastPage?d.lastPage.url.replace(/^http:\/\//,''):'')}" placeholder="www.example.lab" aria-label="Address"><button class="btn primary" id="wGo">Go</button></div><div class="page" id="wPage"></div>`;
     const go=()=>{const u=$('#wUrl').value.trim();if(!u)return;if(d.session)return toast(`${d.name} is busy. Wait a moment.`);d.lastPage={url:u,loading:true};runCmd(d,'http '+u);afterUserCmd();renderPage(d)};
@@ -3959,7 +4371,7 @@ async function downloadProject(){const n=($('#projName').value.trim()||'packetya
   let dl=null;try{dl=window.claude&&window.claude.use?await window.claude.use('downloads'):null}catch(e){dl=null}
   if(dl){try{await dl.save({filename:n+'.json',data:text});toast(`Saved ${n}.json. Open it later with "Open a file".`)}catch(e){toast(e&&e.code==='declined'?'Download cancelled.':'Downloads are unavailable here. Copy the text below instead.')}return}
   try{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([text],{type:'application/json'}));a.download=n+'.pkyard';document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1500);toast(`Downloading ${n}.pkyard.`)}catch(e){toast('Downloads are blocked here. Copy the text below instead.')}}
-function readProjectFile(file){if(!file)return;const r=new FileReader();r.onload=()=>{try{const o=JSON.parse(r.result);if(!o||!Array.isArray(o.devices))throw 0;openProject(o,file.name.replace(/\.(pkyard|json)$/i,''));$('#modal').hidden=true}catch(e){toast("That file isn't a Packetyard project.")}};r.readAsText(file)}
+function readProjectFile(file){if(!file)return;if(file.size>8e6)return toast('That file is too large to be a Packetyard project (limit 8 MB).');const r=new FileReader();r.onload=()=>{try{const o=JSON.parse(r.result);if(!o||!Array.isArray(o.devices))throw 0;openProject(o,file.name.replace(/\.(pkyard|json)$/i,''));$('#modal').hidden=true}catch(e){toast("That file isn't a Packetyard project.")}};r.readAsText(file)}
 
 /* ---------- main loop ---------- */
 let last=performance.now(),panelTick=0,goalTick=0;
@@ -3968,7 +4380,7 @@ function frame(now){
   if(sim.running){
     const d=dt*sim.speed;sim.t+=d;
     const due=sim.timers.filter(x=>x.at<=sim.t);if(due.length){sim.timers=sim.timers.filter(x=>x.at>sim.t);due.sort((a,b)=>a.at-b.at).forEach(x=>{try{x.fn()}catch(e){console.error(e)}})}
-    try{ripTick();sdTick();ospfTick();stpTick()}catch(e){console.error(e)}
+    try{ripTick();sdTick();ospfTick();stpTick();v6Tick()}catch(e){console.error(e)}
     const arrived=[],lost=[];
     for(const p of sim.packets){const L=linkById(p.link);p.p+=d/(HOP_MS*(L?linkDelay(L):1));if(p.lose&&p.p>=0.5)lost.push(p);else if(p.p>=1)arrived.push(p)}
     if(lost.length){sim.packets=sim.packets.filter(p=>!lost.includes(p));lost.forEach(p=>{const L=linkById(p.link);log(null,`Lost on link: ${fsum(p.f)}`,{frame:p.f,cls:'err',explain:`This packet was lost on the link (${L?L.loss:0}% packet loss). The sender will have to wait for a timeout.`})})}
@@ -3976,7 +4388,7 @@ function frame(now){
       if(sim.stepMode||sim.stepOnce){sim.running=false;sim.stepOnce=false;updCtl()}}
     $('#clock').textContent='t '+(sim.t/1000).toFixed(1)+' s';
   }
-  if(needFit&&S.devices.length){needFit=false;fitView()}
+  if(needFit){needFit=false;fitView()}
   if(topoDirty)renderTopo();
   renderPackets();
   panelTick+=dt;goalTick+=dt;
@@ -3994,7 +4406,9 @@ setTool('select');setSpeed(1.5);updCtl();
 if(!restored)startItem('scenario','soho');
 renderDevicePane(true);renderInspector();
 requestAnimationFrame(frame);
+if(store.get('packetyard.welcome')!=='off')openWelcome();
 })();
 </script>
+
 </body>
 </html>
